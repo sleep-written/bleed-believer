@@ -1,0 +1,19 @@
+{
+  "name": "@bleed-believer/core",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "tsc && cls && mocha ./dist/**/*.test.js"
+  },
+  "author": "sleep-written",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.2.18",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.6.0",
+    "chai": "^4.3.4",
+    "mocha": "^8.4.0",
+    "typescript": "^4.2.4"
+  }
+}
