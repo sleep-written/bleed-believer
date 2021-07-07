@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "tsc && cls && mocha ./dist/**/*.test.js"
+    "test": "mocha --require ts-node/register ./src/**/*.test.js"
   },
   "author": "sleep-written",
   "license": "MIT",
