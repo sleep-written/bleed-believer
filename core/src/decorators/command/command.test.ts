@@ -12,13 +12,14 @@ describe('Testing "./decorators/command"', () => {
 
         const meta: CommandMeta = (Fake as any)?.__meta__;
         assert.isDefined(meta);
-        assert.hasAllKeys(meta, [ 'main', 'title', 'description' ]);
+        assert.hasAllKeys(meta, [ 'main', 'title', 'description', 'methods' ]);
         assert.instanceOf(meta.main, Array);
-        assert.strictEqual(meta.main.length, 1);
+        assert.lengthOf(meta.main, 1);
         assert.strictEqual(meta.main[0], 'hello');
         assert.strictEqual(meta.title, 'hello world command');
         assert.exists(meta.description);
-    });
+        assert.isEmpty(meta.methods);
+    }).timeout(Number.MAX_SAFE_INTEGER);
 
     it('New "Command" class with uppercase main (one string)', () => {
         @Command({
@@ -29,13 +30,14 @@ describe('Testing "./decorators/command"', () => {
 
         const meta: CommandMeta = (Fake as any)?.__meta__;
         assert.isDefined(meta);
-        assert.hasAllKeys(meta, [ 'main', 'title', 'description' ]);
+        assert.hasAllKeys(meta, [ 'main', 'title', 'description', 'methods' ]);
         assert.instanceOf(meta.main, Array);
-        assert.strictEqual(meta.main.length, 1);
+        assert.lengthOf(meta.main, 1);
         assert.strictEqual(meta.main[0], 'hello bitches');
         assert.strictEqual(meta.title, 'Ahahahah');
         assert.exists(meta.description);
-    });
+        assert.isEmpty(meta.methods);
+    }).timeout(Number.MAX_SAFE_INTEGER);
 
     it('New "Command" class with uppercase main (with array)', () => {
         @Command({
@@ -46,11 +48,12 @@ describe('Testing "./decorators/command"', () => {
 
         const meta: CommandMeta = (Fake as any)?.__meta__;
         assert.isDefined(meta);
-        assert.hasAllKeys(meta, [ 'main', 'title', 'description' ]);
+        assert.hasAllKeys(meta, [ 'main', 'title', 'description', 'methods' ]);
         assert.instanceOf(meta.main, Array);
-        assert.strictEqual(meta.main.length, 1);
+        assert.lengthOf(meta.main, 1);
         assert.strictEqual(meta.main[0], 'hello bitches');
         assert.strictEqual(meta.title, 'Ahahahah');
         assert.exists(meta.description);
-    });
+        assert.isEmpty(meta.methods);
+    }).timeout(Number.MAX_SAFE_INTEGER);
 });

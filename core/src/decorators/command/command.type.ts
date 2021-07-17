@@ -1,4 +1,4 @@
-import { ClassMeta } from '@bleed-believer/core';
+import { ClassMeta } from '../../interfaces';
 import { CommandMeta } from './command.meta';
 
 export type CommandType = ClassMeta<CommandMeta>;

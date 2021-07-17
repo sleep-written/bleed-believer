@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require ts-node/register ./src/**/*.test.ts",
+    "test": "cls && mocha --require ts-node/register ./src/**/*.test.ts",
     "start": "ts-node ./src/"
   },
   "keywords": [],
@@ -20,6 +20,6 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@bleed-believer/core": "file:../core"
+    "bleed-believer": "file:../core"
   }
 }

@@ -5,9 +5,9 @@ export class InvalidModuleError extends Error {
         super();
 
         if (ref?.name) {
-            this.message = `The class "${ref.name}" isn\'t a valid BleedModule`;
+            this.message = `The class "${ref.name}" isn\'t a valid BleedModule.`;
         } else {
-            this.message = `The class given isn\'t a valid BleedModule`;
+            this.message = `The class given isn\'t a valid BleedModule.`;
         }
     }
 }
