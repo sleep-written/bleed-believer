@@ -2,6 +2,9 @@ import { BleedModuleType } from './decorators';
 import { BleedModuleMeta } from './decorators/bleed-module/bleed-module.meta';
 import { InvalidModuleError } from './errors';
 
+/**
+ * A class wrap all 
+ */
 export class BleedBeliever {
     private _rootModule: BleedModuleType;
 

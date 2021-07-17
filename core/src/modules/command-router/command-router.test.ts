@@ -4,7 +4,7 @@ import { BleedModule, Command, CommandMethod } from '../../decorators';
 import { BleedBeliever } from '../../bleed-believer';
 import { CommandRouter } from './command-router';
 
-describe.only('Testing "./modules/command-router"', () => {
+describe('Testing "./modules/command-router"', () => {
     let backup: string[];
     before(() => {
         backup = process.argv.map(x => x);
@@ -31,7 +31,7 @@ describe.only('Testing "./modules/command-router"', () => {
         
         @BleedModule({
             imports: [
-                CommandRouter.letsCum([
+                CommandRouter.addToRouter([
                     Start,
                 ])
             ]
@@ -71,7 +71,7 @@ describe.only('Testing "./modules/command-router"', () => {
         
         @BleedModule({
             imports: [
-                CommandRouter.letsCum([
+                CommandRouter.addToRouter([
                     CommandA,
                     CommandB,
                 ])

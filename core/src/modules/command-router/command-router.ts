@@ -11,9 +11,17 @@ import { CommandNotFoundError } from "../../errors";
     exports: [],
 })
 export class CommandRouter {
-    static letsCum(commands: ClassMeta<CommandMeta>[]): ClassMeta<CommandRouterMeta>;
-    static letsCum(options: CommandRouterOptions): ClassMeta<CommandRouterMeta>;
-    static letsCum(input: CommandRouterOptions | ClassMeta<CommandMeta>[]): ClassMeta<CommandRouterMeta> {
+    /**
+     * Create a new routing module for commands usign the the `@Command` decorator.
+     * @param commands An array with the command classes declared using the `@Command` decorator.
+     */
+    static addToRouter(commands: ClassMeta<CommandMeta>[]): ClassMeta<CommandRouterMeta>;
+    /**
+     * Create a new routing module for commands usign the the `@Command` decorator.
+     * @param options An object with options to configure the command router.
+     */
+    static addToRouter(options: CommandRouterOptions): ClassMeta<CommandRouterMeta>;
+    static addToRouter(input: CommandRouterOptions | ClassMeta<CommandMeta>[]): ClassMeta<CommandRouterMeta> {
         const ref: ClassMeta<CommandRouterMeta> = CommandRouter;        
         ref.__meta__.queue = [];
         

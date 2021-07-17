@@ -4,15 +4,10 @@ import { PendejoCommand } from "./commands/pendejo.command";
 
 @BleedModule({
     imports: [
-        CommandRouter.letsCum({
-            commands: [
-                HelpCommand,
-                PendejoCommand,
-            ],
-            before: () => {
-                console.clear();
-            }
-        })
+        CommandRouter.addToRouter([
+            HelpCommand,
+            PendejoCommand,
+        ])
     ]
 })
 export class CommandRouting {}
