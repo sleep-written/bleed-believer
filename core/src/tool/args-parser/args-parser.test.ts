@@ -1,9 +1,9 @@
 import { assert } from 'chai';
-import { Args } from './args';
+import { ArgsParser } from './args-parser';
 
 describe('Testing "command/tool/args"', () => {
     it('Read "hello world"', () => {
-        const args = new Args([ 'hello', 'world' ]);
+        const args = new ArgsParser([ 'hello', 'world' ]);
 
         assert.strictEqual(args.main.length, 2);
         assert.strictEqual(args.main[0], 'hello');
@@ -11,7 +11,7 @@ describe('Testing "command/tool/args"', () => {
     });
 
     it('Read "hello world --key value"', () => {
-        const args = new Args([ 'hello', 'world', '--key', 'value' ]);
+        const args = new ArgsParser([ 'hello', 'world', '--key', 'value' ]);
 
         assert.lengthOf(args.main, 2);
         assert.strictEqual(args.main[0], 'hello');
@@ -34,7 +34,7 @@ describe('Testing "command/tool/args"', () => {
     });
 
     it('Read "hello world -key value"', () => {
-        const args = new Args([ 'hello', 'world', '-key', 'value' ]);
+        const args = new ArgsParser([ 'hello', 'world', '-key', 'value' ]);
 
         assert.lengthOf(args.main, 2);
         assert.strictEqual(args.main[0], 'hello');
@@ -57,7 +57,7 @@ describe('Testing "command/tool/args"', () => {
     });
 
     it('Read "hello world --key value bastard"', () => {
-        const args = new Args([
+        const args = new ArgsParser([
             'hello', 'world', '--key', 'value', 'bastard'
         ]);
 
@@ -73,7 +73,7 @@ describe('Testing "command/tool/args"', () => {
     });
 
     it('Read "hello world -key value bastard"', () => {
-        const args = new Args([
+        const args = new ArgsParser([
             'hello', 'world', '-key', 'value', 'bastard'
         ]);
 
@@ -89,7 +89,7 @@ describe('Testing "command/tool/args"', () => {
     });
 
     it('Read "hello world --key val-a bastard --key val-b"', () => {
-        const args = new Args([
+        const args = new ArgsParser([
             'hello', 'world', '--key', 'val-a', 'bastard', '--key', 'val-b'
         ]);
 
@@ -106,7 +106,7 @@ describe('Testing "command/tool/args"', () => {
     });
 
     it('Read "hello world -key val-a bastard -key val-b"', () => {
-        const args = new Args([
+        const args = new ArgsParser([
             'hello', 'world', '-key', 'val-a', 'bastard', '-key', 'val-b'
         ]);
 
@@ -123,7 +123,7 @@ describe('Testing "command/tool/args"', () => {
     });
 
     it('Read "hello world --key val-a bastard --key val-b --other value fuck you"', () => {
-        const args = new Args([
+        const args = new ArgsParser([
             'hello', 'world', '--key', 'val-a', 'bastard',
             '--key', 'val-b', '--other', 'value', 'fuck', 'you'
         ]);
@@ -148,7 +148,7 @@ describe('Testing "command/tool/args"', () => {
     });
 
     it('Read "hello world -key val-a bastard -key val-b -other value fuck you"', () => {
-        const args = new Args([
+        const args = new ArgsParser([
             'hello', 'world', '-key', 'val-a', 'bastard',
             '-key', 'val-b', '-other', 'value', 'fuck', 'you'
         ]);
@@ -173,7 +173,7 @@ describe('Testing "command/tool/args"', () => {
     });
 
     it('Read current execution', () => {
-        const args = new Args();
+        const args = new ArgsParser();
         const param = args.find('require');
 
         assert.lengthOf(args.main, 1);

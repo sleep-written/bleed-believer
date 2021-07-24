@@ -1,4 +1,4 @@
-import { Command, CommandMethod } from 'bleed-believer';
+import { Args, Command, CommandMethod } from 'bleed-believer';
 
 @Command({
     main: 'pendejo',
@@ -6,8 +6,9 @@ import { Command, CommandMethod } from 'bleed-believer';
 })
 export class PendejoCommand {
     @CommandMethod()
-    start() {
+    start(args: Args) {
         console.log('Bienvenido maldito pendejo tome asiento...');
         console.log('2021 CARNAAAAAAL ESTOY AGARRANDO SEÑAL!!!');
+        console.log('--key ->', args.find('key'));
     }
 }

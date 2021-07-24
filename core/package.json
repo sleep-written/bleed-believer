@@ -1,10 +1,11 @@
 {
   "name": "bleed-believer",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.2",
+  "description": "A Generic and minimalistic module manager inpired in Angular",
   "main": "dist/index.js",
   "scripts": {
-    "test": "cls && mocha --require ts-node/register ./src/**/*.test.ts"
+    "test": "cls && mocha --require ts-node/register ./src/**/*.test.ts",
+    "prepare": "tsc"
   },
   "author": "sleep-written",
   "license": "MIT",

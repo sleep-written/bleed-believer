@@ -1,7 +1,7 @@
 import { ClassMeta } from "../../interfaces";
+import { ArgsParser } from "../../tool/args-parser";
 import { BleedModule } from "../../decorators";
 import { CommandMeta } from "../../decorators/command/command.meta";
-import { Args } from "../../tool/args/args";
 import { CommandRouterMeta } from "./command-router.meta";
 import { CommandRouterOptions } from "./command-router.options";
 import { CommandNotFoundError } from "../../errors";
@@ -25,7 +25,7 @@ export class CommandRouter {
         const ref: ClassMeta<CommandRouterMeta> = CommandRouter;        
         ref.__meta__.queue = [];
         
-        const args = new Args();
+        const args = new ArgsParser();
         ref.__meta__.args = args;
 
         let commands: ClassMeta<CommandMeta>[];

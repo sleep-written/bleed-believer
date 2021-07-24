@@ -1,4 +1,4 @@
-import { Args } from "../tool/args/args";
+import { Args } from "../tool/args-parser";
 
 /**
  * A generic function, with one optional parameter _(a instence of `Args` class)_.

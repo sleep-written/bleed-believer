@@ -1,6 +1,6 @@
-import { Parameters } from "./interfaces";
+import { Args, Parameters } from "./interfaces";
 
-export class Args {
+export class ArgsParser implements Args {
     private _param: Parameters;
     private _main: string[];
     public get main(): string[] {

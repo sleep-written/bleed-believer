@@ -1,6 +1,6 @@
 import { BleedModule, CommandRouter } from "../../core/dist";
-import { HelpCommand } from "./commands/help.command";
 import { PendejoCommand } from "./commands/pendejo.command";
+import { HelpCommand } from "./commands/help.command";
 
 @BleedModule({
     imports: [
