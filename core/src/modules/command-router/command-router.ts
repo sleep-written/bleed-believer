@@ -86,9 +86,12 @@ export class CommandRouter {
     
             // Execute commands
             for (const command of meta.queue) {
+                const instance = new command();
+
                 const actions = Object.values(command.__meta__.methods);
                 for (const action of actions) {
-                    await action.value(meta.args);
+                    const key = action.value.name;
+                    await instance[key](meta.args);
                 }
             }
     

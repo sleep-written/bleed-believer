@@ -1,6 +1,6 @@
 {
   "name": "bleed-believer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Generic and minimalistic module manager inpired in Angular",
   "main": "dist/index.js",
   "scripts": {
