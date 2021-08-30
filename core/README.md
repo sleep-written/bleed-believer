@@ -75,6 +75,70 @@ const main = new BleedBeliever(ModuleRoot);
 main.bleed();
 ```
 
+## Module Injection
+
+Now this library has module injection support. In the `exports` options of any module, you can put there modules that has been initialized from `imports` option. For example this module, whichs has a websocket's connection:
+
+```ts
+import { BleedModule } from '@bleed-believer/core';
+import { WebSocket } from 'ws';
+
+@BleedModule({
+    imports: [],
+    exports: []
+})
+export class WebSocketModule {
+    private _ws: WebSocket;
+
+    constructor {
+        this._ws = new WebSocket('https://www.example.com/ws/');
+    }
+
+    sendMessage(text: string): void {
+        this._ws.send(text);
+    }
+}
+```
+
+Now chech this another module, whichs contains other modules:
+```ts
+import { BleedModule } from '@bleed-believer/core';
+import { CommandRouter } from '@bleed-believer/command';
+
+import { StartCommand } from './start.command';
+import { WebSocketModule } from './web-socket.module';
+
+@BleedModule({
+    imports: [
+        CommandRouter.addToRouter([ StartCommand ]),
+        WebSocketModule
+    ],
+    exports: [
+        WebSocketModule
+    ]
+})
+export class ServerModule {}
+```
+
+Imagine that you need to use that exported module in the parent module. In that case:
+```ts
+import { BleedModule, Inject } from '@bleed-believer/core';
+
+
+@BleedModule({
+    imports: [ ServerModule ],
+    exports: []
+})
+export class MainModule {
+    constructor(
+        @Inject(WebSocketModule) private _webSocket: WebSocketModule
+    ) {
+        this._webSocket.sendMessage('Almost ready!');
+    }
+}
+```
+In this example, you have access to `WebSocketModule` because this module has been exported by ServerModule. If you try to inject a module that didn't been exported by at leas one of the imported modules, the `BleedBeliever` will throws an `ModuleNotInitializedError` object type.
+
 ## Official modules
 
 The official modules are listed there
@@ -82,5 +146,5 @@ The official modules are listed there
 - [@bleed-believer/command](https://www.npmjs.com/package/@bleed-believer/command): A module for resolve terminal arguments.
 
 ## Roadmap
-- [ ] Implement the explor injection mechanism.
-- [ ] Create more modules to use.
+- ✅ Implement the exports injection mechanism.
+- 🟦 Create more modules to use.

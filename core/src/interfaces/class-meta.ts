@@ -1,4 +1,4 @@
 export interface ClassMeta<T, U = any> {
     __meta__?: T;
-    new(): U;
+    new(...args: any[]): U;
 }
