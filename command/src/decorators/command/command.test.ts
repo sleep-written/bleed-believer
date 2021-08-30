@@ -5,7 +5,7 @@ import { CommandMeta } from "./command.meta";
 describe('Testing "./decorators/command"', () => {
     it('New "Command" class', () => {
         @Command({
-            main: 'hello',
+            main: [ 'hello', 'bitches' ],
             title: 'hello world command'
         })
         class Fake { }
@@ -14,12 +14,13 @@ describe('Testing "./decorators/command"', () => {
         assert.isDefined(meta);
         assert.hasAllKeys(meta, [ 'main', 'title', 'description', 'methods' ]);
         assert.instanceOf(meta.main, Array);
-        assert.lengthOf(meta.main, 1);
+        assert.lengthOf(meta.main, 2);
         assert.strictEqual(meta.main[0], 'hello');
+        assert.strictEqual(meta.main[1], 'bitches');
         assert.strictEqual(meta.title, 'hello world command');
         assert.exists(meta.description);
         assert.isEmpty(meta.methods);
-    }).timeout(Number.MAX_SAFE_INTEGER);
+    });
 
     it('New "Command" class with uppercase main (one string)', () => {
         @Command({
@@ -32,12 +33,13 @@ describe('Testing "./decorators/command"', () => {
         assert.isDefined(meta);
         assert.hasAllKeys(meta, [ 'main', 'title', 'description', 'methods' ]);
         assert.instanceOf(meta.main, Array);
-        assert.lengthOf(meta.main, 1);
-        assert.strictEqual(meta.main[0], 'hello bitches');
+        assert.lengthOf(meta.main, 2);
+        assert.strictEqual(meta.main[0], 'hello');
+        assert.strictEqual(meta.main[1], 'bitches');
         assert.strictEqual(meta.title, 'Ahahahah');
         assert.exists(meta.description);
         assert.isEmpty(meta.methods);
-    }).timeout(Number.MAX_SAFE_INTEGER);
+    });
 
     it('New "Command" class with uppercase main (with array)', () => {
         @Command({
@@ -55,5 +57,5 @@ describe('Testing "./decorators/command"', () => {
         assert.strictEqual(meta.title, 'Ahahahah');
         assert.exists(meta.description);
         assert.isEmpty(meta.methods);
-    }).timeout(Number.MAX_SAFE_INTEGER);
+    });
 });

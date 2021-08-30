@@ -1,4 +1,4 @@
-import { Command, CommandMethod } from 'bleed-believer';
+import { Command, CommandMethod } from '@bleed-believer/command';
 
 @Command({
     main: 'count',

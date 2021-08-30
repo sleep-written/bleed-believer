@@ -1,7 +1,7 @@
 {
-  "name": "@bleed-believer/core",
+  "name": "@bleed-believer/command",
   "version": "0.0.1",
-  "description": "A Generic and minimalistic module manager inpired in Angular",
+  "description": "A module for @bleed-believer to make commands routing",
   "main": "dist/index.js",
   "scripts": {
     "test": "cls && mocha --require ts-node/register ./src/**/*.test.ts",
@@ -17,6 +17,9 @@
     "mocha": "^9.1.0",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "@bleed-believer/core": "file:../core"
   },
   "files": [
     "./dist"

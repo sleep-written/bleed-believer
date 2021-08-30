@@ -1,4 +1,4 @@
-import { ClassMeta } from "../../interfaces";
+import { ClassMeta } from '@bleed-believer/core';
 import { CommandMethodMeta } from "./command-method.meta";
 import { CommandMethodType } from "./command-method.type";
 

@@ -1,6 +1,6 @@
-import { ClassMeta } from '../../interfaces';
+import { ClassMeta } from '@bleed-believer/core';
+
 import { CommandMethodMeta } from '../command-method/command-method.meta';
-import { CommandMeta } from './command.meta';
 import { CommandOptions } from './command.options';
 import { CommandType } from './command.type';
 
@@ -10,7 +10,7 @@ export function Command(options: CommandOptions): (obj: CommandType) => void {
         // Lowercase all and converts to string[] 
         const val = options.main.trim().toLowerCase();
         if (val) {
-            main = [ val ];
+            main = val.split(/\s+/gi);
         } else {
             main = [];
         }
@@ -20,6 +20,11 @@ export function Command(options: CommandOptions): (obj: CommandType) => void {
         main = options.main
             .map(x => x?.trim()?.toLowerCase())
             .filter(x => !!x);
+
+    } else {
+        // Add an empty array
+        main = [];
+
     }
 
     let description = 'None description provided yet.';

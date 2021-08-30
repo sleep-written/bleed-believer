@@ -8,10 +8,9 @@ export class ArgsParser implements Args {
     }
 
     constructor(raw?: string[]) {
-        // Use arguments from the current running process 
+        // Use arguments from the current running process
         if (!raw) {
-            raw = process.argv;
-            raw.splice(0, 2);
+            raw = process.argv.slice(2);
         }
 
         // Initialize internal variables
@@ -20,7 +19,9 @@ export class ArgsParser implements Args {
 
         // Iterate into the raw parameters
         let key: string;
-        for (const item of raw) {
+        for (let item of raw) {
+            item = item.trim();
+
             if (item.match(/^-{1,2}[^\-]*$/gi)) {
                 // This is the key param
                 key = item
@@ -62,5 +63,15 @@ export class ArgsParser implements Args {
         return this._param[ref]?.map(x => x);
     }
 
+    toString(): string {
+        if (this._main.length) {
+            let out = this._main.reduce((prev, curr, i) => {
+                return i ? `${prev} ${curr}` : curr
+            });
     
+            return out;
+        } else {
+            return '';
+        }
+    }
 }

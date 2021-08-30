@@ -1,4 +1,4 @@
-import { BleedBeliever } from 'bleed-believer';
+import { BleedBeliever } from '@bleed-believer/core';
 import { CommandRouting } from './command-routing';
 
 const main = new BleedBeliever(CommandRouting);

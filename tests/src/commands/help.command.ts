@@ -1,4 +1,4 @@
-import { Command, CommandMethod } from "../../../core/dist";
+import { Command, CommandMethod } from '@bleed-believer/command';
 
 @Command({
     main: 'help',

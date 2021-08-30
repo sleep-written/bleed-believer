@@ -1,4 +1,4 @@
-import { Args, Command, CommandMethod } from 'bleed-believer';
+import { Args, Command, CommandMethod } from '@bleed-believer/command';
 
 @Command({
     main: 'pendejo',

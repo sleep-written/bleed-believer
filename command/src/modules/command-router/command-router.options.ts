@@ -1,15 +1,13 @@
+import { ClassMeta } from '@bleed-believer/core';
+
 import { CommandMeta } from '../../decorators/command/command.meta';
-import { ClassMeta, Action } from '../../interfaces';
+import { Action } from '../../interfaces';
+import { Fail } from '../../interfaces/fail';
 
 /**
  * A interface with the options accepted by the `CommandRouter` module class.
  */
 export interface CommandRouterOptions {
-    /**
-     * A method to show a custom message when the command typed by the user doesn't found  by the router
-     */
-    notFound?: Action;
-
     /**
      * The commands to add into the command router.
      */
@@ -24,4 +22,9 @@ export interface CommandRouterOptions {
      * A generic action to be executed always after execute the command queue attached to the command router.
      */
     after?: Action;
+
+    /**
+     * A method to show a custom message when the CommandRouter module emits an error.
+     */
+    error?: Fail;
 }

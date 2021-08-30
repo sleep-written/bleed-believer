@@ -20,6 +20,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "bleed-believer": "file:../core"
+    "@bleed-believer/command": "file:../command",
+    "@bleed-believer/core": "file:../core"
   }
 }

@@ -1,10 +1,12 @@
-import { ClassMeta } from "../../interfaces";
-import { ArgsParser } from "../../tool/args-parser";
-import { BleedModule } from "../../decorators";
-import { CommandMeta } from "../../decorators/command/command.meta";
-import { CommandRouterMeta } from "./command-router.meta";
-import { CommandRouterOptions } from "./command-router.options";
-import { CommandNotFoundError } from "../../errors";
+import { ClassMeta, BleedModule } from '@bleed-believer/core';
+
+import { ArgsParser } from '../../tool/args-parser';
+import { ArgsComparer } from '../../tool/args-comparer';
+
+import { CommandMeta } from '../../decorators/command/command.meta';
+import { CommandRouterMeta } from './command-router.meta';
+import { CommandRouterOptions } from './command-router.options';
+import { CommandNotFoundError } from '../../errors';
 
 @BleedModule({
     imports: [],
@@ -33,32 +35,17 @@ export class CommandRouter {
             commands = input;
         } else {
             commands = input.commands;
-            ref.__meta__.notFound = input.notFound;
             ref.__meta__.before = input.before;
             ref.__meta__.after = input.after;
+            ref.__meta__.error = input.error;
         }
         
         for (const command of commands) {
-            if (command.__meta__.main.length <= args.main.length) {
-                // Iterate for all
-                let found = true;
-                for (let i = 0; i < command.__meta__.main.length; i++) {
-                    const a = command.__meta__.main[i];
-                    const b = args.main[i].trim().toLowerCase();
+            const exp = new ArgsParser(command?.__meta__?.main ?? []);
+            const obj = new ArgsComparer(exp, args);
 
-                    if (
-                        (a !== b) &&
-                        (!a.match(/^:[^:]+$/gi))
-                    ) {
-                        found = false;
-                        break;
-                    }
-                }
-
-                // Add to the queue
-                if (found) {
-                    ref.__meta__.queue.push(command);
-                }
+            if (obj.isSimilar()) {
+                ref.__meta__.queue.push(command);
             }
         }
 
@@ -74,14 +61,14 @@ export class CommandRouter {
         const meta = proto.constructor?.__meta__ as CommandRouterMeta;
 
         try {
-            // Check not found
-            if (meta.queue.length === 0) {
-                throw new CommandNotFoundError();
-            }
-    
             // Before process
             if (meta.before) {
                 await meta.before(meta.args);
+            }
+
+            // Check not found
+            if (meta.queue.length === 0) {
+                throw new CommandNotFoundError(meta.args);
             }
     
             // Execute commands
@@ -100,12 +87,9 @@ export class CommandRouter {
                 await meta.after(meta.args);
             }
         } catch (err) {
-            if (
-                (meta.notFound) &&
-                (err instanceof CommandNotFoundError)
-            ) {
+            if (meta.error && err instanceof Error) {
                 // Detect command not found
-                await meta.notFound(meta.args);
+                await meta.error(err);
             } else {
                 // Generic Error
                 console.error(err);
