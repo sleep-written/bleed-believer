@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/command",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A module for @bleed-believer to make commands routing",
   "main": "dist/index.js",
   "scripts": {
@@ -19,9 +19,9 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@bleed-believer/core": "0.0.1"
+    "@bleed-believer/core": "0.0.2"
   },
   "files": [
-    "./dist"
+    "dist"
   ]
 }
