@@ -9,9 +9,6 @@
   },
   "author": "sleep-written",
   "license": "MIT",
-  "dependencies": {
-    "@bleed-believer/core": "0.0.3"
-  },
   "files": [
     "dist"
   ],
@@ -23,5 +20,8 @@
     "mocha": "^9.1.3",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "@bleed-believer/core": "^0.0.4"
   }
 }
