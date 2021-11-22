@@ -27,4 +27,10 @@ export interface CommandRouterOptions {
      * A method to show a custom message when the CommandRouter module emits an error.
      */
     error?: Fail;
+
+    /**
+     * By default, the router only will execute the first command found, instead, if you want to execute all
+     * commands found, set this property to `true`.
+     */
+    multi?: boolean;
 }

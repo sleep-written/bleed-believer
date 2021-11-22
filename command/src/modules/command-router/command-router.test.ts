@@ -192,4 +192,107 @@ describe('Testing "./modules/command-router"', () => {
         const main = new BleedBeliever(MainModule);
         main.bleed();
     });
+
+    it('multi = false', () => new Promise<void>((resolve, reject) => {
+        process.argv = [ null, null, 'lol' ];
+        let calls = '';
+
+        @Command({
+            title: 'cmd-a',
+            main: [ '...args' ]
+        })
+        class CmdA {
+            @CommandMethod()
+            start() {
+                calls += 'a';
+            }
+        }
+        
+        @Command({
+            title: 'cmd-b',
+            main: [ '...args' ]
+        })
+        class CmdB {
+            @CommandMethod()
+            start() {
+                calls += 'b';
+            }
+        }
+
+        @BleedModule({
+            imports: [
+                CommandRouter.addToRouter({
+                    commands: [
+                        CmdA,
+                        CmdB,
+                    ],
+                    after: () => {
+                        try {
+                            assert.strictEqual(calls, 'a');
+                            resolve();
+                        } catch (err) {
+                            reject(err);
+                        }
+                    }
+                })
+            ]
+        })
+        class MainModule { }
+
+        // Ejecutar
+        const main = new BleedBeliever(MainModule);
+        main.bleed();
+    }));
+
+    it('multi = true', () => new Promise<void>((resolve, reject) => {
+        process.argv = [ null, null, 'lol' ];
+        let calls = '';
+
+        @Command({
+            title: 'cmd-a',
+            main: [ '...args' ]
+        })
+        class CmdA {
+            @CommandMethod()
+            start() {
+                calls += 'a';
+            }
+        }
+        
+        @Command({
+            title: 'cmd-b',
+            main: [ '...args' ]
+        })
+        class CmdB {
+            @CommandMethod()
+            start() {
+                calls += 'b';
+            }
+        }
+
+        @BleedModule({
+            imports: [
+                CommandRouter.addToRouter({
+                    multi: true,
+                    commands: [
+                        CmdA,
+                        CmdB,
+                    ],
+                    after: () => {
+                        try {
+                            assert.strictEqual(calls, 'ab');
+                            resolve();
+                        } catch (err) {
+                            reject(err);
+                        }
+                    }
+                })
+            ]
+        })
+        class MainModule { }
+
+        // Ejecutar
+        const main = new BleedBeliever(MainModule);
+        main.bleed();
+    }));
 });

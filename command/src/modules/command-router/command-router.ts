@@ -38,6 +38,7 @@ export class CommandRouter {
             ref.__meta__.before = input.before;
             ref.__meta__.after = input.after;
             ref.__meta__.error = input.error;
+            ref.__meta__.multi = input.multi;
         }
         
         for (const command of commands) {
@@ -46,6 +47,9 @@ export class CommandRouter {
 
             if (obj.isSimilar()) {
                 ref.__meta__.queue.push(command);
+                if (!ref.__meta__.multi) {
+                    break;
+                }
             }
         }
 

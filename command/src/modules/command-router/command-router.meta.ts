@@ -12,4 +12,5 @@ export interface CommandRouterMeta {
     before?: Action;
     after?: Action;
     error?: Fail;
+    multi?: boolean;
 }
