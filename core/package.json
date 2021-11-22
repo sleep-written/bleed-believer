@@ -4,7 +4,7 @@
   "description": "A Generic and minimalistic module manager inpired in Angular",
   "main": "dist/index.js",
   "scripts": {
-    "test": "cls && mocha --require ts-node/register ./src/**/*.test.ts",
+    "test": "mocha --require ts-node/register ./src/**/*.test.ts",
     "prepare": "tsc"
   },
   "author": "sleep-written",
