@@ -1,0 +1,24 @@
+{
+  "name": "@bleed-believer/command",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "mocha --require ts-node/register ./src/**/*.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sleep-written/bleed-believer.git"
+  },
+  "keywords": [
+    "command",
+    "argv",
+    "arguments",
+    "cli"
+  ],
+  "author": "sleep-written",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sleep-written/bleed-believer/issues"
+  },
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme"
+}

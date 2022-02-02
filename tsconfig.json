@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "exclude": [ "./**/*.test.ts" ],
+  "references": [
+    { "path": "./packages/command" }
+  ]
+}

@@ -1,0 +1,7 @@
+# Ignore dependencies
+node_modules
+packages/*/node_modules
+
+# Ignore transpiled files
+packages/*/dist
+*.tsbuildinfo
