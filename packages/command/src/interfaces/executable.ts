@@ -1,5 +1,5 @@
-import { ArgParser } from '../tool/arg-parser';
+import { Argv } from '../tool/arg-parser';
 
 export interface Executable {
-    start(argv: ArgParser): void | Promise<void>;
+    start(argv: Argv): void | Promise<void>;
 }

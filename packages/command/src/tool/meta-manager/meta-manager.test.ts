@@ -18,8 +18,8 @@ describe('Testing "@bleed-believer/command/tool/meta-manager"', () => {
     const META_KEY = Symbol('meta-key');
 
     it('Doesn\'t have metadata.', () => {
-        const meta = manager.get<Meta>(META_KEY);
-        assert.isNull(meta);
+        const meta = manager.some(META_KEY);
+        assert.isFalse(meta);
     });
 
     it('Insert metadata.', () => {
@@ -39,7 +39,7 @@ describe('Testing "@bleed-believer/command/tool/meta-manager"', () => {
     
     it('Delete metadata.', () => {
         manager.del(META_KEY);
-        const meta = manager.get<Meta>(META_KEY);
-        assert.isNull(meta);
+        const meta = manager.some(META_KEY);
+        assert.isFalse(meta);
     });
 });

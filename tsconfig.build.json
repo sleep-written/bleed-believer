@@ -13,6 +13,11 @@
   
         "strict": true,
         "moduleResolution": "node",
-        "esModuleInterop": true
+        "esModuleInterop": true,
+
+        "baseUrl": "./packages/",
+        "paths": {
+            "@bleed-believer/command": ["command"]
+        }
     }
 }

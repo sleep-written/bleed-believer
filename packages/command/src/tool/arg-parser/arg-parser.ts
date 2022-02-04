@@ -1,6 +1,11 @@
-import { ParserOptions } from './parser-options';
+import { ParserOptions, Argv } from './interfaces';
 
-export class ArgParser {
+export class ArgParser implements Argv {
+    static parseMain(input: string): string[] {
+        const match = input.match(/(:|\.{3})?[a-z0-9\-_]+/gi);
+        return match ?? [];
+    }
+
     private _main: string[];
     get main(): string[] {
         return [ ...this._main ];

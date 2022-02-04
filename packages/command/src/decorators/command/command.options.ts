@@ -1,5 +1,5 @@
 export interface CommandOptions {
-    main: string[];
+    main: string;
     name: string;
     info?: string;
 }

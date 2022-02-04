@@ -4,10 +4,10 @@ import { Executable } from '../../interfaces';
 import { CommandMeta } from './command.meta';
 import { Command, COMMAND_META } from './command';
 
-describe('Testing "@bleed-believer/command/command"', () => {
+describe('Testing "@bleed-believer/command/decorators/command"', () => {
     it('Command 01.', () => {
         @Command({
-            main: ['start'],
+            main: 'start',
             name: 'Start Server'
         })
         class TestCommand implements Executable {
@@ -27,7 +27,7 @@ describe('Testing "@bleed-believer/command/command"', () => {
     
     it('Command 02.', () => {
         @Command({
-            main: ['orm', 'migration', ':args'],
+            main: 'orm migration :args',
             name: 'Migration Manager',
             info: 'Test information.'
         })

@@ -3,6 +3,7 @@ import { MetaManager } from '../../tool/meta-manager';
 import { CommandMeta } from './command.meta';
 import { CommandOptions } from './command.options';
 import { CommandDecorator } from './command.decorator';
+import { ArgParser } from 'command/src/tool/arg-parser';
 
 export const COMMAND_META = Symbol('@bleed-believer/command');
 export function Command(options: CommandOptions): CommandDecorator {
@@ -10,9 +11,7 @@ export function Command(options: CommandOptions): CommandDecorator {
         options.info = 'Not available.';
     }
     
-    const main: string[] = options.main
-        .map(x => x?.replace(/[^a-z0-9:\-_]/gi, ''))
-        .filter(x => typeof x === 'string' && !!x);
+    const main: string[] = ArgParser.parseMain(options.main);
 
     return o => {
         const manager = new MetaManager(o);
