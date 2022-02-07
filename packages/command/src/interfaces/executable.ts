@@ -1,5 +1,5 @@
 import { Argv } from '../tool/arg-parser';
 
 export interface Executable {
-    start(argv: Argv): void | Promise<void>;
+    start(argv: Argv, data: Record<string, string[]>): void | Promise<void>;
 }

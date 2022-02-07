@@ -3,7 +3,7 @@ import { CommandRoutingOptions } from './command-routing.options';
 import { CommandRoutingMeta } from './command-routing.meta';
 import { COMMAND_META } from '../command';
 
-import { ClassMeta, Executable } from '../../interfaces';
+import { ClassMeta, CommandRoute, Executable } from '../../interfaces';
 import { MetaManager } from '../../tool/meta-manager';
 import { ArgParser } from '../../tool/arg-parser';
 
@@ -11,18 +11,40 @@ export const COMMAND_ROUTING_META = Symbol('@bleed-believer/command-routing');
 export function CommandRouting(options: CommandRoutingOptions): CommandRoutingDecorator {
     const meta: CommandRoutingMeta = {
         main: [],
+        routes: [],
         commands : [],
     };
 
-    if (options instanceof Array) {
-        meta.commands = [...options];
-    } else {
-        meta.main = ArgParser.parseMain((options as any)?.main as string);
-        meta.commands = ((options as any).commands as ClassMeta<Executable>[])
-            .filter(x => {
+    // Get main pattern
+    meta.main = options.main ? ArgParser.parseMain(options.main): [];
+
+    // Get routes
+    meta.routes = ((options as any).commands as ClassMeta<CommandRoute>[])
+        .filter(x => {
             const manag = new MetaManager(x);
-            return manag.some(COMMAND_META)
+            return manag.some(COMMAND_ROUTING_META);
         });
+
+    // Get commands
+    meta.commands = ((options as any).commands as ClassMeta<Executable>[])
+        .filter(x => {
+            const manag = new MetaManager(x);
+            return manag.some(COMMAND_META);
+        });
+
+    // Check main arg
+    for (const item of meta.main) {
+        if (item.startsWith('...')) {
+            throw new Error(
+                    'the wildcard "..." is not '
+                +   'allowed in command routes.'
+            );
+        } else if (item.startsWith(':')) {
+            throw new Error(
+                    'the wildcard ":" is not '
+                +   'allowed in command routes.'
+            );
+        }
     }
 
     return o => {

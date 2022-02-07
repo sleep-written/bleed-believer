@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import { ArgParser } from './arg-parser';
 import { ParserOptions } from './interfaces/parser-options';
 
-describe('Testing "@bleed-believer/command/tool/arg-parser"', () => {
+describe('Testing "/command/tool/arg-parser"', () => {
     describe('linear = false', () => {
         const options: ParserOptions = {};
 

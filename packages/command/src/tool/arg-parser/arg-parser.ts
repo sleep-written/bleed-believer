@@ -16,8 +16,8 @@ export class ArgParser implements Argv {
         return { ...this._args };
     }
 
-    private _options: ParserOptions;
-    get options(): ParserOptions {
+    private _options: Required<ParserOptions>;
+    get options(): Required<ParserOptions> {
         return { ...this._options };
     }
 
@@ -30,7 +30,7 @@ export class ArgParser implements Argv {
         }
 
         let key: string | null = null;
-        for (const item of input) {
+        for (const item of [...input]) {
             if (item.match(/^-{1,2}[a-z0-9\-]*$/gi)) {
                 // It's a key
                 key = item

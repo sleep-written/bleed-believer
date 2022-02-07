@@ -4,7 +4,7 @@
   "private": true,
   "description": "",
   "scripts": {
-    "test": "mocha -r ts-node/register -r tsconfig-paths/register ./packages/*/src/**/*.test.ts",
+    "test": "mocha -r ts-node/register -r tsconfig-paths/register './packages/*/src/**/*.test.ts'",
     "start": "ts-node -r tsconfig-paths/register ./packages/test/src",
     "prepare": "npm run clean && npm run build",
     "build": "tsc --build",

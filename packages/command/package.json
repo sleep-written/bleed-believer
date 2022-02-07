@@ -5,6 +5,9 @@
   "scripts": {
     "test": "mocha --require ts-node/register ./src/**/*.test.ts"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sleep-written/bleed-believer.git"

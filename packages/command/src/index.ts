@@ -11,3 +11,4 @@ export {
 } from './interfaces';
 
 export { Argv } from './tool/arg-parser';
+export { Commander } from './commander';

@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import { MetaManager } from './meta-manager';
 
-describe('Testing "@bleed-believer/command/tool/meta-manager"', () => {
+describe('Testing "/command/tool/meta-manager"', () => {
     class Target {
         private _n = 0;
         next(): number {

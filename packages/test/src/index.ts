@@ -1,7 +1,5 @@
 import { AppRouting } from './app.routing';
+import { Commander } from '@bleed-believer/command';
 
-const app = new AppRouting();
-app.before();
-
-const meta = (AppRouting as any)?.__meta__;
-console.log(meta);
+const app = new Commander(AppRouting);
+app.execute();

@@ -4,7 +4,7 @@ import { Executable } from '../../interfaces';
 import { CommandMeta } from './command.meta';
 import { Command, COMMAND_META } from './command';
 
-describe('Testing "@bleed-believer/command/decorators/command"', () => {
+describe('Testing "/command/decorators/command"', () => {
     it('Command 01.', () => {
         @Command({
             main: 'start',

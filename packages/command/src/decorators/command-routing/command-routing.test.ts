@@ -7,7 +7,7 @@ import { Executable } from '../../interfaces';
 import { Command } from '../command';
 
 
-describe('Testing "@bleed-believer/command/decorators/command-routing"', () => {
+describe('Testing "/command/decorators/command-routing"', () => {
     @Command({
         main: 'hello world',
         name: 'Greetings'
@@ -37,22 +37,24 @@ describe('Testing "@bleed-believer/command/decorators/command-routing"', () => {
         const manag = new MetaManager(Route);
         const metad = manag.get<CommandRoutingMeta>(COMMAND_ROUTING_META);
         
-        assert.hasAllKeys(metad, ['main', 'commands']);
+        assert.hasAllKeys(metad, ['main', 'routes', 'commands']);
         assert.sameOrderedMembers(metad.main, ['aaa']);
         assert.sameOrderedMembers(metad.commands, [Command01, Command02]);
     });
 
     it('Check metadata; options -> Array', () => {
-        @CommandRouting([
-            Command01,
-            Command02
-        ])
+        @CommandRouting({
+            commands: [
+                Command01,
+                Command02
+            ]
+        })
         class Route { }
 
         const manag = new MetaManager(Route);
         const metad = manag.get<CommandRoutingMeta>(COMMAND_ROUTING_META);
         
-        assert.hasAllKeys(metad, ['main', 'commands']);
+        assert.hasAllKeys(metad, ['main', 'routes', 'commands']);
         assert.lengthOf(metad.main, 0);
         assert.sameOrderedMembers(metad.commands, [Command01, Command02]);
     });
