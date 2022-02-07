@@ -1,52 +1,59 @@
-import { Command } from '../command';
-import { Executable } from '../../interfaces';
-import { CommandRouting } from './command-routing';
-import { MetaManager } from 'command/src/tool/meta-manager';
+import { assert } from 'chai';
 
-import { COMMAND_ROUTING } from './command-routing';
+import { CommandRouting, COMMAND_ROUTING_META } from './command-routing';
+import { CommandRoutingMeta } from './command-routing.meta';
+import { MetaManager } from '../../tool/meta-manager';
+import { Executable } from '../../interfaces';
+import { Command } from '../command';
+
 
 describe('Testing "@bleed-believer/command/decorators/command-routing"', () => {
     @Command({
-        name: 'Command 01',
-        main: 'cmd-01'
+        main: 'hello world',
+        name: 'Greetings'
     })
     class Command01 implements Executable {
         start(): void { }
     }
 
     @Command({
-        name: 'Command 02',
-        main: 'cmd-02'
+        main: 'kill :pid',
+        name: 'Task Kill'
     })
     class Command02 implements Executable {
         start(): void { }
     }
 
-    @Command({
-        name: 'Command 03',
-        main: 'cmd-03'
-    })
-    class Command03 implements Executable {
-        start(): void { }
-    }
+    it('Check metadata; options -> Object', () => {
+        @CommandRouting({
+            main: 'aaa',
+            commands: [
+                Command01,
+                Command02
+            ]
+        })
+        class Route { }
 
-    @CommandRouting({
-        path: 'orm',
-        attach: [
+        const manag = new MetaManager(Route);
+        const metad = manag.get<CommandRoutingMeta>(COMMAND_ROUTING_META);
+        
+        assert.hasAllKeys(metad, ['main', 'commands']);
+        assert.sameOrderedMembers(metad.main, ['aaa']);
+        assert.sameOrderedMembers(metad.commands, [Command01, Command02]);
+    });
+
+    it('Check metadata; options -> Array', () => {
+        @CommandRouting([
             Command01,
-            Command02,
-        ]
-    })
-    class SubRoute { }
+            Command02
+        ])
+        class Route { }
 
-    @CommandRouting([
-        SubRoute,
-        Command03
-    ])
-    class AppRoute{ }
-
-    it('Check Sub Route', () => {
-        const subMeta = new MetaManager(SubRoute).get(COMMAND_ROUTING);
-        const appMeta = new MetaManager(SubRoute).get(COMMAND_ROUTING);
+        const manag = new MetaManager(Route);
+        const metad = manag.get<CommandRoutingMeta>(COMMAND_ROUTING_META);
+        
+        assert.hasAllKeys(metad, ['main', 'commands']);
+        assert.lengthOf(metad.main, 0);
+        assert.sameOrderedMembers(metad.commands, [Command01, Command02]);
     });
 });

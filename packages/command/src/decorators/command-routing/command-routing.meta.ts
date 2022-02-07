@@ -1,8 +1,7 @@
-import { ClassMeta, CommandRoute, Executable } from '../../interfaces';
-import { Metadata } from '../../tool/meta-manager';
+import {ClassMeta, Executable} from '../../interfaces';
+import {Metadata} from '../../tool/meta-manager';
 
 export interface CommandRoutingMeta extends Metadata {
-    path: string[];
-    routes: ClassMeta<CommandRoute>[];
+    main: string[];
     commands: ClassMeta<Executable>[];
 }

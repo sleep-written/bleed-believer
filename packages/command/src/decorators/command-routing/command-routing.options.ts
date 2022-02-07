@@ -1,6 +1,8 @@
-import { ClassMeta, CommandRoute, Executable } from '../../interfaces';
+import {ClassMeta, Executable} from '../../interfaces';
 
-export interface CommandRoutingOptions {
-    path: string;
-    attach: ClassMeta<Executable | CommandRoute>[];
-};
+export type CommandRoutingOptions = 
+    {
+        main?: string;
+        commands: ClassMeta<Executable>[];
+    } | 
+    ClassMeta<Executable>[];

@@ -1,66 +1,32 @@
-import { MetaManager } from '../../tool/meta-manager';
-import { ClassMeta, CommandRoute, Executable } from '../../interfaces';
-
-import { ArgParser } from 'command/src/tool/arg-parser';
-import { CommandRoutingMeta } from './command-routing.meta';
-import { CommandRoutingOptions } from './command-routing.options';
 import { CommandRoutingDecorator } from './command-routing.decorator';
-
+import { CommandRoutingOptions } from './command-routing.options';
+import { CommandRoutingMeta } from './command-routing.meta';
 import { COMMAND_META } from '../command';
 
-export const COMMAND_ROUTING = Symbol('@bleed-believer/command-routing');
+import { ClassMeta, Executable } from '../../interfaces';
+import { MetaManager } from '../../tool/meta-manager';
+import { ArgParser } from '../../tool/arg-parser';
 
-export function CommandRouting(commands: (
-    ClassMeta<Executable> |
-    ClassMeta<CommandRoute>
-)[]): CommandRoutingDecorator;
-
-export function CommandRouting(
-    options: CommandRoutingOptions
-): CommandRoutingDecorator;
-
-export function CommandRouting(
-    arg:
-        CommandRoutingOptions |
-        (
-            ClassMeta<Executable> |
-            ClassMeta<CommandRoute>
-        )[]
-): CommandRoutingDecorator {
+export const COMMAND_ROUTING_META = Symbol('@bleed-believer/command-routing');
+export function CommandRouting(options: CommandRoutingOptions): CommandRoutingDecorator {
     const meta: CommandRoutingMeta = {
-        path: [],
-        routes: [],
-        commands: []
+        main: [],
+        commands : [],
     };
 
-    if (arg instanceof Array) {
-        meta.routes = (arg as any[]).filter(x => {
-            const mmm = new MetaManager(x);
-            return !!mmm.some(COMMAND_ROUTING);
-        });
-
-        meta.commands = (arg as any[]).filter(x => {
-            const mmm = new MetaManager(x);
-            return !!mmm.some(COMMAND_META);
-        });
+    if (options instanceof Array) {
+        meta.commands = [...options];
     } else {
-        if (arg.path) {
-            meta.path = ArgParser.parseMain(arg.path);
-        }
-
-        meta.routes = (arg.attach as any[]).filter(x => {
-            const mmm = new MetaManager(x);
-            return !!mmm.some(COMMAND_ROUTING);
-        });
-
-        meta.commands = (arg.attach as any[]).filter(x => {
-            const mmm = new MetaManager(x);
-            return !!mmm.some(COMMAND_META);
+        meta.main = ArgParser.parseMain((options as any)?.main as string);
+        meta.commands = ((options as any).commands as ClassMeta<Executable>[])
+            .filter(x => {
+            const manag = new MetaManager(x);
+            return manag.some(COMMAND_META)
         });
     }
 
     return o => {
-        const manager = new MetaManager(o);
-        manager.set<CommandRoutingMeta>(COMMAND_ROUTING, meta);
+        const manag = new MetaManager(o);
+        manag.set(COMMAND_ROUTING_META, meta);
     };
 }

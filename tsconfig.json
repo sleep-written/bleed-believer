@@ -7,6 +7,7 @@
   "exclude": [ "./**/*.test.ts" ],
   "references": [
     { "path": "./packages/command" },
-    { "path": "./packages/test" },
+    { "path": "./packages/test" }
+
   ]
 }
