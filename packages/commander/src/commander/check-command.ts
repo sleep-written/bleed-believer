@@ -20,18 +20,24 @@ export class CheckCommand {
         const mainTemp = [...meta.main];
         const mainUser = [...this._mainUser];
 
-        if (mainTemp.length > mainUser.length) {
+        const last = mainTemp[mainTemp.length - 1];
+        if (last?.startsWith('...')) {
+            const t = mainTemp.length;
+            const u = mainUser.length;
+
+            if (t - 1 > u) {
+                return null;
+            }
+        } else if (mainTemp.length > mainUser.length) {
             return null;
         }
         
         const data: ArgvData = {};
-        let param: Record<string, string> | undefined;
-        let items: string[] | undefined;
         while (mainTemp.length > 0) {
-            let temp = mainTemp.shift() ?? '';
-            let user = mainUser.shift() ?? '';
+            let temp = mainTemp.shift();
+            let user = mainUser.shift();
 
-            if (temp.startsWith(':')) {
+            if (temp?.startsWith(':')) {
                 // Key/Value pair
                 const key =( this._toLower
                     ? temp.toLowerCase()
@@ -42,23 +48,27 @@ export class CheckCommand {
                     data.param = {};
                 }
 
-                data.param[key] = user;
+                if (user) {
+                    data.param[key] = user;
+                }
 
             } else if (
-                (temp.startsWith('...')) &&
+                (temp?.startsWith('...')) &&
                 (mainTemp.length === 0)
             ) {
                 if (!data.items) {
                     data.items = [];
                 }
 
-               data.items.push(user, ...mainUser);
+                if (user) {
+                    data.items.push(user, ...mainUser);
+                }
 
             } else {
                 // Equality
                 if (this._toLower) {
-                    temp = temp.toLowerCase();
-                    user = user.toLowerCase();
+                    temp = temp?.toLowerCase();
+                    user = user?.toLowerCase();
                 }
 
                 if (temp !== user) {
