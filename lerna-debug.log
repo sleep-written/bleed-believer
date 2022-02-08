@@ -1,6 +1,0 @@
-42 error Error: Command failed with exit code 128: git tag v0.0.2 -m v0.0.2
-42 error fatal: tag 'v0.0.2' already exists
-42 error     at makeError (/home/dr-null/projects/modules/bleed-believer/node_modules/execa/lib/error.js:60:11)
-42 error     at handlePromise (/home/dr-null/projects/modules/bleed-believer/node_modules/execa/index.js:118:26)
-42 error     at processTicksAndRejections (node:internal/process/task_queues:96:5)
-42 error     at async Promise.all (index 0)
