@@ -28,5 +28,8 @@
   "gitHead": "892fcee6de566734bb5c084e094fdb7c4ba79c40",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@bleed-believer/meta": "^0.0.3"
   }
 }
