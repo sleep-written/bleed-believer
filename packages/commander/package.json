@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/commander",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
@@ -24,5 +24,6 @@
   "bugs": {
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
-  "homepage": "https://github.com/sleep-written/bleed-believer#readme"
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "gitHead": "892fcee6de566734bb5c084e094fdb7c4ba79c40"
 }

@@ -3,13 +3,13 @@
   "compilerOptions": {
     "noEmit": true
   },
-
   "exclude": [
     "./**/*.test.ts"
   ],
   "references": [
     { "path": "./packages/meta" },
     { "path": "./packages/commander" },
-    { "path": "./packages/test" }
+
+    { "path": "./tests/commander" }
   ]
 }

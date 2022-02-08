@@ -5,11 +5,10 @@
   "description": "",
   "scripts": {
     "test": "mocha -r ts-node/register -r tsconfig-paths/register './packages/*/src/**/*.test.ts'",
-    "start": "ts-node -r tsconfig-paths/register ./packages/test/src",
     "prepare": "npm run clean && npm run build",
     "build": "tsc --build",
     "watch": "tsc --build --watch",
-    "clean": "rm -r -f ./packages/*/dist && rm -f ./*.tsbuildinfo && rm -f ./packages/*/*.tsbuildinfo"
+    "clean": "./clean.sh"
   },
   "repository": {
     "type": "git",
@@ -23,9 +22,9 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "workspaces": [
+    "packages/meta",
     "packages/commander",
-    "packages/test",
-    "packages/meta"
+    "tests/commander"
   ],
   "devDependencies": {
     "@types/chai": "^4.3.0",

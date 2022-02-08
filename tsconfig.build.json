@@ -15,10 +15,12 @@
         "moduleResolution": "node",
         "esModuleInterop": true,
 
-        "baseUrl": "./packages/",
+        "baseUrl": ".",
         "paths": {
-            "@bleed-believer/commander": ["commander"],
-            "@bleed-believer/meta": ["meta"]
+            "@bleed-believer/commander": ["./packages/commander"],
+            "@bleed-believer/meta": ["./packages/meta"],
+
+            "test/commander": [ "./tests/commander" ]
         }
     }
 }
