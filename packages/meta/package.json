@@ -1,5 +1,6 @@
 {
   "name": "@bleed-believer/meta",
+  "version": "0.0.0",
   "description": "",
   "main": "./dist/index.js",
   "devDependencies": {},

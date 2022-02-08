@@ -1,5 +1,5 @@
 {
-  "name": "architecture-test",
+  "name": "test",
   "private": true,
   "description": "A proyect for testing the packages of this monorepo",
   "main": "./dist/index.js",
