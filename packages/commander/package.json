@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/commander",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
@@ -30,6 +30,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@bleed-believer/meta": "^0.0.3"
+    "@bleed-believer/meta": "^0.0.4"
   }
 }
