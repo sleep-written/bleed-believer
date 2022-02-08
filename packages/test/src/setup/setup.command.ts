@@ -1,4 +1,4 @@
-import { Command, Executable } from '@bleed-believer/command';
+import { Command, Executable } from '@bleed-believer/commander';
 
 @Command({
     main: 'setup',

@@ -4,10 +4,12 @@
     "noEmit": true
   },
 
-  "exclude": [ "./**/*.test.ts" ],
+  "exclude": [
+    "./**/*.test.ts"
+  ],
   "references": [
-    { "path": "./packages/command" },
+    { "path": "./packages/meta" },
+    { "path": "./packages/commander" },
     { "path": "./packages/test" }
-
   ]
 }

@@ -17,7 +17,8 @@
 
         "baseUrl": "./packages/",
         "paths": {
-            "@bleed-believer/command": ["command"]
+            "@bleed-believer/commander": ["commander"],
+            "@bleed-believer/meta": ["meta"]
         }
     }
 }

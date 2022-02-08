@@ -1,9 +1,13 @@
-import { BeforeCommand, CommandRouting, FailedCommand } from '@bleed-believer/command';
+import { BeforeCommand, CommandRouting, FailedCommand } from '@bleed-believer/commander';
 
+import { NestedRouting } from './nested';
 import { SetupCommand } from './setup';
 import { TestCommand } from './test';
 
 @CommandRouting({
+    routes: [
+        NestedRouting
+    ],
     commands: [
         SetupCommand,
         TestCommand,
