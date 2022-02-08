@@ -19,5 +19,8 @@
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
-  "gitHead": "892fcee6de566734bb5c084e094fdb7c4ba79c40"
+  "gitHead": "892fcee6de566734bb5c084e094fdb7c4ba79c40",
+  "publishConfig": {
+    "access": "public"
+  }
 }
