@@ -1,2 +1,2 @@
-export * from './interfaces';
-export { MetaManager } from './meta-manager';
+export * from './errors';
+export { Meta } from './meta';

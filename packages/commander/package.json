@@ -1,23 +1,24 @@
 {
   "name": "@bleed-believer/commander",
-  "version": "0.0.5",
-  "description": "",
+  "version": "0.2.0",
+  "description": "A package to create CLI applications using decorators",
   "main": "./dist/index.js",
-  "scripts": {
-    "test": "mocha --require ts-node/register ./src/**/*.test.ts"
-  },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sleep-written/bleed-believer.git"
   },
   "keywords": [
-    "command",
-    "argv",
+    "cli",
     "arguments",
-    "cli"
+    "parser",
+    "argv",
+    "router"
   ],
   "author": "sleep-written",
   "license": "MIT",
@@ -25,11 +26,7 @@
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
-  "gitHead": "892fcee6de566734bb5c084e094fdb7c4ba79c40",
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
-    "@bleed-believer/meta": "^0.0.5"
+    "@bleed-believer/meta": "^0.2.0"
   }
 }

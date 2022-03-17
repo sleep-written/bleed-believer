@@ -1,116 +1,101 @@
-import { ClassMeta } from '@bleed-believer/meta';
-
-import { ArgvData, CommandRoute, Executable } from '../interfaces';
-import { ArgParser, ParserOptions } from '../tool/arg-parser';
-import { COMMAND_ROUTING } from '../decorators';
-import { CheckCommand } from './check-command';
-import { CheckRoute } from './check-route';
+import { Argv, ArgvData, ArgvParser, ParserOptions } from '../argv';
+import { CommandRoute, GetClass } from '../interfaces';
+import { commandFlatter } from './command-flatter';
+import { CommandFlatted } from './interfaces';
 
 export class Commander {
-    private _route: ClassMeta<CommandRoute>;
-    private _argv: ArgParser;
+    private _root: GetClass<CommandRoute>;
+    private _argv: ArgvParser;
 
-    constructor(route: ClassMeta<CommandRoute>, options?: ParserOptions) {
-        this._route = route;
-        this._argv = new ArgParser(
+    constructor(route: GetClass<CommandRoute>, options?: ParserOptions) {
+        this._root = route;
+        this._argv = new ArgvParser(
             process.argv.slice(2),
-            options
+            {...options}
         );
     }
 
-    private async _resolveCommand(
-        classCommand: ClassMeta<Executable>,
-        data: ArgvData
-    ): Promise<void> {
-        const route = new this._route();
-        const command = new classCommand();
+    async #execute(flat: CommandFlatted, argv: Argv, data: ArgvData): Promise<void> {
+        // Prepare execution
+        const routes = flat.routes.map(x => new x());
 
         try {
-            if (route?.before) {
-                await route.before(this._argv);
+            // Execute all "before" routes method
+            for (const route of routes.slice().reverse()) {
+                if (route.before && !(route instanceof this._root)) {
+                    await route.before(argv);
+                }
             }
 
-            await command.start(this._argv, data);
+            // Execute the command
+            const command = new flat.command();
+            await command.start(argv, data);
+        } catch (err) {
+            // Execute "failed" routes method
+            for (const route of routes) {
+                if (route.failed) {
+                    await route.failed(err);
+                    return;
+                }
+            }
 
-            if (route?.after) {
-                await route.after(this._argv);
+            // Only if a "failed" method not found
+            throw err;
+        } finally {
+            // Execute all "after" routes method
+            for (const route of routes) {
+                if (route.after && !(route instanceof this._root)) {
+                    await route.after(argv);
+                }
+            }
+        }
+    }
+
+    async execute(): Promise<void> {
+        const route = new this._root();
+        const argv: Argv = {
+            main: this._argv.main,
+            data: this._argv.data
+        };
+
+        try {
+            // Execute the root's "before" event
+            if (route.before) {
+                await route.before(argv);
+            }
+
+            // Flatter the command's path
+            const flattedCommands = commandFlatter(this._root);
+            let found = false;
+
+
+            for (const flat of flattedCommands) {
+                // Comparte the pattern with argv
+                const data = this._argv.match(flat.main);                 
+                if (data) {
+                    // Execute the command
+                    await this.#execute(flat, argv, data);
+                    found = true;
+                    break;
+                }
+            }
+
+            // Trigger an error when command not found
+            if (!found) {
+                throw new Error('Command not found.');
             }
         } catch (err: any) {
-            if (route?.failed) {
+            // Use the "failed" root route event
+            if (route.failed) {
                 await route.failed(err);
             } else {
-                throw new Error(err);
+                throw err;
+            }
+        } finally {
+            // Use the "after" root route event
+            if (route.after) {
+                await route.after(argv);
             }
         }
-    }
-
-    private async _rejectCommand(): Promise<void> {
-        const error = new Error('Command not found.');
-        
-        // Execute the before command
-        const obj = new this._route();
-        if (obj.before) {
-            await obj.before(this._argv);
-        }
-
-        if (obj.failed) {
-            await obj.failed(error);
-
-            if (obj.after) {
-                await obj.after(this._argv);
-            }
-        } else {
-            throw error;
-        }
-    }
-
-    private _search(
-        route: ClassMeta<CommandRoute>,
-        argv: ArgParser
-    ): null | {
-        command: ClassMeta<Executable>,
-        data: ArgvData
-    } {
-        const meta = COMMAND_ROUTING.get(route);
-        const routeChecker = new CheckRoute(argv);
-
-        for (const innerRoute of meta.routes) {
-            const match = routeChecker.eval(innerRoute);
-            if (!match) { continue; }
-
-            const innerArgv = new ArgParser(match, this._argv.options);
-            const resp = this._search(innerRoute, innerArgv);
-            if (resp) {
-                return resp;
-            }
-        }
-
-        const commandChecker = new CheckCommand(argv);
-        for (const command of meta.commands) {
-            const data = commandChecker.eval(command);
-            if (data) {
-                return { command, data };
-            }
-        }
-
-        return null;
-    }
-
-    execute(): Promise<void> {
-        const found = this._search(
-            this._route,
-            this._argv
-        );
-
-        if (found) {
-            return this._resolveCommand(
-                found.command,
-                found.data
-            );
-        } else {
-
-        }
-
-        return this._rejectCommand();
     }
 }

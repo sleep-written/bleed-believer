@@ -9,7 +9,6 @@
   "references": [
     { "path": "./packages/meta" },
     { "path": "./packages/commander" },
-
-    { "path": "./tests/commander" }
+    { "path": "./packages/cli" }
   ]
 }

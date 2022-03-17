@@ -1,7 +1,15 @@
 # Bleed Believer
 
-Under construction...
+This monorepo contains several packages to make applications easily.
 
-## [Commander](./packages/commander/README.md)
+<br />
 
-It's a package with all tools do you need to maye an CLI application.
+## [@bleed-believer/meta](./packages/meta/README.md)
+
+Add metadata to your objects using symbols as metadata identifier.
+
+<br />
+
+## [@bleed-believer/commander](./packages/commander/README.md)
+
+Create CLI applications with decorators, routing and and parses the execution arguments.

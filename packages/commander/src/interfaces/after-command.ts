@@ -1,4 +1,4 @@
-import { Argv } from '../tool/arg-parser';
+import { Argv } from '../argv';
 
 export interface AfterCommand {
     after(argv: Argv): void | Promise<void>;

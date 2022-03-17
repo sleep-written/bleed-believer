@@ -1,0 +1,1 @@
+export type ClassDecorator<T> = (c: { new(...args: any[]): T; }) => void;

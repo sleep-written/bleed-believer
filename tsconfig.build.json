@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es2020",
+        "target": "es2021",
         "module": "CommonJS",
         "composite": true,
   
@@ -10,17 +10,16 @@
         "incremental": true,
         "sourceMap": true,
         "declaration": true,
+        "removeComments": false,
   
         "strict": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
 
-        "baseUrl": ".",
+        "baseUrl": "./packages",
         "paths": {
-            "@bleed-believer/commander": ["./packages/commander"],
-            "@bleed-believer/meta": ["./packages/meta"],
-
-            "test/commander": [ "./tests/commander" ]
+            "@bleed-believer/meta": ["./meta"],
+            "@bleed-believer/commander": ["./commander"]
         }
     }
 }
