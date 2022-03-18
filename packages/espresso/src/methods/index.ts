@@ -1,6 +1,7 @@
 import { methodFactory } from './method-factory';
 
 export { MethodMeta } from './method.meta';
+export { DuplicatedMethodError as MethodAlreadyRegisteredError } from '../errors/duplicated-method-error';
 
 export const Get = methodFactory('get');
 export const Head = methodFactory('head');

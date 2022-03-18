@@ -5,16 +5,22 @@ import { Request, Response } from 'express';
 
 export const ENDPOINT = new Meta<EndpointMeta>();
 export abstract class Endpoint {
-    protected get req(): Request {
-        return this._req;
+    /**
+     * The __request__ object incomming from `express.js`
+     */
+    protected get requ(): Request {
+        return this._requ;
     }
 
-    protected get res(): Response {
-        return this._res;
+    /**
+     * The __response__ object incomming from `express.js`
+     */
+    protected get resp(): Response {
+        return this._resp;
     }
 
     constructor(
-        private _req: Request,
-        private _res: Response,
+        private _requ: Request,
+        private _resp: Response,
     ) { }
 }

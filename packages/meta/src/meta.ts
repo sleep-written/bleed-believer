@@ -16,7 +16,7 @@ export class Meta<T extends Record<string, any>> {
 
         const meta: Metadata = target[Meta.SYMBOL];
         if (!(meta instanceof Metadata)) {
-            throw new MetadataNotFoundError();
+            throw new MetadataNotFoundError(target);
         }
 
         return meta.get(this.#symbol);

@@ -1,6 +1,6 @@
-export function normalizePath(path?: string): string {
-    if (typeof path !== 'string') {
-        return '';
+export function normalizePath(path?: string): string | undefined {
+    if (!path?.trim()?.length) {
+        return undefined;
     } else {
         return path
             .replace(/\\+/gi, '/')
