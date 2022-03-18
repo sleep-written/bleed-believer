@@ -1,0 +1,32 @@
+{
+  "name": "@bleed-believer/espresso",
+  "version": "0.2.0",
+  "description": "An wrapper for express.js using decorators for routing",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sleep-written/bleed-believer.git"
+  },
+  "keywords": [
+    "express",
+    "espresso",
+    "api",
+    "route",
+    "routing"
+  ],
+  "author": "sleep-written",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sleep-written/bleed-believer/issues"
+  },
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "dependencies": {
+    "@bleed-believer/meta": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13"
+  }
+}
