@@ -1,7 +1,9 @@
 import { assert } from 'chai';
 
+import { DuplicatedEndpointError } from '../errors';
 import { CONTROLLER, Controller } from './controller';
-import { DuplicatedEndpointError, Get, Post } from '../endpoint';
+import { ControllerPath } from './controller-path';
+import { Get, Post } from '../endpoint';
 
 describe.only('Testing "@espresso/endpoint"', () => {
     it('Controller 01', () => {
@@ -74,5 +76,22 @@ describe.only('Testing "@espresso/endpoint"', () => {
         } catch (err) {
             assert.instanceOf(err, DuplicatedEndpointError);
         }
+    });
+
+    it('Controller 05 (custom path)', () => {
+        @ControllerPath('jajaja')
+        class Target extends Controller {
+            @Get()
+            find(): void { }
+        }
+
+        const meta = CONTROLLER.get(Target);
+        assert.isObject(meta);
+        assert.deepEqual(meta, {
+            path: 'jajaja',
+            endpoints: [
+                { key: 'find', method: 'get' }
+            ]
+        });
     });
 });

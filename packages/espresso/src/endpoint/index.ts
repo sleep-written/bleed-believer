@@ -1,5 +1,4 @@
 export * from './interfaces';
-export { DuplicatedEndpointError } from './duplicated-endpoint-error';
 
 import { methodFactory } from './method-factory';
 export const Get        = methodFactory('get');

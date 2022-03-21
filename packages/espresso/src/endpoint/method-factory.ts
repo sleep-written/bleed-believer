@@ -1,5 +1,5 @@
 import { EndpointDecorator, EndpointMeta } from './interfaces';
-import { DuplicatedEndpointError } from './duplicated-endpoint-error';
+import { DuplicatedEndpointError } from '../errors';
 
 import { ControllerMeta, CONTROLLER } from '../controller';
 import { normalizePath } from '../tool';
