@@ -12,7 +12,7 @@ export function methodFactory(method: keyof HttpMethods) {
             const meta: ControllerMeta = CONTROLLER.some(target.constructor)
                 ?   CONTROLLER.get(target.constructor)
                 :   {
-                    path: target.constructor.name.replace(/Controller$/i, ''),
+                    path: target.constructor.name.replace(/Controller$/, ''),
                     endpoints: []
                 };
 

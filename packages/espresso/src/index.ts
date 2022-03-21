@@ -1,6 +1,21 @@
 export * from './endpoint';
-export * from './controller';
-export * from './interfaces';
-export * from './controller-routing';
+
+export {
+    HttpMethods,
+    ErrorCallback,
+} from './interfaces';
+
+export {
+    Controller,
+    ControllerClass,
+    ControllerDecorator,
+} from './controller';
+
+export {
+    ControllerRouting,
+    ControllerRoutingClass,
+    ControllerRoutingOptions,
+    ControllerRoutingDecorator,
+} from './controller-routing';
 
 export { Espresso } from './espresso';
