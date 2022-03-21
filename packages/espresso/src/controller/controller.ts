@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Meta } from '@bleed-believer/meta';
 
-import { ControllerMeta } from './controller.meta';
+import { ControllerMeta } from './interfaces';
 
 export const CONTROLLER = new Meta<ControllerMeta>();
 export abstract class Controller {
