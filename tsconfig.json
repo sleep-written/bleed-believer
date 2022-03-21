@@ -9,6 +9,8 @@
   "references": [
     { "path": "./packages/meta" },
     { "path": "./packages/commander" },
+    { "path": "./packages/espresso" },
+    { "path": "./packages/espresso-test" },
     { "path": "./packages/cli" }
   ]
 }

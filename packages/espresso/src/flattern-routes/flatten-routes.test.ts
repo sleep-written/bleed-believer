@@ -59,22 +59,22 @@ describe.only('Testing "@espresso/flatten-routes"', () => {
             {
                 key: 'findOne',
                 method: 'get',
-                path: 'Documents/Quotation/:id',
+                path: '/Documents/Quotation/:id',
             },
             {
                 key: 'save',
                 method: 'post',
-                path: 'Documents/Quotation'
+                path: '/Documents/Quotation'
             },
             {
                 key: 'findOne',
                 method: 'get',
-                path: 'Documents/Contract/:id',
+                path: '/Documents/Contract/:id',
             },
             {
                 key: 'save',
                 method: 'post',
-                path: 'Documents/Contract'
+                path: '/Documents/Contract'
             }
         ]);
 
@@ -97,37 +97,37 @@ describe.only('Testing "@espresso/flatten-routes"', () => {
             {
                 key: 'login',
                 method: 'post',
-                path: 'User/login',
+                path: '/User/login',
             },
             {
                 key: 'findOne',
                 method: 'get',
-                path: 'User/:id',
+                path: '/User/:id',
             },
             {
                 key: 'save',
                 method: 'post',
-                path: 'User'
+                path: '/User'
             },
             {
                 key: 'findOne',
                 method: 'get',
-                path: 'Documents/Quotation/:id',
+                path: '/Documents/Quotation/:id',
             },
             {
                 key: 'save',
                 method: 'post',
-                path: 'Documents/Quotation'
+                path: '/Documents/Quotation'
             },
             {
                 key: 'findOne',
                 method: 'get',
-                path: 'Documents/Contract/:id',
+                path: '/Documents/Contract/:id',
             },
             {
                 key: 'save',
                 method: 'post',
-                path: 'Documents/Contract'
+                path: '/Documents/Contract'
             }
         ]);
 

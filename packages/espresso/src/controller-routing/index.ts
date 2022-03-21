@@ -1,2 +1,5 @@
-export { CONTROLLER_ROUTING } from './controller-routing';
 export * from './interfaces';
+export {
+    CONTROLLER_ROUTING,
+    ControllerRouting
+} from './controller-routing';

@@ -5,8 +5,8 @@ import { FlattedRoute } from './flatted-route';
 export function flattenRoutes(route: ControllerRoutingClass): FlattedRoute[] {
     const meta = CONTROLLER_ROUTING.get(route);
     const path = typeof meta.path === 'string'
-        ?   `${meta.path}/`
-        :   ``;
+        ?   `/${meta.path}`
+        :   '';
 
     // Iterate over controllers
     const out: FlattedRoute[] = [];
@@ -17,8 +17,8 @@ export function flattenRoutes(route: ControllerRoutingClass): FlattedRoute[] {
                 ...endpoint,
                 class: ctrl,
                 path: typeof endpoint.path === 'string'
-                    ?   `${path}${ctrlMeta.path}/${endpoint.path}`
-                    :   `${path}${ctrlMeta.path}`
+                    ?   `${path}/${ctrlMeta.path}/${endpoint.path}`
+                    :   `${path}/${ctrlMeta.path}`
             });
         }
     }
