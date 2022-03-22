@@ -1,23 +1,23 @@
 import * as BodyParser from 'body-parser';
 import express from 'express';
 
-import { Espresso } from '@bleed-believer/espresso';
 import { ApiRouting } from './controllers/api.routing';
+import { Espresso } from '@bleed-believer/espresso';
 
-const exp = express();
-exp.use(BodyParser.json({ strict: false }));
-exp.use(BodyParser.urlencoded({ extended: true }));
+const app = express();
+app.use(BodyParser.json({ strict: false }));
+app.use(BodyParser.urlencoded({ extended: true }));
 
-const app = new Espresso(exp);
-app.inject(ApiRouting);
-app.onError((e, req, res) => {
+const exp = new Espresso(app, { verbose: true, lowercase: true });
+exp.inject(ApiRouting);
+
+exp.onError((e, _, res) => {
     console.log('ERROR!');
     console.log(e.message);
     
     res.json('FATAL ERROR!');
 });
 
-exp.listen(8080, () => {
-    console.clear();
+app.listen(8080, () => {
     console.log('Ready...');
 });

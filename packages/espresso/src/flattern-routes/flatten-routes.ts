@@ -7,22 +7,22 @@ export function flattenRoutes(route: ControllerRoutingClass, lowercase?: boolean
     const meta = CONTROLLER_ROUTING.get(route);
     let routePath = meta.path ?? '';
     if (lowercase && !routePath.match(/^\/:/gi)) {
-        routePath = routePath.toLowerCase();
+        routePath = Path.toLower(routePath);
     }
 
     // Iterate over controllers
     const out: FlattedRoute[] = [];
     for (const ctrl of meta.controllers) {
         const ctrlMeta = CONTROLLER.get(ctrl);
-        let ctrlPath = ctrlMeta.path ?? Path.fromClass(ctrl)
+        let ctrlPath = ctrlMeta.path ?? Path.fromClass(ctrl);
         if (lowercase && !ctrlPath.match(/^\/:/gi)) {
-            ctrlPath = ctrlPath.toLowerCase();
+            ctrlPath = Path.toLower(ctrlPath);
         }
         
         for (const endpoint of ctrlMeta.endpoints) {
             let endpPath = endpoint.path ?? '';
             if (lowercase && !endpPath.match(/^\/:/gi)) {
-                endpPath = endpPath.toLowerCase();
+                endpPath = Path.toLower(endpPath.toLowerCase());
             }
 
             const fullPath = `${routePath}${ctrlPath}${endpPath}`;
