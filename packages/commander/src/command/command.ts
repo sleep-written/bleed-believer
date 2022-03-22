@@ -6,6 +6,12 @@ import { CommandDecorator } from './command.decorator';
 import { ArgvParser } from '../argv';
 
 export const COMMAND = new Meta<CommandMeta>();
+
+/**
+ * A decorator to converts a class into a `Command` class type. The target class
+ * must implements the `Executable` interface.
+ * @param options The options required to configure the target.
+ */
 export function Command(options: CommandOptions): CommandDecorator {
     return target => {
         const meta: CommandMeta = {

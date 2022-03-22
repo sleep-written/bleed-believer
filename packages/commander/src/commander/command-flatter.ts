@@ -1,9 +1,9 @@
 import { COMMAND } from '../command/command';
 import { CommandFlatted } from './interfaces';
 import { COMMAND_ROUTING } from '../command-routing';
-import { CommandRoute, GetClass } from '../interfaces';
+import { CommandRoutingClass } from '../interfaces';
 
-export function commandFlatter(route: GetClass<CommandRoute>): CommandFlatted[] {
+export function commandFlatter(route: CommandRoutingClass): CommandFlatted[] {
     const mainMeta = COMMAND_ROUTING.get(route);
     const commands = mainMeta.commands
         .map(cmd => {

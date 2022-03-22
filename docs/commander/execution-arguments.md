@@ -28,7 +28,7 @@ This library parses the __execution arguments__, returning an object that implem
     ```
 <br />
 
-- __"opts"__ (`Record<string, string[]>`) - An object that contains all __optional arguments__ grouped in a object. The elements with `"-"` at the beginning will be the key, and the elements at the right of will be the value. Using the above example:
+- __"data"__ (`Record<string, string[]>`) - An object that contains all __optional arguments__ grouped in a object. The elements with `"-"` at the beginning will be the key, and the elements at the right of will be the value. Using the above example:
     ```ts
     {
         "--key00": [ "v00" ],
@@ -54,7 +54,7 @@ The parsed object will be:
 ```ts
 {
     main: [ "arg", "bb", "dd" ],
-    opts: {
+    data: {
         "--key00": [ "aa", "cc" ],
         "--key01": [ "zz" ],
         "--key99": []

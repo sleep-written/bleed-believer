@@ -1,1 +1,1 @@
-export type ClassDecorator<T> = (c: { new(...args: any[]): T; }) => void;
+export type ClassDecorator<T> = (c: T) => void;

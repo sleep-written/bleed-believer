@@ -1,3 +1,3 @@
-import { ClassDecorator, CommandRoute } from '../interfaces';
+import { ClassDecorator, CommandRoutingClass } from '../interfaces';
 
-export type CommandRoutingDecorator = ClassDecorator<CommandRoute>;
+export type CommandRoutingDecorator = ClassDecorator<CommandRoutingClass>;

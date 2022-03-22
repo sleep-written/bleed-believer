@@ -5,6 +5,11 @@ import { CommandRoutingMeta } from './command-routing.meta';
 import { CommandRoutingOptions } from './command-routing.options';
 
 export const COMMAND_ROUTING = new Meta<CommandRoutingMeta>();
+
+/**
+ * Converts a class into a `CommandRouter` class type.
+ * @param options The options required to configure the current target.
+ */
 export function CommandRouting(options: CommandRoutingOptions): CommandRoutingDecorator {
     return target => {
         const meta: CommandRoutingMeta = {

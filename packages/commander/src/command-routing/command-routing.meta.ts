@@ -1,7 +1,7 @@
-import { CommandRoute, Executable, GetClass } from '../interfaces';
+import { CommandClass, CommandRoutingClass } from '../interfaces';
 
 export interface CommandRoutingMeta {
     main: string[];
-    routes: GetClass<CommandRoute>[];
-    commands: GetClass<Executable>[];
+    routes: CommandRoutingClass[];
+    commands: CommandClass[];
 }

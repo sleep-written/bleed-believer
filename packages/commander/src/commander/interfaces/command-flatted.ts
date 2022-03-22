@@ -1,7 +1,7 @@
-import { CommandRoute, Executable, GetClass } from '../../interfaces';
+import { CommandClass, CommandRoutingClass } from '../../interfaces';
 
 export interface CommandFlatted {
     main: string[];
-    routes: GetClass<CommandRoute>[];
-    command: GetClass<Executable>;
+    routes: CommandRoutingClass[];
+    command: CommandClass;
 }

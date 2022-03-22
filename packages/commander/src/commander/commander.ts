@@ -1,13 +1,18 @@
 import { Argv, ArgvData, ArgvParser, ParserOptions } from '../argv';
-import { CommandRoute, GetClass } from '../interfaces';
+import { CommandRoutingClass } from '../interfaces';
 import { commandFlatter } from './command-flatter';
 import { CommandFlatted } from './interfaces';
 
 export class Commander {
-    private _root: GetClass<CommandRoute>;
+    private _root: CommandRoutingClass;
     private _argv: ArgvParser;
 
-    constructor(route: GetClass<CommandRoute>, options?: ParserOptions) {
+    /**
+     * A class that initializes the route that you pass as argument.
+     * @param route The root `CommandRouting` of your application.
+     * @param options The options to change the behavior of the commander instance.
+     */
+    constructor(route: CommandRoutingClass, options?: ParserOptions) {
         this._root = route;
         this._argv = new ArgvParser(
             process.argv.slice(2),
@@ -51,6 +56,11 @@ export class Commander {
         }
     }
 
+    /**
+     * Searches the `Command` class using the __execution arguments__ as reference.
+     * If the `Command` class is found, that class is instanciated and launchs its
+     * `start(...)` method.
+     */
     async execute(): Promise<void> {
         const route = new this._root();
         const argv: Argv = {
