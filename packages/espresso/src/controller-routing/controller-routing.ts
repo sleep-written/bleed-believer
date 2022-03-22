@@ -1,4 +1,5 @@
 import { Meta } from '@bleed-believer/meta';
+import { Path } from '../path';
 import { normalizePath } from '../tool';
 
 import {
@@ -19,7 +20,7 @@ export function ControllerRouting(
         };
         
         // Assign the parsed path
-        const parsedPath = normalizePath(path);
+        const parsedPath = Path.normalize(path);
         if (typeof parsedPath === 'string') {
             meta.path = parsedPath;
         }

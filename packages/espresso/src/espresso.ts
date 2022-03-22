@@ -13,7 +13,7 @@ export class Espresso {
         this._onError = [];
     }
 
-    injectRouting(route: ControllerRoutingClass): void {
+    inject(route: ControllerRoutingClass): void {
         const flatted = flattenRoutes(route);
         for (const route of flatted) {
             this._app[route.method](route.path, async (req, res) => {

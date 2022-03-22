@@ -1,7 +1,7 @@
 import { EmptyControllerError, InvalidPathError } from '../errors';
 import { ControllerDecorator } from './interfaces';
-import { normalizePath } from '../tool';
 import { CONTROLLER } from './controller';
+import { Path } from '../path';
 
 export function ControllerPath(path: string): ControllerDecorator {
     return target => {
@@ -11,7 +11,7 @@ export function ControllerPath(path: string): ControllerDecorator {
 
         // Normalize path
         const meta = CONTROLLER.get(target);
-        const data = normalizePath(path);
+        const data = Path.normalize(path);
         if (data == null) {
             throw new InvalidPathError();
         }

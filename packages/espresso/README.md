@@ -7,21 +7,40 @@ An scalable endpoint router for [express.js](https://www.npmjs.com/package/expre
 
 In your project you must have installed locally [express.js](https://www.npmjs.com/package/express) framework with its type definitions:
 ```bash
-# Install express.js
-npm i --save express
+# Install typescript
+npm i --save-dev typescript
 
 # Install the types for development
+npm i --save-dev @types/node
 npm i --save-dev @types/express
+
+# Install express.js
+npm i --save express
+```
+
+In your `tsconfig.json`, remember to enables these options:
+```json
+{
+    "compilerOptions": {
+        /** ... **/
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        /** ... **/
+    }
+}
 ```
 
 
 ## Installation
 
-After install [express.js](https://www.npmjs.com/package/express) you can install this package:
+After install the required dependencies, you can install this package:
 ```bash
 npm i --save @bleed-believer/espresso
 ```
 
 
 ## Documentation
-1. [How it works?](/docs/espresso/how-it-works.md)
+1. [Getting started.](/docs/espresso/getting-started.md)
+1. [Creating a controller.](/docs/espresso/controllers.md)
+1. [Creating routes.](/docs/espresso/routes.md)
+1. [Routing injection.](/docs/espresso/injection.md)

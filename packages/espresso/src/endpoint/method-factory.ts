@@ -4,6 +4,7 @@ import { DuplicatedEndpointError } from '../errors';
 import { ControllerMeta, CONTROLLER } from '../controller';
 import { normalizePath } from '../tool';
 import { HttpMethods } from '../interfaces';
+import { Path } from '../path';
 
 export function methodFactory(method: keyof HttpMethods) {
     return function(path?: string): EndpointDecorator {
@@ -12,14 +13,13 @@ export function methodFactory(method: keyof HttpMethods) {
             const meta: ControllerMeta = CONTROLLER.some(target.constructor)
                 ?   CONTROLLER.get(target.constructor)
                 :   {
-                    path: target.constructor.name.replace(/Controller$/, ''),
                     endpoints: []
                 };
 
             // Create the endpoint
             const endpoint: EndpointMeta = {
                 key, method,
-                path: normalizePath(path)
+                path: Path.normalize(path)
             };
 
             // Clean path
@@ -33,7 +33,11 @@ export function methodFactory(method: keyof HttpMethods) {
                 x.method === endpoint.method
             ))) {
                 throw new DuplicatedEndpointError(
-                    endpoint.path ?? meta.path,
+                    Path.fromInstance(target) + (
+                        typeof endpoint.path === 'string'
+                            ?   endpoint.path
+                            :   ''
+                        ),
                     method
                 );
             }

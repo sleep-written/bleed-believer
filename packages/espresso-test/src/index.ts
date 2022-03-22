@@ -9,7 +9,7 @@ exp.use(BodyParser.json({ strict: false }));
 exp.use(BodyParser.urlencoded({ extended: true }));
 
 const app = new Espresso(exp);
-app.injectRouting(ApiRouting);
+app.inject(ApiRouting);
 app.onError((e, req, res) => {
     console.log('ERROR!');
     console.log(e.message);

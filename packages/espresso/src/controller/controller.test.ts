@@ -5,7 +5,7 @@ import { CONTROLLER, Controller } from './controller';
 import { ControllerPath } from './controller-path';
 import { Get, Post } from '../endpoint';
 
-describe.only('Testing "@espresso/endpoint"', () => {
+describe('Testing "@espresso/controller"', () => {
     it('Controller 01', () => {
         class Target extends Controller {
             @Get()
@@ -15,7 +15,6 @@ describe.only('Testing "@espresso/endpoint"', () => {
         const meta = CONTROLLER.get(Target);
         assert.isObject(meta);
         assert.deepEqual(meta, {
-            path: 'Target',
             endpoints: [
                 { key: 'find', method: 'get' }
             ]
@@ -34,10 +33,9 @@ describe.only('Testing "@espresso/endpoint"', () => {
         const meta = CONTROLLER.get(Target);
         assert.isObject(meta);
         assert.deepEqual(meta, {
-            path: 'Target',
             endpoints: [
                 { key: 'find',      method: 'get' },
-                { key: 'findOne',   method: 'get', path: ':id' },
+                { key: 'findOne',   method: 'get', path: '/:id' },
             ]
         });
     });
@@ -54,7 +52,6 @@ describe.only('Testing "@espresso/endpoint"', () => {
         const meta = CONTROLLER.get(Target);
         assert.isObject(meta);
         assert.deepEqual(meta, {
-            path: 'Target',
             endpoints: [
                 { key: 'find', method: 'get' },
                 { key: 'save', method: 'post' },
@@ -88,7 +85,7 @@ describe.only('Testing "@espresso/endpoint"', () => {
         const meta = CONTROLLER.get(Target);
         assert.isObject(meta);
         assert.deepEqual(meta, {
-            path: 'jajaja',
+            path: '/jajaja',
             endpoints: [
                 { key: 'find', method: 'get' }
             ]
