@@ -2,7 +2,6 @@ import { EndpointDecorator, EndpointMeta } from './interfaces';
 import { DuplicatedEndpointError } from '../errors';
 
 import { ControllerMeta, CONTROLLER } from '../controller';
-import { normalizePath } from '../tool';
 import { HttpMethods } from '../interfaces';
 import { Path } from '../path';
 

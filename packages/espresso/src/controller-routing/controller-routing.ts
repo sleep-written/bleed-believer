@@ -1,6 +1,5 @@
 import { Meta } from '@bleed-believer/meta';
 import { Path } from '../path';
-import { normalizePath } from '../tool';
 
 import {
     ControllerRoutingDecorator,
@@ -9,18 +8,22 @@ import {
 } from './interfaces';
 
 export const CONTROLLER_ROUTING = new Meta<ControllerRoutingMeta>();
-export function ControllerRouting(
-    { routes, controllers, path }: ControllerRoutingOptions
-): ControllerRoutingDecorator {
+
+/**
+ * Converts a class into a `ControllerRouting` class. The `ControllerRouting` class can store a great
+ * amount of `Controller` classes, or also another `ControllerRouting` classes.
+ * @param options An object with the options to define the descendant of the current `ControllerRouting` class.
+ */
+export function ControllerRouting(options: ControllerRoutingOptions): ControllerRoutingDecorator {
     return target => {
         // Build metadata
         const meta: ControllerRoutingMeta = {
-            controllers:    controllers ?? [],
-            routes:         routes      ?? []
+            controllers:    options.controllers ?? [],
+            routes:         options.routes      ?? []
         };
         
         // Assign the parsed path
-        const parsedPath = Path.normalize(path);
+        const parsedPath = Path.normalize(options.path);
         if (typeof parsedPath === 'string') {
             meta.path = parsedPath;
         }
