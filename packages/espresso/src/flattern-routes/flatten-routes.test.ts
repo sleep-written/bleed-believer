@@ -1,6 +1,6 @@
 import { ControllerRouting } from '../controller-routing/controller-routing';
 import { flattenRoutes } from './flatten-routes';
-import { Controller } from '../controller';
+import { Controller, ControllerPath } from '../controller';
 import { Get, Post } from '../endpoint';
 import { assert } from 'chai';
 
@@ -32,6 +32,20 @@ describe('Testing "@espresso/flatten-routes"', () => {
         save(): void {}
     }
 
+    @ControllerPath('*')
+    class All extends Controller {
+        @Get()
+        throwError(): void {
+            this.response.json('El endpoint no existe, no sea pendejo...');
+        }
+    }
+
+    @ControllerPath('')
+    class Root extends Controller {
+        @Get()
+        load(): void {}
+    }
+
     @ControllerRouting({
         path: 'Documents',
         controllers: [
@@ -42,7 +56,7 @@ describe('Testing "@espresso/flatten-routes"', () => {
     class DocumentsRouting {}
 
     @ControllerRouting({
-        controllers:    [ User ],
+        controllers:    [ User, All, Root ],
         routes:         [ DocumentsRouting ]
     })
     class ApiRouting {}
@@ -111,6 +125,16 @@ describe('Testing "@espresso/flatten-routes"', () => {
                     path: '/User'
                 },
                 {
+                    key: 'throwError',
+                    method: 'get',
+                    path: '/*'
+                },
+                {
+                    key: 'load',
+                    method: 'get',
+                    path: '/'
+                },
+                {
                     key: 'findOne',
                     method: 'get',
                     path: '/Documents/Quotation/:id',
@@ -136,10 +160,12 @@ describe('Testing "@espresso/flatten-routes"', () => {
             assert.strictEqual(objs[0], User);
             assert.strictEqual(objs[1], User);
             assert.strictEqual(objs[2], User);
-            assert.strictEqual(objs[3], Quotation);
-            assert.strictEqual(objs[4], Quotation);
-            assert.strictEqual(objs[5], Contract);
-            assert.strictEqual(objs[6], Contract);
+            assert.strictEqual(objs[3], All);
+            assert.strictEqual(objs[4], Root);
+            assert.strictEqual(objs[5], Quotation);
+            assert.strictEqual(objs[6], Quotation);
+            assert.strictEqual(objs[7], Contract);
+            assert.strictEqual(objs[8], Contract);
         });
     });
 
@@ -207,6 +233,16 @@ describe('Testing "@espresso/flatten-routes"', () => {
                     path: '/user'
                 },
                 {
+                    key: 'throwError',
+                    method: 'get',
+                    path: '/*'
+                },
+                {
+                    key: 'load',
+                    method: 'get',
+                    path: '/'
+                },
+                {
                     key: 'findOne',
                     method: 'get',
                     path: '/documents/quotation/:id',
@@ -232,10 +268,12 @@ describe('Testing "@espresso/flatten-routes"', () => {
             assert.strictEqual(objs[0], User);
             assert.strictEqual(objs[1], User);
             assert.strictEqual(objs[2], User);
-            assert.strictEqual(objs[3], Quotation);
-            assert.strictEqual(objs[4], Quotation);
-            assert.strictEqual(objs[5], Contract);
-            assert.strictEqual(objs[6], Contract);
+            assert.strictEqual(objs[3], All);
+            assert.strictEqual(objs[4], Root);
+            assert.strictEqual(objs[5], Quotation);
+            assert.strictEqual(objs[6], Quotation);
+            assert.strictEqual(objs[7], Contract);
+            assert.strictEqual(objs[8], Contract);
         });
     });
 });

@@ -7,6 +7,7 @@ export {
 
 export {
     Controller,
+    ControllerPath,
     ControllerClass,
     ControllerDecorator,
 } from './controller';

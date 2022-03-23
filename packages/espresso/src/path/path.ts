@@ -9,7 +9,7 @@ export module Path {
     }
 
     export function normalize(path?: string): string | undefined {
-        if (!path?.trim()?.length) {
+        if (typeof path !== 'string') {
             return undefined;
         } else {
             const v = path
@@ -18,7 +18,7 @@ export module Path {
                 .replace(/(^\/|\/$)/gi, '')
                 .trim();
     
-            return v.length ? '/' + v : undefined;
+            return '/' + v;
         }
     }
 

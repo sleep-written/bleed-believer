@@ -14,7 +14,10 @@ export function flattenRoutes(route: ControllerRoutingClass, lowercase?: boolean
     const out: FlattedRoute[] = [];
     for (const ctrl of meta.controllers) {
         const ctrlMeta = CONTROLLER.get(ctrl);
-        let ctrlPath = ctrlMeta.path ?? Path.fromClass(ctrl);
+        let ctrlPath = typeof ctrlMeta.path === 'string'
+            ?   ctrlMeta.path
+            :   Path.fromClass(ctrl);
+
         if (lowercase && !ctrlPath.match(/^\/:/gi)) {
             ctrlPath = Path.toLower(ctrlPath);
         }
