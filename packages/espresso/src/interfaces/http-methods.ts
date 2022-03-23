@@ -40,8 +40,8 @@ export interface HttpMethods {
     trace: string;
 
     /**
-    * The PATCH method applies partial modifications to a resource.
-    */
+     * The PATCH method applies partial modifications to a resource.
+     */
     patch: string;
 
     /**

@@ -1,4 +1,16 @@
-export * from './endpoint';
+export {
+    Get,
+    Head,
+    Post,
+    Put,
+    Delete,
+    Connect,
+    Options,
+    Trace,
+    Patch,
+    All,
+    EndpointDecorator,
+} from './endpoint';
 
 export {
     HttpMethods,

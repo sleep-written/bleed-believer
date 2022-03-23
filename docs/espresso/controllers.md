@@ -88,47 +88,52 @@ export class TestController extends Controller {
 The HTTP methods available are (according with [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)):
 
 - `@Get()`:
-    > The GET method requests a representation of the specified resource. Requests using GET should only retrieve data.
+    > The __`"GET"`__ method requests a representation of the specified resource. Requests using GET should only retrieve data.
 
     <br />
 
 - `@Head()`:
-    > The HEAD method asks for a response identical to a GET request, but without the response body.
+    > The __`"HEAD"`__ method asks for a response identical to a GET request, but without the response body.
 
     <br />
 
 - `@Post()`:
-    > The POST method submits an entity to the specified resource, often causing a change in state or side effects on the server.
+    > The __`"POST"`__ method submits an entity to the specified resource, often causing a change in state or side effects on the server.
 
     <br />
 
 - `@Put()`:
-    > The PUT method replaces all current representations of the target resource with the request payload.
+    > The __`"PUT"`__ method replaces all current representations of the target resource with the request payload.
 
     <br />
 
 - `@Delete()`:
-    > The DELETE method deletes the specified resource.
+    > The __`"DELETE"`__ method deletes the specified resource.
 
     <br />
 
 - `@Connect()`:
-    > The CONNECT method establishes a tunnel to the server identified by the target resource.
+    > The __`"CONNECT"`__ method establishes a tunnel to the server identified by the target resource.
 
     <br />
 
 - `@Options()`:
-    > The OPTIONS method describes the communication options for the target resource.
+    > The __`"OPTIONS"`__ method describes the communication options for the target resource.
 
     <br />
 
 - `@Trace()`:
-    > The TRACE method performs a message loop-back test along the path to the target resource.
+    > The __`"TRACE"`__ method performs a message loop-back test along the path to the target resource.
 
     <br />
 
 - `@Patch()`:
-    > The PATCH method applies partial modifications to a resource.
+    > The __`"PATCH"`__ method applies partial modifications to a resource.
+
+    <br />
+
+- `@All()`:
+    > This method is, actually, __a shortcut__ to refer to all HTTP methods existents.
 
 <br />
 

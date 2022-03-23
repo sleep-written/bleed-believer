@@ -24,6 +24,15 @@ espresso.inject(ApiRouting);
 app.listen(8080, () => console.log('Ready!'));
 ```
 
+The order of injection is the following:
+1. The __nested__ routes:
+    1. The __nested__ routes:
+        1. The __nested__ routes:
+            1. `[...]`
+        1. The __controllers__ of the current class.
+    1. The __controllers__ of the current class.
+1. The __controllers__ of the current class.
+
 <br />
 
 ## Options

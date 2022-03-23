@@ -117,31 +117,6 @@ describe('Testing "@espresso/flatten-routes"', () => {
     
             assert.sameDeepOrderedMembers(data, [
                 {
-                    key: 'login',
-                    method: 'post',
-                    path: '/User/login',
-                },
-                {
-                    key: 'findOne',
-                    method: 'get',
-                    path: '/User/:id',
-                },
-                {
-                    key: 'save',
-                    method: 'post',
-                    path: '/User'
-                },
-                {
-                    key: 'throwError',
-                    method: 'get',
-                    path: '/*'
-                },
-                {
-                    key: 'load',
-                    method: 'get',
-                    path: '/*'
-                },
-                {
                     key: 'findOne',
                     method: 'get',
                     path: '/Documents/Quotation/:id',
@@ -165,19 +140,44 @@ describe('Testing "@espresso/flatten-routes"', () => {
                     key: 'load',
                     method: 'get',
                     path: '/Documents/*'
+                },
+                {
+                    key: 'login',
+                    method: 'post',
+                    path: '/User/login',
+                },
+                {
+                    key: 'findOne',
+                    method: 'get',
+                    path: '/User/:id',
+                },
+                {
+                    key: 'save',
+                    method: 'post',
+                    path: '/User'
+                },
+                {
+                    key: 'throwError',
+                    method: 'get',
+                    path: '/*'
+                },
+                {
+                    key: 'load',
+                    method: 'get',
+                    path: '/*'
                 }
             ]);
     
             const objs = flat.map(x => x.class);
-            assert.strictEqual(objs[0], User);
-            assert.strictEqual(objs[1], User);
-            assert.strictEqual(objs[2], User);
-            assert.strictEqual(objs[3], All);
+            assert.strictEqual(objs[0], Quotation);
+            assert.strictEqual(objs[1], Quotation);
+            assert.strictEqual(objs[2], Contract);
+            assert.strictEqual(objs[3], Contract);
             assert.strictEqual(objs[4], Root);
-            assert.strictEqual(objs[5], Quotation);
-            assert.strictEqual(objs[6], Quotation);
-            assert.strictEqual(objs[7], Contract);
-            assert.strictEqual(objs[8], Contract);
+            assert.strictEqual(objs[5], User);
+            assert.strictEqual(objs[6], User);
+            assert.strictEqual(objs[7], User);
+            assert.strictEqual(objs[8], All);
             assert.strictEqual(objs[9], Root);
         });
     });
@@ -237,31 +237,6 @@ describe('Testing "@espresso/flatten-routes"', () => {
     
             assert.sameDeepOrderedMembers(data, [
                 {
-                    key: 'login',
-                    method: 'post',
-                    path: '/user/login',
-                },
-                {
-                    key: 'findOne',
-                    method: 'get',
-                    path: '/user/:id',
-                },
-                {
-                    key: 'save',
-                    method: 'post',
-                    path: '/user'
-                },
-                {
-                    key: 'throwError',
-                    method: 'get',
-                    path: '/*'
-                },
-                {
-                    key: 'load',
-                    method: 'get',
-                    path: '/*'
-                },
-                {
                     key: 'findOne',
                     method: 'get',
                     path: '/documents/quotation/:id',
@@ -285,19 +260,44 @@ describe('Testing "@espresso/flatten-routes"', () => {
                     key: 'load',
                     method: 'get',
                     path: '/documents/*'
+                },
+                {
+                    key: 'login',
+                    method: 'post',
+                    path: '/user/login',
+                },
+                {
+                    key: 'findOne',
+                    method: 'get',
+                    path: '/user/:id',
+                },
+                {
+                    key: 'save',
+                    method: 'post',
+                    path: '/user'
+                },
+                {
+                    key: 'throwError',
+                    method: 'get',
+                    path: '/*'
+                },
+                {
+                    key: 'load',
+                    method: 'get',
+                    path: '/*'
                 }
             ]);
     
             const objs = flat.map(x => x.class);
-            assert.strictEqual(objs[0], User);
-            assert.strictEqual(objs[1], User);
-            assert.strictEqual(objs[2], User);
-            assert.strictEqual(objs[3], All);
+            assert.strictEqual(objs[0], Quotation);
+            assert.strictEqual(objs[1], Quotation);
+            assert.strictEqual(objs[2], Contract);
+            assert.strictEqual(objs[3], Contract);
             assert.strictEqual(objs[4], Root);
-            assert.strictEqual(objs[5], Quotation);
-            assert.strictEqual(objs[6], Quotation);
-            assert.strictEqual(objs[7], Contract);
-            assert.strictEqual(objs[8], Contract);
+            assert.strictEqual(objs[5], User);
+            assert.strictEqual(objs[6], User);
+            assert.strictEqual(objs[7], User);
+            assert.strictEqual(objs[8], All);
             assert.strictEqual(objs[9], Root);
         });
     });

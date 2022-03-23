@@ -5,13 +5,25 @@ import { Path } from '../path';
 
 export function flattenRoutes(route: ControllerRoutingClass, lowercase?: boolean): FlattedRoute[] {
     const meta = CONTROLLER_ROUTING.get(route);
+    const out: FlattedRoute[] = [];
+
     let routePath = meta.path ?? '';
     if (lowercase && !routePath.match(/^\/:/gi)) {
         routePath = Path.toLower(routePath);
     }
 
+    // Iterates recursivelly across nested routes
+    for (const innerRoute of meta.routes) {
+        const flatted = flattenRoutes(innerRoute, lowercase);
+        for (const flat of flatted) {
+            out.push({
+                ...flat,
+                path: `${routePath}${flat.path}`
+            });
+        }
+    }
+
     // Iterate over controllers
-    const out: FlattedRoute[] = [];
     for (const ctrl of meta.controllers) {
         const ctrlMeta = CONTROLLER.get(ctrl);
         let ctrlPath = typeof ctrlMeta.path === 'string'
@@ -35,17 +47,6 @@ export function flattenRoutes(route: ControllerRoutingClass, lowercase?: boolean
                 path: fullPath.length
                     ?   fullPath
                     :   '/'
-            });
-        }
-    }
-
-    // Iterates recursivelly across nested routes
-    for (const innerRoute of meta.routes) {
-        const flatted = flattenRoutes(innerRoute, lowercase);
-        for (const flat of flatted) {
-            out.push({
-                ...flat,
-                path: `${routePath}${flat.path}`
             });
         }
     }
