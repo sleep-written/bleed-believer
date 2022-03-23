@@ -64,3 +64,10 @@ export const Trace      = methodFactory('trace');
  * as a subroute of its `Controller` class.
  */
 export const Patch      = methodFactory('patch');
+
+/**
+ * A decorator to convert a `Controller` class method into an endpoint with all existents methods.
+ * @param path If this value is provided, the path of the endpoint will be settled
+ * as a subroute of its `Controller` class.
+ */
+export const All        = methodFactory('all');

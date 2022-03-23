@@ -43,4 +43,9 @@ export interface HttpMethods {
     * The PATCH method applies partial modifications to a resource.
     */
     patch: string;
+
+    /**
+     * This method is, actually, a shortcut to refer to all HTTP methods existents.
+     */
+    all: string;
 }
