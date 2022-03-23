@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/commander",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A package to create CLI applications using decorators",
   "main": "./dist/index.js",
   "files": [
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "@bleed-believer/meta": "^0.3.0"
+    "@bleed-believer/meta": "^0.3.1"
   },
   "gitHead": "8c35bacc65316e462001b4cd776cb6d7048a6e7e"
 }

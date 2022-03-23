@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/espresso",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "An wrapper for express.js using decorators for routing",
   "main": "./dist/index.js",
   "files": [
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "@bleed-believer/meta": "^0.3.0"
+    "@bleed-believer/meta": "^0.3.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.13"
