@@ -6,6 +6,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -28,5 +31,6 @@
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
     "@bleed-believer/meta": "^0.3.0"
-  }
+  },
+  "gitHead": "8c35bacc65316e462001b4cd776cb6d7048a6e7e"
 }
