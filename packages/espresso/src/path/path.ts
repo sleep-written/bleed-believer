@@ -11,7 +11,7 @@ export module Path {
     export function normalize(path?: string): string | undefined {
         if (typeof path !== 'string') {
             return undefined;
-        } else {
+        } else if (path.trim().length) {
             const v = path
                 .replace(/:+/gi, ':')
                 .replace(/(\\|\/)+/gi, '/')
@@ -19,6 +19,8 @@ export module Path {
                 .trim();
     
             return '/' + v;
+        } else {
+            return '';
         }
     }
 

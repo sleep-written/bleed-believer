@@ -42,7 +42,7 @@ describe('Testing "@espresso/flatten-routes"', () => {
 
     @ControllerPath('')
     class Root extends Controller {
-        @Get()
+        @Get('*')
         load(): void {}
     }
 
@@ -50,7 +50,8 @@ describe('Testing "@espresso/flatten-routes"', () => {
         path: 'Documents',
         controllers: [
             Quotation,
-            Contract
+            Contract,
+            Root
         ]
     })
     class DocumentsRouting {}
@@ -90,6 +91,11 @@ describe('Testing "@espresso/flatten-routes"', () => {
                     key: 'save',
                     method: 'post',
                     path: '/Documents/Contract'
+                },
+                {
+                    key: 'load',
+                    method: 'get',
+                    path: '/Documents/*'
                 }
             ]);
     
@@ -98,6 +104,7 @@ describe('Testing "@espresso/flatten-routes"', () => {
             assert.strictEqual(objs[1], Quotation);
             assert.strictEqual(objs[2], Contract);
             assert.strictEqual(objs[3], Contract);
+            assert.strictEqual(objs[4], Root);
         });
     
         it('Validate all API Routes', () => {
@@ -132,7 +139,7 @@ describe('Testing "@espresso/flatten-routes"', () => {
                 {
                     key: 'load',
                     method: 'get',
-                    path: '/'
+                    path: '/*'
                 },
                 {
                     key: 'findOne',
@@ -153,6 +160,11 @@ describe('Testing "@espresso/flatten-routes"', () => {
                     key: 'save',
                     method: 'post',
                     path: '/Documents/Contract'
+                },
+                {
+                    key: 'load',
+                    method: 'get',
+                    path: '/Documents/*'
                 }
             ]);
     
@@ -166,6 +178,7 @@ describe('Testing "@espresso/flatten-routes"', () => {
             assert.strictEqual(objs[6], Quotation);
             assert.strictEqual(objs[7], Contract);
             assert.strictEqual(objs[8], Contract);
+            assert.strictEqual(objs[9], Root);
         });
     });
 
@@ -198,6 +211,11 @@ describe('Testing "@espresso/flatten-routes"', () => {
                     key: 'save',
                     method: 'post',
                     path: '/documents/contract'
+                },
+                {
+                    key: 'load',
+                    method: 'get',
+                    path: '/documents/*'
                 }
             ]);
     
@@ -206,6 +224,7 @@ describe('Testing "@espresso/flatten-routes"', () => {
             assert.strictEqual(objs[1], Quotation);
             assert.strictEqual(objs[2], Contract);
             assert.strictEqual(objs[3], Contract);
+            assert.strictEqual(objs[4], Root);
         });
     
         it('Validate all API Routes', () => {
@@ -240,7 +259,7 @@ describe('Testing "@espresso/flatten-routes"', () => {
                 {
                     key: 'load',
                     method: 'get',
-                    path: '/'
+                    path: '/*'
                 },
                 {
                     key: 'findOne',
@@ -261,6 +280,11 @@ describe('Testing "@espresso/flatten-routes"', () => {
                     key: 'save',
                     method: 'post',
                     path: '/documents/contract'
+                },
+                {
+                    key: 'load',
+                    method: 'get',
+                    path: '/documents/*'
                 }
             ]);
     
@@ -274,6 +298,7 @@ describe('Testing "@espresso/flatten-routes"', () => {
             assert.strictEqual(objs[6], Quotation);
             assert.strictEqual(objs[7], Contract);
             assert.strictEqual(objs[8], Contract);
+            assert.strictEqual(objs[9], Root);
         });
     });
 });
