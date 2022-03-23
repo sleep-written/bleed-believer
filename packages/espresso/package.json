@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/espresso",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "An wrapper for express.js using decorators for routing",
   "main": "./dist/index.js",
   "files": [
