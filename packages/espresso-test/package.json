@@ -1,6 +1,6 @@
 {
   "name": "espresso-test",
-  "version": "1.0.0",
+  "version": "0.3.0",
   "private": true,
   "description": "",
   "main": "index.js",
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "@bleed-believer/espresso": "^0.2.0",
+    "@bleed-believer/espresso": "^0.3.0",
     "express": "^4.17.3"
   }
 }
