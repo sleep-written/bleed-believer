@@ -42,5 +42,14 @@ test('Pattern: "kill ...", Args: "kill runcobol node nodemon', t => {
     const argv = new ArgvParser(['kill', 'runcobol', 'node', 'nodemon']);
     const data = argv.match(['kill', '...']);
 
+    t.is(Object.keys(data?.param ?? {}).length, 0);
+    t.deepEqual(data?.items, ['runcobol', 'node', 'nodemon']);
+});
+
+test('Pattern: "kill ...", Args: "kill runcobol node nodemon --silent', t => {
+    const argv = new ArgvParser(['kill', 'runcobol', 'node', 'nodemon', '--silent']);
+    const data = argv.match(['kill', '...']);
+
+    t.is(Object.keys(data?.param ?? {}).length, 0);
     t.deepEqual(data?.items, ['runcobol', 'node', 'nodemon']);
 });

@@ -5,14 +5,15 @@
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
-  "files": ["./dist"],
+  "files": [
+    "./dist"
+  ],
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",
       "import": "./dist/esm/index.js"
     }
   },
-  "devDependencies": {},
   "scripts": {
     "test": "ava"
   },
@@ -30,5 +31,8 @@
   "bugs": {
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
-  "homepage": "https://github.com/sleep-written/bleed-believer#readme"
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "dependencies": {
+    "@bleed-believer/meta": "^0.4.0"
+  }
 }
