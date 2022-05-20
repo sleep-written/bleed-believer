@@ -1,4 +1,4 @@
-import { ParserOptions, Argv, ArgvData } from './interfaces';
+import { ParserOptions, Argv, ArgvData } from './interfaces/index.js';
 
 export class ArgvParser implements Argv {
     static parsePattern(input: string | string[]): string[] {

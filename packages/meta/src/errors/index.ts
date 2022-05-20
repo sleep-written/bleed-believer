@@ -1,3 +1,2 @@
-export { ValueNotFoundError } from './value-not-found-error';
-export { UndefinedTargetError } from './undefined-target-error';
-export { MetadataNotFoundError } from './metadata-not-found-error';
+export { UndefinedMetaError } from './undefined-meta-error.js';
+export { UndefinedTargetError } from './undefined-target-error.js';

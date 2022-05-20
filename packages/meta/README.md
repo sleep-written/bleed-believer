@@ -1,46 +1,28 @@
 # @bleed-believer/meta
 
-Adds metadata easifuly to your objects.
-
+Adds metadata easifuly to your objects. Now this package works in ESM projects and CommonJS too.
 
 ## Installation
 
-Using npm:
-```
+Use npm to get the last version:
+```bash
 npm i --save @bleed-believer/meta
 ```
 
+<br />
+
+## Concepts
+
+To understand how this library works, first we need to define some concepts:
+
+### _Target:_
+
+Any object that you want to write inside of, data about itself. It's common, for example, have classes that you need to specify how those classes will be instantiated and used for a particular third party tool or library. So in thoses cases you may need to write data dinamically into the class definition.
+
+### _Metadata:_
+
+The data do you want to attach to the target. This data normally describes how to use the target to another object that requires for it. 
+
+<br />
+
 ## How to use
-
-```ts
-import { Meta } from '@bleed-believer/meta';
-
-// This is the metadata struct
-interface ClassMeta {
-    text: string;
-    value: number;
-}
-
-// This class is the target to assign metadata
-class Target {}
-
-// The instance to manage metadata
-const CLASSMETA = new Meta<ClassMeta>(
-    // Set here a friendly name to the metadata
-    'trolled'
-);
-
-// Set the metadata value to the target
-CLASSMETA.set(Target, {
-    text: 'jajaja',
-    value: 666
-});
-
-// Get the metadata stored in the target
-const metaValue = CLASSMETA.get(Target);
-console.log(metaValue);
-
-// Check if the target has this metadata with value
-const hasMetadata = CLASSMETA.some(Target);
-console.log(hasMetadata);
-```

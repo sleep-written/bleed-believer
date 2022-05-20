@@ -1,18 +1,28 @@
-# @bleed-believer/commander
+# @bleed-believer/meta
 
-A package to create CLI applications using decorators. Provides mechanisms to implement routing for large CLI applications, and parses the arguments given by the user or another program.
+Adds metadata easifuly to your objects. Now this package works in ESM projects and CommonJS too.
 
 ## Installation
 
-Using npm:
-```
-npm i --save @bleed-believer/commander
+Use npm to get the last version:
+```bash
+npm i --save @bleed-believer/meta
 ```
 
-## Documentation
+<br />
 
-1. [About the project structure.](/docs/commander/project-structure.md)
-1. [About the execution arguments.](/docs/commander/execution-arguments.md)
-1. [Creating a command.](/docs/commander/commands.md)
-1. [Routing your commands.](/docs/commander/command-routing.md)
-1. [Initialize your application.](/docs/commander/commander-class.md)
+## Concepts
+
+To understand how this library works, first we need to define some concepts:
+
+### _Target:_
+
+Any object that you want to write inside of, data about itself. It's common, for example, have classes that you need to specify how those classes will be instantiated and used for a particular third party tool or library. So in thoses cases you may need to write data dinamically into the class definition.
+
+### _Metadata:_
+
+The data do you want to attach to the target. This data normally describes how to use the target to another object that requires for it. 
+
+<br />
+
+## How to use

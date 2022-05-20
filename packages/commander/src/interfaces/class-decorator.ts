@@ -1,1 +1,0 @@
-export type ClassDecorator<T> = (c: T) => void;

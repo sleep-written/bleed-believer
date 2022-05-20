@@ -1,16 +1,19 @@
 {
-  "extends": "./tsconfig.build.json",
-  "compilerOptions": {
-    "noEmit": true
-  },
-  "exclude": [
-    "./**/*.test.ts"
-  ],
-  "references": [
-    { "path": "./packages/meta" },
-    { "path": "./packages/commander" },
-    { "path": "./packages/espresso" },
-    { "path": "./packages/espresso-test" },
-    { "path": "./packages/cli" }
-  ]
+    "compilerOptions": {
+        "target": "ES2020",
+        "composite": true,
+
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        
+        "strict": true,
+        "removeComments": false,
+        "moduleResolution": "node",
+
+        "sourceMap": true,
+        "declaration": true,
+    },
+    "exclude": [
+        "./packages/*/dist"
+    ]
 }

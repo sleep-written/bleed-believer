@@ -1,5 +1,5 @@
 export class UndefinedTargetError extends Error {
     constructor() {
-        super('The target is null or undefined.');
+        super('Cannot get the meta storage of a null or undefined target.');
     }
 }

@@ -1,36 +1,34 @@
 {
   "name": "@bleed-believer/commander",
   "version": "0.4.0",
-  "description": "A package to create CLI applications using decorators",
-  "main": "./dist/index.js",
-  "files": [
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
+  "description": "",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "files": ["./dist"],
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    }
   },
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sleep-written/bleed-believer.git"
   },
   "keywords": [
-    "cli",
-    "arguments",
-    "parser",
-    "argv",
-    "router"
+    "meta",
+    "metadata",
+    "symbol"
   ],
   "author": "sleep-written",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
-  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
-  "dependencies": {
-    "@bleed-believer/meta": "^0.4.0"
-  },
-  "gitHead": "8c35bacc65316e462001b4cd776cb6d7048a6e7e"
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme"
 }

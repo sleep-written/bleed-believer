@@ -1,25 +1,12 @@
 {
+    "extends": "./tsconfig.json",
     "compilerOptions": {
-        "target": "es2021",
-        "module": "CommonJS",
-        "composite": true,
-  
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-  
-        "incremental": true,
-        "sourceMap": true,
-        "declaration": true,
-        "removeComments": false,
-  
-        "strict": true,
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-
-        "baseUrl": "./packages",
-        "paths": {
-            "@bleed-believer/meta": ["./meta"],
-            "@bleed-believer/commander": ["./commander"]
-        }
-    }
+        "noEmit": true,
+    },
+    "references": [
+        { "path": "./packages/meta/tsconfig.cjs.json" },
+        { "path": "./packages/meta/tsconfig.json" },
+        { "path": "./packages/commander/tsconfig.cjs.json" },
+        { "path": "./packages/commander/tsconfig.json" }
+    ]
 }
