@@ -4,6 +4,4 @@ packages/*/node_modules
 
 # Ignore transpiled files
 packages/*/dist
-!packages/*/dist/cjs/package.json
-!packages/*/dist/esm/package.json
 *.tsbuildinfo

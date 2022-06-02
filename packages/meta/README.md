@@ -17,12 +17,67 @@ To understand how this library works, first we need to define some concepts:
 
 ### _Target:_
 
-Any object that you want to write inside of, data about itself. It's common, for example, have classes that you need to specify how those classes will be instantiated and used for a particular third party tool or library. So in thoses cases you may need to write data dinamically into the class definition.
+Any object that you want to write inside of, data about itself. It's common, for example, have classes that you need to specify how these classes will be instantiated and used for a particular third party tool or library. So in thoses cases you may need to write data dinamically into the prototype por example.
 
 ### _Metadata:_
 
-The data do you want to attach to the target. This data normally describes how to use the target to another object that requires for it. 
+The data do you want to attach to the target. This data normally describes how to use the target object to another one that requires for it. We use interfaces to describe the structure of a kind of metadata.
 
-<br />
 
 ## How to use
+
+-   First create an interface with the structure of your metadata:
+    ```ts
+    export interface EndpointMeta {
+        path:   string;
+        routes: {
+            method: string;
+            key:    string;
+        }[];
+    }
+    ```
+
+-   Create a new instance of `metaManager`:
+    ```ts
+    export const ENDPOINT = new MetaManager<EndpointMeta>();
+    ```
+
+-   Now you can attach metadata into your objects:
+    ```ts
+    import { ENDPOINT } from './endpoint.js';
+
+    export class UserController {
+        get(): Promise<void> {
+            // bla bla bla bla bla bla
+        }
+        
+        set(): Promise<void> {
+            // bla bla bla bla bla bla
+        }
+    }
+
+    ENDPOINT.set(UserController, {
+        path: 'user',
+        routes: [
+            { method: 'GET',    key: 'get' },
+            { method: 'POST',   key: 'set' },
+        ]
+    });
+    ```
+
+-   ...or get its metadata:
+    ```ts
+    import { UserController } from './user.controller.js';
+    import { ENDPOINT } from './endpoint.js';
+
+    const meta = ENDPOINT.get(UserController);
+    console.log(meta);
+    // Prints:
+    // {
+    //     path: 'user',
+    //     routes: [
+    //         { method: 'GET',    key: 'get' },
+    //         { method: 'POST',   key: 'set' },
+    //     ]
+    // }
+    ```
