@@ -15,9 +15,9 @@ export class ArgvParser implements Argv {
         return [ ...this._main ];
     }
 
-    private _data: Record<string, string[]>;
-    get data(): Record<string, string[]> {
-        return { ...this._data };
+    private _flags: Record<string, string[]>;
+    get flags(): Record<string, string[]> {
+        return { ...this._flags };
     }
 
     private _options: Required<ParserOptions>;
@@ -27,7 +27,7 @@ export class ArgvParser implements Argv {
 
     constructor(input: string[], options?: ParserOptions) {
         this._main = [];
-        this._data = {};
+        this._flags = {};
         this._options = {
             linear:     options?.linear     ?? false,
             lowercase:  options?.lowercase  ?? false,
@@ -45,13 +45,13 @@ export class ArgvParser implements Argv {
                     key = key.toLowerCase();
                 }                
 
-                if (!this._data[key]) {
-                    this._data[key] = [];
+                if (!this._flags[key]) {
+                    this._flags[key] = [];
                 }
 
             } else if (key) {
                 // It's a value for a key
-                this._data[key].push(item);
+                this._flags[key].push(item);
 
                 if (!this._options.linear) {
                     key = null;

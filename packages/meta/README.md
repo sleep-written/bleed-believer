@@ -37,7 +37,7 @@ The data do you want to attach to the target. This data normally describes how t
     }
     ```
 
--   Create a new instance of `metaManager`:
+-   Create a new instance of `MetaManager`:
     ```ts
     export const ENDPOINT = new MetaManager<EndpointMeta>();
     ```

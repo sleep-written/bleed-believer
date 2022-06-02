@@ -9,7 +9,7 @@ export class Commander {
     get argv(): Argv {
         return {
             main: this._argv.main,
-            data: this._argv.data,
+            flags: this._argv.flags,
         };
     }
 

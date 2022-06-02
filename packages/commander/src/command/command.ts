@@ -2,11 +2,12 @@ import { MetaManager } from '@bleed-believer/meta';
 
 import { CommandDecorator, CommandMeta, CommandOptions } from './interfaces/index.js';
 import { InvalidPathError } from './errors/index.js';
+import { ArgvParser } from '../argv-parser/argv-parser.js';
 
 export const COMMAND = new MetaManager<CommandMeta>('@bleed-believer/commander:command');
 export function Command(options: CommandOptions): CommandDecorator {
     return target => {
-        const path = options.path.split(/\s+/gi);
+        const path = ArgvParser.parsePattern(options.path);
         const inva = path.some(x => !x.match(/^(\.{3}|(:[a-z])?[a-z0-9\-_]*[a-z0-9])$/gi));
         if (inva) {
             console.log(path);

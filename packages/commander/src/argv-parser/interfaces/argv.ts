@@ -9,5 +9,5 @@ export interface Argv {
      * An object with all __optional arguments__
      * given by the user or another program.
      */
-    get data(): Record<string, string[]>;
+    get flags(): Record<string, string[]>;
 }
