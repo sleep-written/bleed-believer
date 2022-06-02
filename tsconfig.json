@@ -14,6 +14,8 @@
         "declaration": true,
     },
     "exclude": [
-        "./packages/*/dist"
+        "./packages/*/dist",
+        "./**/*.example.ts",
+        "./**/*.test.ts"
     ]
 }

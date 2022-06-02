@@ -1,0 +1,23 @@
+import { CommandRouting } from '../command-routing/index.js';
+import { Command, Executable } from '../command/index.js';
+
+@Command({
+    name: 'command 01',
+    path: 'com01'
+})
+export class Com01 implements Executable {
+    start(): void {}
+}
+
+@Command({
+    name: 'command 02',
+    path: 'com02'
+})
+export class Com02 implements Executable {
+    start(): void {}
+}
+
+@CommandRouting({
+    commands: [ Com01, Com02 ]
+})
+export class Routing01 {}
