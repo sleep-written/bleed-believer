@@ -7,14 +7,14 @@ test('Parse "hello world"', t => {
     );
 
     t.deepEqual(argv.main, ['hello', 'world']);
-    t.is(Object.keys(argv.data).length, 0);
+    t.is(Object.keys(argv.flags).length, 0);
 });
 
 test('Parse "hello world --lol"', t => {
     const argv = new ArgvParser(['hello', 'world', '--lol']);
 
     t.deepEqual(argv.main, ['hello', 'world']);
-    t.true(Object.keys(argv.data).some(x => x === '--lol'));
+    t.true(Object.keys(argv.flags).some(x => x === '--lol'));
 });
 
 test('Parse "hello world --lol kek"', t => {
@@ -23,7 +23,7 @@ test('Parse "hello world --lol kek"', t => {
     );
 
     t.deepEqual(argv.main, ['hello', 'world']);
-    t.deepEqual(argv.data['--lol'], ['kek']);
+    t.deepEqual(argv.flags['--lol'], ['kek']);
 });
 
 test('Parse "hello world --lol kek jej ñee"', t => {
@@ -32,7 +32,7 @@ test('Parse "hello world --lol kek jej ñee"', t => {
     );
 
     t.deepEqual(argv.main, ['hello', 'world', 'jej', 'ñee']);
-    t.deepEqual(argv.data['--lol'], ['kek']);
+    t.deepEqual(argv.flags['--lol'], ['kek']);
 });
 
 test('Parse "hello world --lol kek jej ñee" (linear)', t => {
@@ -42,7 +42,7 @@ test('Parse "hello world --lol kek jej ñee" (linear)', t => {
     );
 
     t.deepEqual(argv.main, ['hello', 'world']);
-    t.deepEqual(argv.data['--lol'], ['kek', 'jej', 'ñee']);
+    t.deepEqual(argv.flags['--lol'], ['kek', 'jej', 'ñee']);
 });
 
 test('Parse "hello world --lol kek jej ñee --foo bar"', t => {
@@ -51,8 +51,8 @@ test('Parse "hello world --lol kek jej ñee --foo bar"', t => {
     );
 
     t.deepEqual(argv.main, ['hello', 'world', 'jej', 'ñee']);
-    t.deepEqual(argv.data['--lol'], ['kek']);
-    t.deepEqual(argv.data['--foo'], ['bar']);
+    t.deepEqual(argv.flags['--lol'], ['kek']);
+    t.deepEqual(argv.flags['--foo'], ['bar']);
 });
 
 test('Parse "hello world --lol kek jej ñee --foo bar" (linear)', t => {
@@ -62,8 +62,8 @@ test('Parse "hello world --lol kek jej ñee --foo bar" (linear)', t => {
     );
 
     t.deepEqual(argv.main, ['hello', 'world']);
-    t.deepEqual(argv.data['--lol'], ['kek', 'jej', 'ñee']);
-    t.deepEqual(argv.data['--foo'], ['bar']);
+    t.deepEqual(argv.flags['--lol'], ['kek', 'jej', 'ñee']);
+    t.deepEqual(argv.flags['--foo'], ['bar']);
 });
 
 test('Parse "hello world --lol kek --foo bar --LOL iei"', t => {
@@ -72,9 +72,9 @@ test('Parse "hello world --lol kek --foo bar --LOL iei"', t => {
     );
 
     t.deepEqual(argv.main, ['hello', 'world']);
-    t.deepEqual(argv.data['--lol'], ['kek']);
-    t.deepEqual(argv.data['--foo'], ['bar']);
-    t.deepEqual(argv.data['--LOL'], ['iei']);
+    t.deepEqual(argv.flags['--lol'], ['kek']);
+    t.deepEqual(argv.flags['--foo'], ['bar']);
+    t.deepEqual(argv.flags['--LOL'], ['iei']);
 });
 
 test('Parse "hello world --lol kek --foo bar --LOL iei" (lowercase)', t => {
@@ -84,6 +84,6 @@ test('Parse "hello world --lol kek --foo bar --LOL iei" (lowercase)', t => {
     );
 
     t.deepEqual(argv.main, ['hello', 'world']);
-    t.deepEqual(argv.data['--lol'], ['kek', 'iei']);
-    t.deepEqual(argv.data['--foo'], ['bar']);
+    t.deepEqual(argv.flags['--lol'], ['kek', 'iei']);
+    t.deepEqual(argv.flags['--foo'], ['bar']);
 });

@@ -6,7 +6,7 @@ FOLDERS=$(find ./packages/* -maxdepth 0 -type d);
 IFS="
 "
 
-rm -rf *.tsbuildinfo
+find . -name "*.tsbuildinfo" -type f -delete
 for folder in $FOLDERS; do
     echo deleting: \"$folder/dist\"
     rm -rf $folder/dist
@@ -33,4 +33,5 @@ elif [[ $1 != "--clean" && $1 != "-c" ]]; then
         npx tsc --build ./tsconfig.build.json
 fi
 
+find . -name "*.tsbuildinfo" -type f -delete
 echo "Done!"

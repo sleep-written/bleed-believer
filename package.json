@@ -18,7 +18,8 @@
     "scripts": {
         "build": "./builder.sh",
         "watch": "./builder.sh --watch",
-        "clean": "./builder.sh --clean"
+        "clean": "./builder.sh --clean",
+        "prepare":"./builder.sh"
     },
     "devDependencies": {
         "@types/node": "^17.0.38",

@@ -9,7 +9,7 @@ import { Commander } from '../commander.js';
 export class Com01 implements Executable {
     start(): void {
         const { file1, file2 } = app.argvData.param;
-
+        mem.set([file1, file2]);
     }
 }
 
@@ -20,6 +20,7 @@ export class Com01 implements Executable {
 export class Com02 implements Executable {
     start(): void {
         const { items } = app.argvData;
+        mem.set(items);
     }
 }
 
@@ -33,3 +34,14 @@ export class AppRouting {}
  * The "Commander" instance's root application
  */
 export const app = new Commander(AppRouting);
+export const mem = new class {
+    private _value: string[] = [];
+
+    get(): string[] {
+        return this._value;
+    }
+
+    set(v: string[]) {
+        this._value = v;
+    }
+}

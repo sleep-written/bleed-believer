@@ -1,7 +1,21 @@
 import { CommandRoute, CommandRouting } from '../command-routing/index.js';
 import { Command, Executable } from '../command/index.js';
 
-export const execTail: (string | number)[] = [];
+export const mem = new class {
+    private _value: string[] = [];
+
+    get(): string[] {
+        return this._value;
+    }
+
+    add(v: string): void {
+        this._value.push(v);
+    }
+
+    reset(): void {
+        this._value = [];
+    }
+};
 
 @Command({
     name: 'Command 01',
@@ -9,7 +23,7 @@ export const execTail: (string | number)[] = [];
 })
 export class Com01 implements Executable {
     start(): void {
-        execTail.push('com01');
+        mem.add('com01');
     }
 }
 
@@ -19,7 +33,7 @@ export class Com01 implements Executable {
 })
 export class Com02 implements Executable {
     start(): void {
-        execTail.push('com02');
+        mem.add('com02');
     }
 }
 
@@ -29,7 +43,7 @@ export class Com02 implements Executable {
 })
 export class Com03 implements Executable {
     start(): void {
-        execTail.push('com03');
+        mem.add('com03');
     }
 }
 
@@ -39,7 +53,7 @@ export class Com03 implements Executable {
 })
 export class Com04 implements Executable {
     start(): void {
-        execTail.push('com04');
+        mem.add('com04');
     }
 }
 
@@ -49,15 +63,15 @@ export class Com04 implements Executable {
 })
 export class ApiRouting implements CommandRoute {
     before(): void {
-        execTail.push('ApiRouting:before');
+        mem.add('ApiRouting:before');
     }
 
     after(): void {
-        execTail.push('ApiRouting:after');
+        mem.add('ApiRouting:after');
     }
 
-    failed(err: Error): void {
-        execTail.push('ApiRouting:failed');
+    failed(): void {
+        mem.add('ApiRouting:failed');
     }
 }
 
@@ -68,14 +82,14 @@ export class ApiRouting implements CommandRoute {
 })
 export class AppRouting implements CommandRoute {
     before(): void {
-        execTail.push('AppRouting:before');
+        mem.add('AppRouting:before');
     }
 
     after(): void {
-        execTail.push('AppRouting:after');
+        mem.add('AppRouting:after');
     }
 
-    failed(err: Error): void {
-        execTail.push('AppRouting:failed');
+    failed(): void {
+        mem.add('AppRouting:failed');
     }
 }

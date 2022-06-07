@@ -1,22 +1,17 @@
 import rawTest, { TestFn } from 'ava';
 
-import { AppRouting, execTail } from './case01.example.js';
+import { AppRouting, mem } from './case01.example.js';
 import { Commander } from '../commander.js';
 
-const test = rawTest as TestFn<string[]>;
+const test = rawTest as TestFn<{argv: string[]}>;
 
-test.beforeEach(t => {
-    t.context = process.argv.slice();
-    process.argv = t.context.slice(0, 2);
+test.serial.beforeEach(t => {
+    t.context = { argv: process.argv.slice() };
+    process.argv = t.context.argv.slice(0, 2);
 });
 
-test.afterEach(t => {
-    process.argv = t.context.slice();
-    t.context = [];
-
-    while (execTail.length) {
-        execTail.pop();
-    }
+test.serial.afterEach(t => {
+    process.argv = t.context.argv.slice();
 });
 
 test.serial('Exec "app api com01"', async t => {
@@ -25,13 +20,14 @@ test.serial('Exec "app api com01"', async t => {
     const app = new Commander(AppRouting);
     await app.initialize();
     
-    t.deepEqual(execTail, [
+    t.deepEqual(mem.get(), [
         'AppRouting:before',
         'ApiRouting:before',
         'com01',
         'ApiRouting:after',
         'AppRouting:after'
     ]);
+    mem.reset();
 });
 
 test.serial('Exec "app api com02"', async t => {
@@ -40,13 +36,14 @@ test.serial('Exec "app api com02"', async t => {
     const app = new Commander(AppRouting);
     await app.initialize();
     
-    t.deepEqual(execTail, [
+    t.deepEqual(mem.get(), [
         'AppRouting:before',
         'ApiRouting:before',
         'com02',
         'ApiRouting:after',
         'AppRouting:after'
     ]);
+    mem.reset();
 });
 
 test.serial('Exec "app com03"', async t => {
@@ -55,11 +52,12 @@ test.serial('Exec "app com03"', async t => {
     const app = new Commander(AppRouting);
     await app.initialize();
     
-    t.deepEqual(execTail, [
+    t.deepEqual(mem.get(), [
         'AppRouting:before',
         'com03',
         'AppRouting:after'
     ]);
+    mem.reset();
 });
 
 test.serial('Exec "app com04"', async t => {
@@ -68,9 +66,10 @@ test.serial('Exec "app com04"', async t => {
     const app = new Commander(AppRouting);
     await app.initialize();
     
-    t.deepEqual(execTail, [
+    t.deepEqual(mem.get(), [
         'AppRouting:before',
         'com04',
         'AppRouting:after'
     ]);
+    mem.reset();
 });
