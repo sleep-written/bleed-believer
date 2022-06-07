@@ -19,7 +19,7 @@ export const tail = new class {
 })
 export class Cmd01 implements Executable {
     @GetArgv()
-    argv!: Argv;
+    declare argv: Argv;
 
     start(): void {
         tail.set(this.argv.main);
@@ -32,7 +32,7 @@ export class Cmd01 implements Executable {
 })
 export class Cmd02 implements Executable {
     @GetArgv()
-    argv!: Argv;
+    declare argv: Argv;
 
     start(): void {
         tail.set(this.argv.flags);
@@ -45,7 +45,7 @@ export class Cmd02 implements Executable {
 })
 export class Cmd03 implements Executable {
     @GetArgv()
-    argv!: Argv;
+    declare argv: Argv;
 
     start(): void {
         tail.set(this.argv.main);

@@ -1,63 +1,61 @@
-import { Argv, ArgvData, ArgvParser, ParserOptions } from '../argv-parser/index.js';
+import { MetaManager } from '@bleed-believer/meta';
+
+import { ArgvParser, ParserOptions } from '../argv-parser/index.js';
 import { CommandRoutingClass } from '../command-routing/index.js';
+import { CommanderMeta } from './commander.meta.js';
 import { flattenRoute } from '../flatten-route/index.js';
 
 import { GET_ARGV_DATA } from '../get-argv-data/get-argv-data.js';
 import { GET_ARGV } from '../get-argv/get-argv.js';
 
+export const COMMANDER = new MetaManager<CommanderMeta>();
 export class Commander {
     private _main: CommandRoutingClass;
     private _opts: ParserOptions;
-    
-    private _argv!: ArgvParser;
-    get argv(): Argv {
-        if (!this._argv) {
-            throw new Error('TODO: Create a custom error for not initialized.');
-        } else {
-            return {
-                main: this._argv.main,
-                flags: this._argv.flags,
-            };
-        }
-    }
-
-    private _data!: ArgvData;
-    get argvData(): ArgvData {
-        if (!this._data) {
-            throw new Error('TODO: Create a custom error for not initialized.');
-        } else {
-            return this._data;
-        }
-    }
 
     constructor(
         mainRoute: CommandRoutingClass,
         options?: ParserOptions
     ) {
+        // Sets the options
         this._main = mainRoute;
         this._opts = {
             linear:     options?.linear     ?? false,
             lowercase:  options?.lowercase  ?? false,
         };
+
+        // Overwrite the metadata
+        const meta = COMMANDER.get(Commander);
+        if (meta?.instantiated) {
+            throw new Error('TODO: Create a error for duplicate instance');
+        } else {
+            COMMANDER.set(Commander, {
+                instantiated: true,
+                rawArgv: meta.rawArgv
+            });
+        }
+
     }
 
     async initialize(): Promise<void> {
-        this._argv = new ArgvParser(
-            process.argv.slice(2),
+        // Create the ArgvParser
+        const meta = COMMANDER.get(Commander);
+        const argv = new ArgvParser(
+            meta.rawArgv,
             this._opts
         );
+        
+        // Add Argv to the Commander Metadata
+        GET_ARGV.set(Commander, {
+            main: argv.main,
+            flags: argv.flags,
+        });
 
+        // Find a result
         const flattened = flattenRoute(this._main);
         const flat = flattened.find(x => {
-            const data = this._argv.match(x.path);
+            const data = argv.match(x.path);
             if (data) {
-                this._data = data;
-
-                GET_ARGV.set(Commander, {
-                    main: this._argv.main,
-                    flags: this._argv.flags,
-                });
-
                 GET_ARGV_DATA.set(Commander, {
                     items: [ ...data.items ],
                     param: { ...data.param }
@@ -66,6 +64,7 @@ export class Commander {
             return !!data;
         });
         
+        // Command not found
         if (!flat) {
             throw new Error('TODO: Create an error for "command not found"');
         }
@@ -90,16 +89,25 @@ export class Commander {
                 route.after &&
                 await route.after();
             }
+
         } catch (err: any) {
-            // Execute all available "failed" functions
             const route = routes.find(x => !!x.failed);
             if (route?.failed) {
+                // Execute all available "failed" functions
                 await route.failed(err);
             } else {
+                // Launch a global error
                 throw err;
             }
+
         } finally {
             return;
         }
     }
 }
+
+// Set the default metadata
+COMMANDER.set(Commander, {
+    instantiated: false,
+    rawArgv: process.argv.slice(2)
+});

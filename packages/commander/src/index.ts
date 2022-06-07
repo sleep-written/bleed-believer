@@ -4,7 +4,8 @@ export {
 
 export {
     Argv,
-    ArgvData
+    ArgvData,
+    ParserOptions
 } from './argv-parser/index.js';
 
 export {
@@ -15,8 +16,8 @@ export {
 } from './command/index.js';
 
 export {
-    BeforeCommand,
     AfterCommand,
+    BeforeCommand,
     FailedCommand,
 
     CommandRoute,

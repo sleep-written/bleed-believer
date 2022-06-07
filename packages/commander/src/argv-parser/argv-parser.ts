@@ -71,6 +71,13 @@ export class ArgvParser implements Argv {
             param: {},
         };
 
+        if (
+            (pattern.at(-1) !== '...') &&
+            (pattern.length !== this._main.length)
+        ) {
+            return null;
+        }
+
         for (let i = 0; i < pattern.length; i++) {
             const real = this._main[i];
             const patt = pattern[i];

@@ -8,6 +8,13 @@ test('Pattern: "hello world", Args: "hello"', t => {
     t.falsy(data);
 });
 
+test('Pattern: "hello", Args: "hello world"', t => {
+    const argv = new ArgvParser(['hello', 'world']);
+    const data = argv.match(['hello']);
+
+    t.falsy(data);
+});
+
 test('Pattern: "hello world", Args: "hello world"', t => {
     const argv = new ArgvParser(['hello', 'world']);
     const data = argv.match(['hello', 'world']);

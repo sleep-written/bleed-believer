@@ -1,22 +1,10 @@
-import rawTest, { TestFn } from 'ava';
+import test from 'ava';
 
+import { Commander, commanderReset } from '../commander/index.js';
 import { AppRouting, mem } from './case01.example.js';
-import { Commander } from '../commander.js';
-
-const test = rawTest as TestFn<{argv: string[]}>;
-
-test.serial.beforeEach(t => {
-    t.context = { argv: process.argv.slice() };
-    process.argv = t.context.argv.slice(0, 2);
-});
-
-test.serial.afterEach(t => {
-    process.argv = t.context.argv.slice();
-});
 
 test.serial('Exec "app api com01"', async t => {
-    process.argv.push('app', 'api', 'com01');
-
+    commanderReset(['app', 'api', 'com01']);
     const app = new Commander(AppRouting);
     await app.initialize();
     
@@ -31,8 +19,7 @@ test.serial('Exec "app api com01"', async t => {
 });
 
 test.serial('Exec "app api com02"', async t => {
-    process.argv.push('app', 'api', 'com02');
-
+    commanderReset(['app', 'api', 'com02']);
     const app = new Commander(AppRouting);
     await app.initialize();
     
@@ -47,8 +34,7 @@ test.serial('Exec "app api com02"', async t => {
 });
 
 test.serial('Exec "app com03"', async t => {
-    process.argv.push('app', 'com03');
-
+    commanderReset(['app', 'com03']);
     const app = new Commander(AppRouting);
     await app.initialize();
     
@@ -61,8 +47,7 @@ test.serial('Exec "app com03"', async t => {
 });
 
 test.serial('Exec "app com04"', async t => {
-    process.argv.push('app', 'com04');
-
+    commanderReset(['app', 'com04']);
     const app = new Commander(AppRouting);
     await app.initialize();
     

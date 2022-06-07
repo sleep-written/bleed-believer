@@ -1,19 +1,13 @@
-import rawTest, {TestFn} from 'ava';
+import test from 'ava';
+
+import { Commander, commanderReset } from '../commander/index.js';
 import * as case03 from './case03.example.js';
 
-const test = rawTest as TestFn<{argv: string[]}>;
-test.beforeEach(t => {
-    t.context = { argv: process.argv.slice() };
-    process.argv = t.context.argv.slice(0, 2);
-});
-
-test.afterEach(t => {
-    process.argv = t.context.argv.slice();
-});
-
 test.serial('Exec "app mv file-a.json file-b.json"', async t => {
-    process.argv.push('app', 'mv', 'file-a.json', 'file-b.json');
-    await case03.app.initialize();
+    commanderReset(['app', 'mv', 'file-a.json', 'file-b.json']);
+    process.argv.push();
+    const app = new Commander(case03.AppRouting);
+    await app.initialize();
 
     t.deepEqual(case03.mem.get(), [
         'file-a.json',
@@ -23,8 +17,10 @@ test.serial('Exec "app mv file-a.json file-b.json"', async t => {
 });
 
 test.serial('Exec "app call aaa bbb ccc"', async t => {
-    process.argv.push('app', 'call', 'aaa', 'bbb', 'ccc');
-    await case03.app.initialize();
+    commanderReset(['app', 'call', 'aaa', 'bbb', 'ccc']);
+    process.argv.push();
+    const app = new Commander(case03.AppRouting);
+    await app.initialize();
 
     t.deepEqual(case03.mem.get(), [
         'aaa',

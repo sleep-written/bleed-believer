@@ -1,9 +1,8 @@
 
-import { getArgvData, GET_ARGV_DATA } from './get-argv-data.js';
 import { Command, Executable } from '../command/index.js';
-import { Commander } from '../commander.js';
-import { ArgvData } from '../argv-parser/index.js';
 import { CommandRouting } from '../command-routing/command-routing.js';
+import { getArgvData } from './get-argv-data.js';
+import { ArgvData } from '../argv-parser/index.js';
 
 export const tail = new class {
     private _value!: any;
@@ -21,7 +20,7 @@ export const tail = new class {
 })
 export class Cmd01 implements Executable {
     @getArgvData()
-    argvData!: ArgvData;
+    declare argvData: ArgvData;
 
     start(): void {
         tail.set(this.argvData.param);
@@ -34,7 +33,7 @@ export class Cmd01 implements Executable {
 })
 export class Cmd02 implements Executable {
     @getArgvData()
-    argvData!: ArgvData;
+    declare argvData: ArgvData;
 
     start(): void {
         tail.set(this.argvData.items);
