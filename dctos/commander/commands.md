@@ -35,10 +35,10 @@ The object sended as `@Command` parameter has this properties:
 
 ## Getting the `Argv` object
 
-You can get the parsed execution arguments through the `Argv` object (see [here](./execution-arguments.md/#the-argv-interface)). To get this object, you need to import your `Commander` instance and use their according getter. For example:
+You can get the parsed execution arguments using the `@GetArgv()` decorator. When your class is instanciated, that property will returns an object with the structure of the `Argv` interface ([more details here](./execution-arguments.md/#the-argv-interface)). For example:
 
 ```ts
-import { Command, Executable } from '@bleed-believer/commander';
+import { Command, Executable, Argv, GetArgv } from '@bleed-believer/commander';
 
 // This is the "Commander" instance at root of application
 import { app } from '../index.js';
@@ -49,19 +49,20 @@ import { app } from '../index.js';
     info: 'This command configures your application.'
 })
 export class SetupCommand implements Executable {
-    start(): void {
-        const { argv } = app;
+    @GetArgv()
+    declare argv: Argv;
 
+    start(): void {
         console.log('This is the setup command!');
-        console.log('main args:', argv.main);
-        console.log('flags:', argv.flags);
+        console.log('main args:', this.argv.main);
+        console.log('flags:', this.argv.flags);
     }
 }
 ```
 
 ## Using wildcards
 
-__If you want to capture data from the _required arguments___, you can use wildcards into the `"main"` options of the `@Command` decorator. To get those captured values, you must add the `ArgvData` interface as second parameter to your `start(...)` method.
+__If you want to capture data from the _required arguments___, you can use wildcards into the `"main"` options of the `@Command` decorator. To get those captured values, you must add a property of `ArgvData` type, and use the `@GetArgvData()` decorator.
 
 <br />
 
@@ -79,9 +80,10 @@ import { app } from '../index.js';
     name: 'Watch File.'
 })
 export class WatchCommand implements Executable {
+    declare 
+
     start(): void {
-        const { data } = app;
-        console.log('target ->', data.param.file);
+        console.log('target ->', this.data.param.file);
     }
 }
 ```

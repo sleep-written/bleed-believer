@@ -10,16 +10,16 @@ import { GET_ARGV } from '../get-argv/get-argv.js';
 
 export const COMMANDER = new MetaManager<CommanderMeta>();
 export class Commander {
-    private _main: CommandRoutingClass;
-    private _opts: ParserOptions;
+    #main: CommandRoutingClass;
+    #opts: ParserOptions;
 
     constructor(
         mainRoute: CommandRoutingClass,
         options?: ParserOptions
     ) {
         // Sets the options
-        this._main = mainRoute;
-        this._opts = {
+        this.#main = mainRoute;
+        this.#opts = {
             linear:     options?.linear     ?? false,
             lowercase:  options?.lowercase  ?? false,
         };
@@ -42,7 +42,7 @@ export class Commander {
         const meta = COMMANDER.get(Commander);
         const argv = new ArgvParser(
             meta.rawArgv,
-            this._opts
+            this.#opts
         );
         
         // Add Argv to the Commander Metadata
@@ -52,7 +52,7 @@ export class Commander {
         });
 
         // Find a result
-        const flattened = flattenRoute(this._main);
+        const flattened = flattenRoute(this.#main);
         const flat = flattened.find(x => {
             const data = argv.match(x.path);
             if (data) {

@@ -25,7 +25,7 @@ export class ArgvParser implements Argv {
         return { ...this._options };
     }
 
-    constructor(input: string[], options?: ParserOptions) {
+    constructor(lol: string[], options?: ParserOptions) {
         this._main = [];
         this._flags = {};
         this._options = {
@@ -34,7 +34,14 @@ export class ArgvParser implements Argv {
         }
 
         let key: string | null = null;
-        for (const item of [...input]) {
+        const input = [...lol];
+
+        while (input.length > 0) {
+            const item = input.shift();
+            if (typeof item !== 'string') {
+                throw new Error('Out of logic!');
+            }
+
             if (item.match(/^-{1,2}[a-z0-9\-]*$/gi)) {
                 // It's a key
                 key = item
@@ -47,6 +54,10 @@ export class ArgvParser implements Argv {
 
                 if (!this._flags[key]) {
                     this._flags[key] = [];
+                }
+
+                if (key === '--') {
+                    this._flags[key] = input.splice(0);
                 }
 
             } else if (key) {
