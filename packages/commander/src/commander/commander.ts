@@ -9,16 +9,25 @@ import { GET_ARGV_DATA } from '../get-argv-data/get-argv-data.js';
 import { GET_ARGV } from '../get-argv/get-argv.js';
 
 export const COMMANDER = new MetaManager<CommanderMeta>();
+
+/**
+ * A class to deploy Command Routing classes and executes Command classes.
+ */
 export class Commander {
     #main: CommandRoutingClass;
     #opts: ParserOptions;
 
+    /**
+     * Creates a new Commander instance.
+     * @param target The Command Routing class do you want to deploy.
+     * @param options Options about the behavior of the execution argument parser.
+     */
     constructor(
-        mainRoute: CommandRoutingClass,
+        target: CommandRoutingClass,
         options?: ParserOptions
     ) {
         // Sets the options
-        this.#main = mainRoute;
+        this.#main = target;
         this.#opts = {
             linear:     options?.linear     ?? false,
             lowercase:  options?.lowercase  ?? false,
@@ -37,7 +46,11 @@ export class Commander {
 
     }
 
-    async initialize(): Promise<void> {
+    /**
+     * Deploys the target Command Routing class and searches inside of the target,
+     * the Command class according the execution arguments.
+     */
+    async execute(): Promise<void> {
         // Create the ArgvParser
         const meta = COMMANDER.get(Commander);
         const argv = new ArgvParser(

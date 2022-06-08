@@ -1,6 +1,6 @@
 # Commands
 
-Commands are the core of this library. Strictly speaking, a command is a class that will be instantiated only if __it's required arguments <u>matches</u> with the execution arguments__, for executes its `start(...)` method.
+Commands are the core of this library. Strictly speaking, a command is a class that will be instantiated only if __it's required arguments <u>matches</u> with the execution arguments__, for executes its `start()` method.
 
 ## Declaring a command class
 

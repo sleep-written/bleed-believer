@@ -16,7 +16,7 @@ At the whole documentation, all elements involved to execute a node.js program w
 - __flags__:
     > Flags are __key/value__ optional arguments that to be sended to the program. In this case is `"--key00 v0 --key01 v01"`.
 
-<br/>
+<hr />
 
 ## The `Argv` interface
 
@@ -35,7 +35,7 @@ This library parses the __execution arguments__, returning an object that implem
         "--key01": [ "v01" ]
     }
     ```
-<br />
+<hr />
 
 ## Parsing options
 

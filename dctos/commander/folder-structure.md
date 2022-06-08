@@ -15,7 +15,7 @@ For __CommonJS__ projects, use a configuration like this:
 ```json
 {
     "compilerOptions": {
-        "target": "ES2021",
+        "target": "ES2022",
         
         /** For CommonJS projects **/
         "module": "CommonJS",
@@ -39,10 +39,10 @@ For __ESM__ projects, use a configuration like this:
 ```json
 {
     "compilerOptions": {
-        "target": "ES2021",
+        "target": "ES2022",
 
         /** For ESM projects **/
-        "module": "ES2020",
+        "module": "ES2022",
   
         /** Required for decorators **/
         "experimentalDecorators": true,

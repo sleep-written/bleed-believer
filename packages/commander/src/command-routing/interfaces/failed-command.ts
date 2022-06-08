@@ -4,5 +4,5 @@ export interface FailedCommand {
      * thrown during the execution of the command.
      * @param err An error instance.
      */
-    failed(err: Error): void | Promise<void>;
+    failed(err: any | unknown): void | Promise<void>;
 }
