@@ -1,0 +1,11 @@
+0 silly argv {
+0 silly argv   _: [ 'add' ],
+0 silly argv   globs: [ 'packages/espresso' ],
+0 silly argv   lernaVersion: '5.0.0',
+0 silly argv   '$0': 'node_modules/.bin/lerna',
+0 silly argv   pkg: 'packages/meta'
+0 silly argv }
+1 notice cli v5.0.0
+2 verbose rootPath /home/dr-null/projects/modules/bleed-believer
+3 error Error: An unknown git error occurred
+3 error     at makeError (/home/dr-null/projects/modules/bleed-believer/node_modules/@npmcli/git/lib/make-error.js:28:13)
