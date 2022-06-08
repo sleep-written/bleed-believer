@@ -5,6 +5,10 @@ import { InvalidPathError } from './errors/index.js';
 import { ArgvParser } from '../argv-parser/argv-parser.js';
 
 export const COMMAND = new MetaManager<CommandMeta>('@bleed-believer/commander:command');
+/**
+ * Transforms a class into a `Command` class. Requires implement the `Executable` interface.
+ * @param options The options required to configure the class.
+ */
 export function Command(options: CommandOptions): CommandDecorator {
     return target => {
         const path = ArgvParser.parsePattern(options.path);

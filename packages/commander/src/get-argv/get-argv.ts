@@ -5,6 +5,10 @@ import { Commander } from '../commander/index.js';
 import { Argv } from '../argv-parser/index.js';
 
 export const GET_ARGV = new MetaManager<Argv>();
+
+/**
+ * Transforms a declared property into an `Argv` property getter.
+ */
 export function GetArgv(): GetArgvDecorator {
     return (target, key) => {
         Object.defineProperty(target, key, {

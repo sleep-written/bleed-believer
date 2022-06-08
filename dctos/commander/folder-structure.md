@@ -11,14 +11,14 @@ npm i --save-dev typescript
 ```
 \* _We suggest use [ts-node](https://www.npmjs.com/package/ts-node) to simplify your development flow._
 
-For __CommonJS__ projects, use a configuration like this:
+For __ESM__ projects, use a configuration like this:
 ```json
 {
     "compilerOptions": {
         "target": "ES2022",
-        
-        /** For CommonJS projects **/
-        "module": "CommonJS",
+
+        /** For ESM projects **/
+        "module": "ES2022",
   
         /** Required for decorators **/
         "experimentalDecorators": true,
@@ -35,14 +35,14 @@ For __CommonJS__ projects, use a configuration like this:
 }
 ```
 
-For __ESM__ projects, use a configuration like this:
+For __CommonJS__ projects, use a configuration like this:
 ```json
 {
     "compilerOptions": {
         "target": "ES2022",
-
-        /** For ESM projects **/
-        "module": "ES2022",
+        
+        /** For CommonJS projects **/
+        "module": "CommonJS",
   
         /** Required for decorators **/
         "experimentalDecorators": true,

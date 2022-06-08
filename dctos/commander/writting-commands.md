@@ -1,4 +1,4 @@
-# Commands
+# Writting Commands
 
 Commands are the core of this library. Strictly speaking, a command is a class that will be instantiated only if __it's required arguments <u>matches</u> with the execution arguments__, for executes its `start()` method.
 
@@ -10,7 +10,7 @@ To declaring a command class you must implements the `Executable` interface, and
 import { Command, Executable } from '@bleed-believer/commander';
 
 @Command({
-    path: [ 'setup' ],
+    path: 'setup',
     name: 'Setup Project.',
     info: 'This command configures your application.'
 })
@@ -40,11 +40,8 @@ You can get the parsed execution arguments using the `@GetArgv()` decorator. Whe
 ```ts
 import { Command, Executable, Argv, GetArgv } from '@bleed-believer/commander';
 
-// This is the "Commander" instance at root of application
-import { app } from '../index.js';
-
 @Command({
-    main: [ 'setup' ],
+    path: 'setup',
     name: 'Setup Project.',
     info: 'This command configures your application.'
 })
@@ -62,25 +59,23 @@ export class SetupCommand implements Executable {
 
 ## Using wildcards
 
-__If you want to capture data from the _required arguments___, you can use wildcards into the `"main"` options of the `@Command` decorator. To get those captured values, you must add a property of `ArgvData` type, and use the `@GetArgvData()` decorator.
+__If you want to capture data from the _required arguments___, you can use wildcards into the `"path"` options of the `@Command` decorator. To get those captured values, you must add a property of `ArgvData` type, and use the `@GetArgvData()` decorator.
 
 <br />
 
-### Wildcard `":name"`
+### Wildcard `":whatever"`
 
 Using `:` with a name, for example `":file"` you can capture the argument at this exact position. All of this wildcards are accesible in the `"param"` key of the `ArgvData` object. Watch this example:
 ```ts
-import { Command, Executable } from '@bleed-believer/commander';
-
-// This is the "Commander" instance at root of application
-import { app } from '../index.js';
+import { Command, Executable, ArgvData, GetArgvData } from '@bleed-believer/commander';
 
 @Command({
-    main: [ 'watch', ':file' ],
+    path: 'watch :file',
     name: 'Watch File.'
 })
 export class WatchCommand implements Executable {
-    declare 
+    @GetArgvData()
+    declare data: ArgvData;
 
     start(): void {
         console.log('target ->', this.data.param.file);
@@ -104,21 +99,19 @@ target -> ./target.png
 
 This wildcard can be used only as the last element of the `"main"` decorator option. This captures all arguments from its current position to the last argument as an `string[]`. Watch this example:
 ```ts
-import { Command, Executable } from '@bleed-believer/commander';
-
-// This is the "Commander" instance at root of application
-import { app } from '../index.js';
+import { Command, Executable, ArgvData, GetArgvData } from '@bleed-believer/commander';
 
 @Command({
-    main: [ 'watch', '...' ],
+    path: 'watch ...',
     name: 'Watch File.'
 })
 export class WatchCommand implements Executable {
-    start(): void {
-        const { data } = app;
+    @GetArgvData()
+    declare data: ArgvData;
 
+    start(): void {
         console.log('targets:');
-        for (const file of data.items) {
+        for (const file of this.data.items) {
             console.log('-', file);
         }
     }

@@ -82,7 +82,7 @@ export class AppRouting {}
 
 <hr />
 
-# Routing Events
+## Routing Events
 
 You can implement events to a Command Routing class. Only the events of those classes that traces the path to the found class will be fired. Lets check this hypothetical routing hierarchy for the next explanation of every event:
 
@@ -112,7 +112,7 @@ app.routing.ts
 
 <hr />
 
-## `BeforeCommand` event
+### `BeforeCommand` event
 
 This event is triggered before to execute the Command class. Using the hierarchy of above, if the command called is `target-122.command.ts` and all routes have the `BeforeCommand` event declared, the execution order is:
 - `app.routing.ts`
@@ -141,7 +141,7 @@ export class AppRouting implements BeforeCommand {
 
 <hr />
 
-## `AfterCommand` event
+### `AfterCommand` event
 
 This event is triggered after to execute and finished successful the Command class. Using the hierarchy of above, if the command called is `target-122.command.ts` and all routes have the `AfterCommand` event declared, the execution order is:
 - `level-12.routing.ts`
@@ -170,9 +170,9 @@ export class AppRouting implements AfterCommand {
 
 <hr />
 
-## `FailedCommand` event
+### `FailedCommand` event
 
-This event is triggered after to execute the Command class and that class throws an error. Using the hierarchy of above, if the command called is `target-122.command.ts` and all routes have the `FailedCommand` event declared, the `Commander` instance will search the nearest event declared, in this order:
+This event is triggered after to execute the Command class and that class throws an error. Using the hierarchy of above, if the command called is `target-122.command.ts` and all routes have the `FailedCommand` event declared, the `Commander` instance will search the nearest event declared, and only execute the first result, in this order:
 - `level-12.routing.ts`
 - `level-1.routing.ts`
 - `app.routing.ts`
