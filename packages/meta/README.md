@@ -1,6 +1,6 @@
 # @bleed-believer/meta
 
-Adds metadata easifuly to your objects. Now this package works in ESM projects and CommonJS too.
+Adds metadata easifuly to your objects. Now this package is compatible with __CommonJS__ and __ECMAScript Modules__.
 
 ## Installation
 

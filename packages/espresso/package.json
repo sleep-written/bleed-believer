@@ -1,12 +1,12 @@
 {
   "name": "@bleed-believer/espresso",
-  "version": "0.4.0",
-  "description": "",
+  "version": "0.8.0",
+  "description": "Create endpoints for express.js using classes and decorators.",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "files": [
-    "./dist"
+    "dist"
   ],
   "exports": {
     ".": {
@@ -22,10 +22,19 @@
     "url": "git+https://github.com/sleep-written/bleed-believer.git"
   },
   "keywords": [
-    "meta",
-    "metadata",
-    "symbol"
+    "express",
+    "expressjs",
+    "express.js",
+    "endpoint",
+    "endpoints",
+    "routing",
+    "api",
+    "rest",
+    "controller"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "sleep-written",
   "license": "MIT",
   "bugs": {
@@ -33,7 +42,7 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "@bleed-believer/meta": "^0.4.0"
+    "@bleed-believer/meta": "0.6.0"
   },
   "peerDependencies": {
     "express": "^4.18.1"

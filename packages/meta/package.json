@@ -1,18 +1,19 @@
 {
   "name": "@bleed-believer/meta",
-  "version": "0.4.0",
-  "description": "",
+  "version": "0.8.0",
+  "description": "Manage multiple tags into your objects.",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
-  "files": ["./dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",
       "import": "./dist/esm/index.js"
     }
   },
-  "devDependencies": {},
   "scripts": {
     "test": "ava"
   },
@@ -25,6 +26,9 @@
     "metadata",
     "symbol"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "sleep-written",
   "license": "MIT",
   "bugs": {

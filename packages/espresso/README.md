@@ -1,6 +1,8 @@
 # @bleed-believer/espresso
 
-An scalable endpoint router for [express.js](https://www.npmjs.com/package/express) applications, using classes as Controller and decorators. Not this package supports __ESM__ and __CommonJS.__
+An scalable endpoint router for [express.js](https://www.npmjs.com/package/express) applications, using classes as Controller and decorators.
+
+Now this package is compatible with __CommonJS__ and __ECMAScript Modules__.
 
 
 ## Prerequisites
