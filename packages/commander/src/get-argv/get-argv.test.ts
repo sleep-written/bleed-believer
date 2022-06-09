@@ -7,7 +7,7 @@ import * as example from './get-argv.example.js';
 test.serial('Check Command 01', async t => {
     commanderReset(['hello', 'world']);
     const app = new Commander(example.AppRouting);
-    await app.initialize();
+    await app.execute();
 
     t.deepEqual(
         example.tail.get(),
@@ -18,7 +18,7 @@ test.serial('Check Command 01', async t => {
 test.serial('Check Command 02', async t => {
     commanderReset(['cmd02', '--locked', 'true']);
     const app = new Commander(example.AppRouting);
-    await app.initialize();
+    await app.execute();
 
     t.deepEqual(
         example.tail.get(),
@@ -29,7 +29,7 @@ test.serial('Check Command 02', async t => {
 test.serial('Check Command 03', async t => {
     commanderReset(['cmd03', 'file01.json', 'file02.json']);
     const app = new Commander(example.AppRouting);
-    await app.initialize();
+    await app.execute();
 
     t.deepEqual(
         example.tail.get(),

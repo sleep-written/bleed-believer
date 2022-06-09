@@ -6,7 +6,7 @@ import { AppRouting, mem } from './case01.example.js';
 test.serial('Exec "app api com01"', async t => {
     commanderReset(['app', 'api', 'com01']);
     const app = new Commander(AppRouting);
-    await app.initialize();
+    await app.execute();
     
     t.deepEqual(mem.get(), [
         'AppRouting:before',
@@ -21,7 +21,7 @@ test.serial('Exec "app api com01"', async t => {
 test.serial('Exec "app api com02"', async t => {
     commanderReset(['app', 'api', 'com02']);
     const app = new Commander(AppRouting);
-    await app.initialize();
+    await app.execute();
     
     t.deepEqual(mem.get(), [
         'AppRouting:before',
@@ -36,7 +36,7 @@ test.serial('Exec "app api com02"', async t => {
 test.serial('Exec "app com03"', async t => {
     commanderReset(['app', 'com03']);
     const app = new Commander(AppRouting);
-    await app.initialize();
+    await app.execute();
     
     t.deepEqual(mem.get(), [
         'AppRouting:before',
@@ -49,7 +49,7 @@ test.serial('Exec "app com03"', async t => {
 test.serial('Exec "app com04"', async t => {
     commanderReset(['app', 'com04']);
     const app = new Commander(AppRouting);
-    await app.initialize();
+    await app.execute();
     
     t.deepEqual(mem.get(), [
         'AppRouting:before',

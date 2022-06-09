@@ -1,5 +1,6 @@
 import { MetaManager } from '@bleed-believer/meta';
 
+import { CommandNotFoundError, DuplicatedInstanceError } from './errors/index.js';
 import { ArgvParser, ParserOptions } from '../argv-parser/index.js';
 import { CommandRoutingClass } from '../command-routing/index.js';
 import { CommanderMeta } from './commander.meta.js';
@@ -36,7 +37,7 @@ export class Commander {
         // Overwrite the metadata
         const meta = COMMANDER.get(Commander);
         if (meta?.instantiated) {
-            throw new Error('TODO: Create a error for duplicate instance');
+            throw new DuplicatedInstanceError();
         } else {
             COMMANDER.set(Commander, {
                 instantiated: true,
@@ -79,7 +80,7 @@ export class Commander {
         
         // Command not found
         if (!flat) {
-            throw new Error('TODO: Create an error for "command not found"');
+            throw new CommandNotFoundError();
         }
 
         // Create route instances

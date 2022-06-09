@@ -19,3 +19,8 @@ Create CLI applications with decorators, routing and and parses the execution ar
 ## [@bleed-believer/espresso](/packages/espresso/README.md)
 
 An scalable endpoint router for [express.js](https://www.npmjs.com/package/express) applications, using classes as controllers and decorators.
+
+## TODO:
+
+* [ ] Add documentation into remaining objects.
+* [ ] Create a CLI.

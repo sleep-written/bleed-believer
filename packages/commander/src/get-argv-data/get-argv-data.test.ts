@@ -6,7 +6,7 @@ import * as example from './get-argv-data.example.js';
 test.serial('Check Command 01', async t => {
     commanderReset(['cmd01', 'file01.json', 'file02.json']);
     const app = new Commander(example.AppRouting);
-    await app.initialize();
+    await app.execute();
 
     t.deepEqual(
         example.tail.get(),
@@ -20,7 +20,7 @@ test.serial('Check Command 01', async t => {
 test.serial('Check Command 02', async t => {
     commanderReset(['cmd02', 'file01.json', 'file02.json']);
     const app = new Commander(example.AppRouting);
-    await app.initialize();
+    await app.execute();
 
     t.deepEqual(
         example.tail.get(),

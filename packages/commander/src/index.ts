@@ -1,5 +1,8 @@
 export {
-    Commander
+    Commander,
+    CommandNotFoundError,
+    DuplicatedInstanceError,
+    InstanceNotExecutedError
 } from './commander/index.js';
 
 export {
@@ -13,6 +16,7 @@ export {
     Executable,
     CommandOptions,
     CommandDecorator,
+    InvalidPathError,
 } from './command/index.js';
 
 export {
