@@ -12,8 +12,8 @@ npm i --save @bleed-believer/commander
 ```
 
 ## Documentation
-- [About project structure.](/dctos/commander/folder-structure.md)
-- [About execution arguments.](/dctos/commander/execution-arguments.md)
-- [Writting commands.](/dctos/commander/writting-commands.md)
-- [Writting Routings.](/dctos/commander/routing-commands.md)
-- [Commander class.](/dctos/commander/commander.md)
+- [About project structure.](/docs/commander/folder-structure.md)
+- [About execution arguments.](/docs/commander/execution-arguments.md)
+- [Writting commands.](/docs/commander/writting-commands.md)
+- [Writting Routings.](/docs/commander/routing-commands.md)
+- [Commander class.](/docs/commander/commander.md)

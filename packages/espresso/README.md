@@ -1,6 +1,6 @@
 # @bleed-believer/espresso
 
-An scalable endpoint router for [express.js](https://www.npmjs.com/package/express) applications, using classes as Controller and decorators.
+An scalable endpoint router for [express.js](https://www.npmjs.com/package/express) applications, using classes as Controller and decorators. Not this package supports __ESM__ and __CommonJS.__
 
 
 ## Prerequisites
@@ -23,8 +23,9 @@ In your `tsconfig.json`, remember to enables these options:
 {
     "compilerOptions": {
         /** ... **/
-        "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
         /** ... **/
     }
 }
