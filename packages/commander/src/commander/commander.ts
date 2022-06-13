@@ -85,6 +85,7 @@ export class Commander {
 
         // Create route instances
         const routes = flat.routings.map(x => new x());
+        const routesRev = [...routes].reverse();
         
         try {
             // Execute all available "before" functions
@@ -94,18 +95,17 @@ export class Commander {
             }
 
             // Execute the command
-            routes.reverse();
             const cmd = new flat.command();
             await cmd.start();
 
             // Execute all available "after" functions
-            for (const route of routes) {
+            for (const route of routesRev) {
                 route.after &&
                 await route.after();
             }
 
         } catch (err: any) {
-            const route = routes.find(x => !!x.failed);
+            const route = routesRev.find(x => !!x.failed);
             if (route?.failed) {
                 // Execute all available "failed" functions
                 await route.failed(err);
@@ -113,9 +113,6 @@ export class Commander {
                 // Launch a global error
                 throw err;
             }
-
-        } finally {
-            return;
         }
     }
 }
