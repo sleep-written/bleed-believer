@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/commander",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Create CLI with routing using classes and decorators.",
   "type": "module",
   "main": "./dist/cjs/index.js",
