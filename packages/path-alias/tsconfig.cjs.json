@@ -5,5 +5,11 @@
 
         "rootDir": "./src",
         "outDir": "./dist/cjs"
-    }
+    },
+    "exclude": [
+        "./dist",
+        "./src/**/*.test.ts",
+        "./src/**/*.test.mts",
+        "./src/**/*.mts"
+    ]
 }

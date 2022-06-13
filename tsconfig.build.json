@@ -6,9 +6,14 @@
     "references": [
         { "path": "./packages/meta/tsconfig.cjs.json" },
         { "path": "./packages/meta/tsconfig.json" },
+
         { "path": "./packages/commander/tsconfig.cjs.json" },
         { "path": "./packages/commander/tsconfig.json" },
+
         { "path": "./packages/espresso/tsconfig.cjs.json" },
-        { "path": "./packages/espresso/tsconfig.json" }
+        { "path": "./packages/espresso/tsconfig.json" },
+
+        { "path": "./packages/path-alias/tsconfig.cjs.json" },
+        { "path": "./packages/path-alias/tsconfig.json" }
     ]
 }

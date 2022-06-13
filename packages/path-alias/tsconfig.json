@@ -5,5 +5,11 @@
 
         "rootDir": "./src",
         "outDir": "./dist/esm"
-    }
+    },
+    "exclude": [
+        "./dist",
+        "./src/**/*.test.ts",
+        "./src/**/*.test.cts",
+        "./src/**/*.cts"
+    ]
 }

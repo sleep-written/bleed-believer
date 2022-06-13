@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "baseUrl": "./src",
+        "paths": {
+            "@models/*": ["./models/*"],
+            "@tool/*": ["./tool/*"]
+        }
+    }
+}

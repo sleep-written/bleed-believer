@@ -9,9 +9,11 @@
     "dist"
   ],
   "exports": {
+    "./register": {
+      "register": "./dist/cjs/register.cjs"
+    },
     ".": {
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js"
+      "import": "./dist/esm/loader.mjs"
     }
   },
   "scripts": {
@@ -36,5 +38,11 @@
   "bugs": {
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
-  "homepage": "https://github.com/sleep-written/bleed-believer#readme"
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "dependencies": {
+    "module-alias": "^2.2.2"
+  },
+  "devDependencies": {
+    "@types/module-alias": "^2.0.1"
+  }
 }
