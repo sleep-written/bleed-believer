@@ -1,6 +1,6 @@
 # Bleed Believer
 
-This monorepo contains several packages to make applications easily.
+This monorepo contains several packages to make applications easily, with support to __CommonJS__ and __ESM__ projects.
 
 <br />
 
@@ -19,6 +19,12 @@ Create CLI applications with decorators, routing and and parses the execution ar
 ## [@bleed-believer/espresso](/packages/espresso/README.md)
 
 An scalable endpoint router for [express.js](https://www.npmjs.com/package/express) applications, using classes as controllers and decorators.
+
+<br />
+
+## [@bleed-believer/path-alias](/packages/path-alias/README.md)
+
+Create alias for your recurrent paths in end-user applications using your `tsconfig.json`.
 
 ## TODO:
 
