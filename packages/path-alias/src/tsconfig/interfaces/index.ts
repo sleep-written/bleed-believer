@@ -1,2 +1,2 @@
-export { TsconfigAlias } from './tsconfig-alias.js';
-export { TsconfigData } from './tsconfig-data.js';
+export { TsconfigMain } from './tsconfig-main.js';
+export { TsconfigOpts } from './tsconfig-opts.js';

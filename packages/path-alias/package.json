@@ -5,15 +5,17 @@
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
-  "files": [
-    "dist"
-  ],
+  "files": [ "dist" ],
   "exports": {
-    "./register": {
-      "register": "./dist/cjs/register.cjs"
+    "./cjs": {
+      "require": "./dist/cjs/register/index.cjs"
+    },
+    "./esm": {
+      "import": "./dist/esm/loader/index.mjs"
     },
     ".": {
-      "import": "./dist/esm/loader.mjs"
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/esm/index.mjs"
     }
   },
   "scripts": {
@@ -28,7 +30,10 @@
     "typescript",
     "tsconfig",
     "ts-config",
-    "tsconfig.json"
+    "tsconfig.json",
+    "path",
+    "alias",
+    "mapping"
   ],
   "publishConfig": {
     "access": "public"
@@ -40,7 +45,11 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "module-alias": "^2.2.2"
+    "module-alias": "^2.2.2",
+    "tsconfig-paths": "^4.0.0"
+  },
+  "peerDependencies": {
+    "ts-node": "^10.8.1"
   },
   "devDependencies": {
     "@types/module-alias": "^2.0.1"

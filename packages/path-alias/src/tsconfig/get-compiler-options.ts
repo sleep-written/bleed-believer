@@ -1,12 +1,12 @@
 import { resolve } from 'path';
 
-import { TsconfigData } from './interfaces/index.js';
+import { TsconfigOpts } from './interfaces/index.js';
 import { Json } from '../tool/json.js';
 
 export function getCompilerOptions(
     path: string,
-    input: Partial<TsconfigData['compilerOptions']>
-): TsconfigData['compilerOptions'] {
+    input: Partial<TsconfigOpts>
+): TsconfigOpts {
     const keys = ['baseUrl', 'rootDir', 'outDir', 'paths'];
     const json = new Json<any>(path).loadSync();
 
