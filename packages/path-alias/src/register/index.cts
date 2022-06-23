@@ -1,27 +1,37 @@
-import { join, resolve } from 'path';
+import { REGISTER_INSTANCE } from 'ts-node';
 import { addAlias } from 'module-alias';
 import { Module } from 'module';
+import { join } from 'path';
 
+import { BB_TS_NODE, pathAlias } from '../path-alias.js';
 import { leftReplacer } from '../tool/left-replacer.js';
-import { pathAlias } from '../path-alias.js';
-import { ModuleRef } from './module-ref.js';
+import { ModuleRef } from './module-ref.cjs';
 
 // Declare the base path of the code to execute
-const base = pathAlias.isTsNode
-    ?   resolve(pathAlias.opts.rootDir)
-    :   leftReplacer(
-            resolve(pathAlias.opts.baseUrl),
-            resolve(pathAlias.opts.rootDir),
-            resolve(pathAlias.opts.outDir)
-        );
+pathAlias.showInConsole(true);
+const isTsNode = Object
+    .getOwnPropertySymbols(process)
+    .some(s => s === REGISTER_INSTANCE);
+
+// Mark in process ofject the ts-node is in use
+if (isTsNode) {
+    (process as any)[BB_TS_NODE] = true;
+}
+
+const base = leftReplacer(
+    pathAlias.opts.baseUrl,
+    pathAlias.opts.rootDir,
+    isTsNode
+        ?   pathAlias.opts.rootDir
+        :   pathAlias.opts.outDir
+);
 
 // Replaces the original "_resolveFilename" with a custom one
 const originalResolver = (Module as any)._resolveFilename;
 (Module as any)._resolveFilename = (input: string, module: ModuleRef, flag: boolean) => {
     if (
         module &&
-        pathAlias.isTsNode &&
-        module.path.startsWith(base)
+        module.path.startsWith(pathAlias.opts.rootDir)
     ) {
         input = input.replace(/\.js$/gi, '.ts');
         input = input.replace(/\.mjs$/gi, '.mts');

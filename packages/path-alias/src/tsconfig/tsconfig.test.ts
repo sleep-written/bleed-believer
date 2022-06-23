@@ -3,22 +3,41 @@ import { resolve } from 'path';
 
 import { Tsconfig } from './tsconfig.js';
 
-test('Get Aliases "tsconfig.01.json" (production)', t => {
+test('Get Aliases "tsconfig.01.json"', t => {
     const tsconfig = new Tsconfig('./tsconfig-tests/tsconfig.01.json');
-    const alias = tsconfig.getAliases();
+    const opts = tsconfig.getOptions();
 
-    t.deepEqual(alias, [
-        { alias: '@models', path: resolve('./dist/models') },
-        { alias: '@tool', path: resolve('./dist/tool') },
-    ]);
+    t.is(opts.baseUrl, resolve('./src'));
+    t.is(opts.rootDir, resolve('./src'));
+    t.is(opts.outDir, resolve('./dist'));
+    t.deepEqual(opts.paths, {
+        '@models/*': ['./models/*'],
+        '@tool/*': ['./tool/*'],
+    });
 });
 
-test('Get Aliases "tsconfig.01.json" (ts-node)', t => {
-    const tsconfig = new Tsconfig('./tsconfig-tests/tsconfig.01.json');
-    const alias = tsconfig.getAliases(true);
+test('Get Aliases "tsconfig.02.json"', t => {
+    const tsconfig = new Tsconfig('./tsconfig-tests/tsconfig.02.json');
+    const opts = tsconfig.getOptions();
 
-    t.deepEqual(alias, [
-        { alias: '@models', path: resolve('./src/models') },
-        { alias: '@tool', path: resolve('./src/tool') },
-    ]);
+    t.is(opts.baseUrl, resolve('./src'));
+    t.is(opts.rootDir, resolve('./src'));
+    t.is(opts.outDir, resolve('./dist'));
+    t.deepEqual(opts.paths, {
+        '@models/*': ['./models/*'],
+        '@tool/*': ['./tool/*'],
+    });
+});
+
+test('Get Aliases "tsconfig.03.json"', t => {
+    const tsconfig = new Tsconfig('./tsconfig-tests/tsconfig.03.json');
+    const opts = tsconfig.getOptions();
+
+    t.is(opts.baseUrl, resolve('./src'));
+    t.is(opts.rootDir, resolve('./src'));
+    t.is(opts.outDir, resolve('./dist'));
+    t.deepEqual(opts.paths, {
+        '@models/*': ['./models/*'],
+        '@tool/*': ['./tool/*'],
+    });
 });

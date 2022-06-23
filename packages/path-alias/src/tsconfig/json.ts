@@ -1,21 +1,26 @@
 import { readFileSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
+import { toJson } from 'tsconfck';
 
-export class Json<T> {
+import { TsconfigMain } from './interfaces/index.js';
+
+export class Json {
     private _path: string;
 
     constructor(path: string) {
         this._path = resolve(path);
     }
 
-    loadSync(): T {
+    loadSync(): TsconfigMain {
         const text = readFileSync(this._path, 'utf-8');
-        return JSON.parse(text);
+        const data = toJson(text);
+        return JSON.parse(data);
     }
 
-    async load(): Promise<T> {
+    async load(): Promise<TsconfigMain> {
         const text = await readFile(this._path, 'utf-8');
-        return JSON.parse(text);
+        const data = toJson(text);
+        return JSON.parse(data);
     }
 }

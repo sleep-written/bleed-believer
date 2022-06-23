@@ -3,8 +3,9 @@
     "compilerOptions": {
         "baseUrl": "./src",
         "paths": {
+            /** joder chaval me llenaré de comas **/
             "@models/*": ["./models/*"],
-            "@tool/*": ["./tool/*"]
+            "@tool/*": ["./tool/*"],
         }
-    }
+    },
 }

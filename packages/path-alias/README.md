@@ -18,7 +18,7 @@ import { Gegege } from '@alias-b/gegege.js';
 
 ## Disclaimer
 
-This package is heavely inspired in [this response](https://github.com/TypeStrong/ts-node/discussions/1450), so I give my gratitude to the [charles-hallen](https://github.com/charles-allen) work. If you see that the [Loader API](https://nodejs.org/api/esm.html#loaders) has been changed and this package stopped working, create an GitHub Issue notifying of the problem.
+This package is heavely inspired in [this response](https://github.com/TypeStrong/ts-node/discussions/1450#discussioncomment-1806115), so I give my gratitude to the [charles-hallen](https://github.com/charles-allen) work. If you see that the [Loader API](https://nodejs.org/api/esm.html#loaders) has been changed and this package stopped working, create an GitHub Issue notifying of the problem.
 
 This package is designed to work in end-user backend aplications (because of how [module alias works](https://github.com/ilearnio/module-alias/blob/dev/README.md#using-within-another-npm-package)). So this probably doesn't work in front-end applications, or apps that uses a bundler (like webpack of example).
 
@@ -38,7 +38,7 @@ npm i --save @bleed-believer/path-alias
 
 ## Usage
 
-First as example, we will use this project folder structure:
+To explain all features of this package, we will use this project estructure as example:
 ```bash
 # Your current working directory
 project-folder
@@ -80,7 +80,6 @@ project-folder
 ### Configure your `tsconfig.json`
 
 This package reads the `tsconfig.json` file (and is capable to find values if the file extends another configuration files) to declare the alias. A typical configuration coul be similar to this:
-
 ```json
 {
     "compilerOptions": {
@@ -103,7 +102,6 @@ The fields listed in the example of above are all required in order to the corre
 - Execute the source code with __ts-node:__
     ```bash
     node \
-    --loader ts-node/esm
     --loader @bleed-believer/path-alias/esm \
     ./src/index.ts
     ```
@@ -121,7 +119,7 @@ The fields listed in the example of above are all required in order to the corre
 - Execute the source code with __ts-node:__
     ```bash
     node \
-    --require ts-node/register
+    --require ts-node/register \
     --require @bleed-believer/path-alias/cjs \
     ./src/index.ts
     ```
@@ -151,4 +149,107 @@ The fields listed in the example of above are all required in order to the corre
     node ./dist/index.js
     ```
 
+## Unit testing with [ava](https://www.npmjs.com/package/ava)
 
+Create in your folder where your package.json is located a file called `"ava.config.mjs"`. Assuming that your `"rootDir"` is `"./src"`, set that file like this:
+
+### With __ESM__:
+```js
+export default {
+    files: [
+        './src/**/*.test.ts',
+        './src/**/*.test.mts',
+    ],
+    extensions: {
+        ts: 'module',
+        mts: 'module',
+    },
+    nodeArguments: [
+        '--loader=@bleed-believer/path-alias/esm',
+    ]
+}
+```
+
+### With __CommonJS__:
+```js
+export default {
+    files: [
+        './src/**/*.test.ts',
+        './src/**/*.test.cts',
+    ],
+    extensions: {
+        ts: 'commonjs',
+        cts: 'commonjs',
+    },
+    require: [
+        'ts-node/register',
+        '@bleed-believer/path-alias/cjs',
+    ]
+}
+```
+
+
+## Utilities
+
+### Function `isTsNodeRunning`
+
+If you want to check if `ts-node` is running, you can execute this function:
+```ts
+import { isTsNodeRunning } from '@bleed-believer/path-alias';
+
+const response = isTsNodeRunning();  // Returns a boolean
+console.log('if ts-node is running?', response); 
+```
+
+### Function `isPathAliasRunning`
+
+If you want to check if `@bleed-believer/path-alias` is running, you can execute this function:
+```ts
+import { isPathAliasRunning } from '@bleed-believer/path-alias';
+
+const response = isPathAliasRunning();  // Returns a boolean
+console.log('if this package is running?', response); 
+```
+
+### Function `pathResolve`
+
+Resolve any sobfolder of `"rootDir"` depending if __ts-node__ is running. For example, imagine do you want to resolve the path `"./src/folder-a/*"`:
+
+```ts
+import { pathResolve } from '@bleed-believer/path-alias';
+
+const path = pathResolve('./folder-a/*');
+console.log('path:', path);
+```
+
+With __ts-node__ the output is:
+```bash
+node \
+--loader @bleed-believer/path-alias/esm \
+./src/index.ts
+
+# path: src/folder-a/*
+```
+
+With the transpiled code:
+```bash
+node \
+--loader @bleed-believer/path-alias/esm \
+./dist/index.js
+
+# path: dist/folder-a/*
+```
+
+Optionally receives as second parameter an object with this options:
+- `"absolute"`:
+    > If `true`, returns the full path, otherwise returns the path relative to the current working directory.
+
+- `"ext"`:
+    > If true, converts the extensions `*.ts` / `*.mts` / `*.cts` /  `*.js` / `*.mjs` / `*.cjs` depending if __ts-node__ is running or not.
+
+
+## Limitations
+
+- The library requires a `"tsconfig.json"` file into the current working directory to work. Doesn't matter if that file extends another file, or be a part of a set of inhetirance, __while all required properties are accesible through its ancestors.__
+
+- The resolve output between `"baseURL"` and the `"paths"` declared in the `"tsconfig.json"` file must always return a path inside of `"rootDir"` folder.

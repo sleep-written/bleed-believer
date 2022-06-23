@@ -1,19 +1,19 @@
 import { resolve } from 'path';
 
-import { TsconfigOpts } from './interfaces/index.js';
-import { Json } from '../tool/json.js';
+import { TsconfigMain, TsconfigOpts } from './interfaces/index.js';
+import { Json } from './json.js';
 
 export function getCompilerOptions(
     path: string,
     input: Partial<TsconfigOpts>
 ): TsconfigOpts {
     const keys = ['baseUrl', 'rootDir', 'outDir', 'paths'];
-    const json = new Json<any>(path).loadSync();
+    const json = new Json(path).loadSync();
 
     const pending = keys
         .filter(k => !Object.keys(input).some(kk => k === kk))
         .filter(k => {
-            const value = json?.compilerOptions?.[k];
+            const value = (json?.compilerOptions as any)?.[k];
             let empty = true;
 
             switch (k) {

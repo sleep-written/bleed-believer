@@ -1,12 +1,23 @@
-import { URL } from 'url';
+import { fileURLToPath } from 'url';
+import { join, resolve } from 'path';
 
 import { Tsconfig, TsconfigOpts } from './tsconfig/index.js';
 import { leftReplacer } from './tool/left-replacer.js';
-import { resolve } from 'path';
-import { BB_PATH_ALIAS } from './index.js';
 
+/**
+ * A custom symbol to mark if ts-node is already used
+ */
+export const BB_TS_NODE = Symbol.for('@bleed-believer/ts-node');
+/**
+ * A symbol used to mark in "process" object that this library is used
+ * in runtime.
+ */
+export const BB_PATH_ALIAS = Symbol.for('@bleed-believer/path-alias');
+
+/**
+ * A constant to manage the current library status.
+ */
 export const pathAlias = new class {
-    // #isTsNode: boolean;
     #opts: TsconfigOpts;
     get opts(): TsconfigOpts {
         return this.#opts;
@@ -26,55 +37,92 @@ export const pathAlias = new class {
         this.#opts = tsconfig.getOptions();
 
         // Check if the path is on source
-        this.#isTsNode = process
-            .argv[1]
-            .startsWith(resolve(this.#opts.rootDir));
-
-        console.log('------------------------------------------');
-        console.log('@bleed-believer/path-alias');
-        console.log(`> ts-node: ${this.#isTsNode};`);
-
-        if (this.#isTsNode) {
-            console.log('  Preparing to execute source files...');
-        } else {
-            console.log('  Preparing to execute transpiled files...');
-        }
-
-        console.log('------------------------------------------');
+        this.#isTsNode =  false;
     }
 
-    replaceLoader(input: string, parentUrl?: string): string {
+    showInConsole(legacy?: boolean): void {
+        console.log('------------------------------------');
+        console.log('@bleed-believer/path-alias');
+        console.log(`> type   : ${legacy ? 'CommmonJS' : 'ESM'};`);
+        console.log('  Preparing to execute...');
+        console.log('------------------------------------');
+    }
+
+    checkTsNode(url: string): boolean;
+    checkTsNode(specifier: string, context: { parentURL?: string }): boolean;
+    checkTsNode(...args: [ string, { parentURL?: string }? ]): boolean {
+        const found = Object
+            .getOwnPropertySymbols(process)
+            .some(x => x === BB_TS_NODE);
+        
+        try {
+            if (found) {
+                this.#isTsNode = true;
+            } else if (args.length === 1) {
+                const path = fileURLToPath(args[0]);
+                this.#isTsNode = path.startsWith(this.#opts.rootDir);
+            } else if (typeof args[1]?.parentURL !== 'string') {
+                const path = fileURLToPath(args[0]);
+                this.#isTsNode = path.startsWith(this.#opts.rootDir);
+            } else {
+                const path = fileURLToPath(args[1].parentURL);
+                this.#isTsNode = path.startsWith(this.#opts.rootDir);
+            }
+        } catch {
+            this.#isTsNode = false;
+        }
+
+        if (this.#isTsNode && !found) {
+            console.log('------------------------------------');
+            console.log('> Source file found!');
+            console.log('  Using "ts-node"...');
+            console.log('------------------------------------');
+            (process as any)[BB_TS_NODE] = true;
+        }
+
+        return this.#isTsNode;
+    }
+
+    replaceLoader(specifier: string, context: { parentURL?: string }): string {
         // ParentURL is required
-        if (typeof parentUrl !== 'string') {
-            return input;
+        if (typeof context.parentURL !== 'string') {
+            return specifier;
         }
 
         // Check if inside of...
-        const path = new URL(parentUrl).pathname;
-        const base = this.#isTsNode
-            ?   resolve(this.#opts.baseUrl)
-            :   leftReplacer(
-                    resolve(this.#opts.baseUrl),
-                    resolve(this.#opts.rootDir),
-                    resolve(this.#opts.outDir)
-                );
+        const path = fileURLToPath(context.parentURL);
+        const root = resolve(this.#opts.rootDir);
 
-        if (path.startsWith(base)) {
+        if (path.startsWith(root)) {
             const found = Object
                 .entries(this.#opts.paths)
-                .map(([k, v]) => ({
-                    alias: k.replace(/(\\|\/)\*/gi, ''),
-                    path: v[0]?.replace(/(\\|\/)\*/gi, '')
+                .map(([alias, path]) => ({
+                    alias: alias.replace(/(\\|\/)\*$/gi, ''),
+                    path: path.map(p => p.replace(/(\\|\/)\*$/gi, ''))
                 }))
-                .find(({ alias }) => input.startsWith(alias));
+                .find(({alias}) => specifier.startsWith(alias));
 
-            if (found) {
-                const fullPath = resolve(base, found.path);
-                const result = leftReplacer(input, found.alias, fullPath);
-                return result;
+            if (found && found.path[0]) {
+                const fullPath = leftReplacer(
+                    join(this.#opts.baseUrl, found.path[0]),
+                    this.#opts.baseUrl,
+                    this.checkTsNode(specifier, context)
+                        ?   this.#opts.rootDir
+                        :   this.#opts.outDir
+                );
+
+                const response = leftReplacer(
+                    specifier,
+                    found.alias,
+                    fullPath
+                );
+
+                console.log('specifier:', specifier);
+                console.log('response: ', response);
+                return response;
             }
         }
         
-        return input;
+        return specifier;
     }
 }
