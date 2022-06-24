@@ -20,7 +20,7 @@ import { Gegege } from '@alias-b/gegege.js';
 
 This package is heavely inspired in [this response](https://github.com/TypeStrong/ts-node/discussions/1450#discussioncomment-1806115), so I give my gratitude to the [charles-hallen](https://github.com/charles-allen) work. If you see that the [Loader API](https://nodejs.org/api/esm.html#loaders) has been changed and this package stopped working, create an GitHub Issue notifying of the problem.
 
-This package is designed to work in end-user backend aplications (because of how [module alias works](https://github.com/ilearnio/module-alias/blob/dev/README.md#using-within-another-npm-package)). So this probably doesn't work in front-end applications, or apps that uses a bundler (like webpack of example).
+This package is designed to work in end-user backend aplications (because of how [module alias works](https://github.com/ilearnio/module-alias/blob/dev/README.md#using-within-another-npm-package)). So this probably doesn't work in front-end applications, or apps that uses a bundler (like webpack for example).
 
 Also, this package is __experimental__ and probably can generate unexpected behaviors, or performance issues. For that reason, <u>__you must test intensively this package in all possible use cases if do you want to implement in production.__</u>
 
@@ -69,6 +69,7 @@ project-folder
 │   ├── folder-b
 │   │   ├── ...
 │   │   └── ...
+│   ├── file-x.ts
 │   └── ...
 │
 │   # The project configuration files
@@ -88,6 +89,7 @@ This package reads the `tsconfig.json` file (and is capable to find values if th
 
         "baseUrl": "./src",
         "paths": {
+            "@file-x": ["./file-x.ts"],
             "@alias-a/*": ["./folder-a/*"],
             "@alias-b/*": ["./folder-b/*"],
         }
@@ -213,7 +215,7 @@ console.log('if this package is running?', response);
 
 ### Function `pathResolve`
 
-Resolve any sobfolder of `"rootDir"` depending if __ts-node__ is running. For example, imagine do you want to resolve the path `"./src/folder-a/*"`:
+Resolve any subfolder of `"rootDir"` depending if __ts-node__ is running. For example, imagine do you want to resolve the path `"./src/folder-a/*"`:
 
 ```ts
 import { pathResolve } from '@bleed-believer/path-alias';

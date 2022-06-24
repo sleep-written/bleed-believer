@@ -97,8 +97,8 @@ export const pathAlias = new class {
             const found = Object
                 .entries(this.#opts.paths)
                 .map(([alias, path]) => ({
-                    alias: alias.replace(/(\\|\/)\*$/gi, ''),
-                    path: path.map(p => p.replace(/(\\|\/)\*$/gi, ''))
+                    alias: alias.replace(/\*$/gi, ''),
+                    path: path.map(p => p.replace(/\*$/gi, ''))
                 }))
                 .find(({alias}) => specifier.startsWith(alias));
 
@@ -111,15 +111,22 @@ export const pathAlias = new class {
                         :   this.#opts.outDir
                 );
 
-                const response = leftReplacer(
-                    specifier,
-                    found.alias,
-                    fullPath
-                );
+                
+                const result = specifier !== found.alias
+                    ?   join(fullPath, leftReplacer(specifier, found.alias, ''))
+                    :   fullPath;
 
                 console.log('specifier:', specifier);
-                console.log('response: ', response);
-                return response;
+
+                if (pathAlias.isTsNode) {
+                    return result
+                        .replace(/\.js$/gi, '.ts')
+                        .replace(/\.mjs$/gi, '.mts');
+                } else {
+                    return result
+                        .replace(/\.ts$/gi, '.js')
+                        .replace(/\.mts$/gi, '.mjs');
+                }
             }
         }
         

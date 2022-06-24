@@ -30,6 +30,7 @@ export function load(
 export const resolve: ResolveFn = (specifier, context, defaultResolve) => {
     const isTsNode = pathAlias.checkTsNode(specifier, context);
     if (isTsNode) {
+        // USE TS-NODE TO HANDLE THE INCOMING MODULES
         const lastIndexOfIndex = specifier.lastIndexOf('/index.js');
         if (lastIndexOfIndex !== -1) {
             // Handle index.js
@@ -42,17 +43,7 @@ export const resolve: ResolveFn = (specifier, context, defaultResolve) => {
                     defaultResolve
                 );
             }
-        // } else if (specifier.endsWith('.js')) {
-        //     // Handle *.js
-        //     const trimmed = specifier.substring(0, specifier.length - 3);
-        //     const match = matchPath(trimmed);
-        //     if (match) {
-        //         return resolveTs(
-        //             pathToFileURL(`${match}.js`).href,
-        //             context,
-        //             defaultResolve
-        //         );
-        //     }
+
         } else {
             const ext = (specifier.match(/\.(m|c)?js$/gi) ?? ['.js'])[0];
             const clearedPath = specifier.replace(/\.(m|c)?js$/gi, '');
@@ -64,12 +55,27 @@ export const resolve: ResolveFn = (specifier, context, defaultResolve) => {
                     context,
                     defaultResolve
                 );
+            } else if (typeof context.parentURL === 'string') {
+                const newPath = replace(specifier, context.parentURL);
+                if (typeof newPath === 'string') {
+                    const newUrl = pathToFileURL(newPath).href;
+                    return resolveTs(
+                        newUrl,
+                        context,
+                        defaultResolve
+                    );
+                }
             }
         }
 
         return resolveTs(specifier, context, defaultResolve);
     } else {
-        specifier = replace(specifier, context.parentURL);
-        return defaultResolve(specifier, context, defaultResolve);
+        // Use node directly, skipping ts-node
+        const newEspecif = replace(specifier, context.parentURL);
+        if (typeof newEspecif === 'string') {
+            return defaultResolve(newEspecif, context, defaultResolve);
+        } else {
+            return defaultResolve(specifier, context, defaultResolve);
+        }
     }
 }
