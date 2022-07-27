@@ -47,6 +47,7 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "module-alias": "^2.2.2",
     "tsconfck": "^2.0.1",
     "tsconfig-paths": "^4.0.0"

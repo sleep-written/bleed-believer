@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../../../packages/meta/src/lib/meta.ts"],"sourcesContent":["export function meta(): string {\n  return 'meta';\n}\n"],"names":["meta"],"mappings":"AAAA;+BAAgBA,MAAI;;aAAJA,IAAI;;AAAb,SAASA,IAAI,GAAW;IAC7B,OAAO,MAAM,CAAC;CACf"}

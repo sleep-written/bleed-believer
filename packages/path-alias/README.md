@@ -193,6 +193,15 @@ export default {
 
 ## Utilities
 
+### Verbose mode
+
+If you want to check if the project is runnig with ts-node (\*.ts) or directly with node (\*.js) at the beginning of the execution, you can define this environment variable:
+```env
+BB_PATH_ALIAS_VERBOSE=true
+```
+
+This package includes `dotnet` package, so if you want, create a `.env` file in your current working directory.
+
 ### Function `isTsNodeRunning`
 
 If you want to check if `ts-node` is running, you can execute this function:

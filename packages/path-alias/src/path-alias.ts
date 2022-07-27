@@ -1,5 +1,6 @@
-import { fileURLToPath } from 'url';
+import { config } from 'dotenv';
 import { join, resolve } from 'path';
+import { fileURLToPath } from 'url';
 
 import { Tsconfig, TsconfigOpts } from './tsconfig/index.js';
 import { leftReplacer } from './tool/left-replacer.js';
@@ -13,6 +14,9 @@ export const BB_TS_NODE = Symbol.for('@bleed-believer/ts-node');
  * in runtime.
  */
 export const BB_PATH_ALIAS = Symbol.for('@bleed-believer/path-alias');
+
+// Parses the *.env file
+config();
 
 /**
  * A constant to manage the current library status.
@@ -28,6 +32,11 @@ export const pathAlias = new class {
         return this.#isTsNode;
     }
 
+    get verbose(): boolean {
+        const verbose = process.env['BB_PATH_ALIAS_VERBOSE'];
+        return verbose?.toLowerCase() === 'true';
+    }
+
     constructor() {
         // Mark this process that this library is in use
         (process as any)[BB_PATH_ALIAS] = true;
@@ -41,11 +50,13 @@ export const pathAlias = new class {
     }
 
     showInConsole(legacy?: boolean): void {
-        console.log('------------------------------------');
-        console.log('@bleed-believer/path-alias');
-        console.log(`> type   : ${legacy ? 'CommmonJS' : 'ESM'};`);
-        console.log('  Preparing to execute...');
-        console.log('------------------------------------');
+        if (this.verbose) {
+            console.log('------------------------------------');
+            console.log('@bleed-believer/path-alias');
+            console.log(`> type   : ${legacy ? 'CommmonJS' : 'ESM'};`);
+            console.log('  Preparing to execute...');
+            console.log('------------------------------------');
+        }
     }
 
     checkTsNode(url: string): boolean;
@@ -73,10 +84,13 @@ export const pathAlias = new class {
         }
 
         if (this.#isTsNode && !found) {
-            console.log('------------------------------------');
-            console.log('> Source file found!');
-            console.log('  Using "ts-node"...');
-            console.log('------------------------------------');
+            if (this.verbose) {
+                console.log('------------------------------------');
+                console.log('> Source file found!');
+                console.log('  Using "ts-node"...');
+                console.log('------------------------------------');
+            }
+
             (process as any)[BB_TS_NODE] = true;
         }
 
