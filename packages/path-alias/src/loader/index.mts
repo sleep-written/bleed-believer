@@ -58,7 +58,10 @@ export const resolve: ResolveFn = (specifier, context, defaultResolve) => {
             } else if (typeof context.parentURL === 'string') {
                 const newPath = replace(specifier, context.parentURL);
                 if (typeof newPath === 'string') {
-                    const newUrl = pathToFileURL(newPath).href;
+                    let newUrl = process.platform !== 'win32'
+                        ?   pathToFileURL(newPath).href
+                        :   newPath;
+
                     return resolveTs(
                         newUrl,
                         context,

@@ -1,4 +1,5 @@
 import { join, resolve } from 'path';
+import { pathToFileURL } from 'url';
 
 import { pathAlias } from '../path-alias.js';
 import { leftReplacer } from '../tool/left-replacer.js';
@@ -10,7 +11,12 @@ export function replace(input: string, parentUrl?: string): string | undefined {
     }
 
     // Check if inside of...
-    const path = new URL(parentUrl).pathname;
+    const path = process.platform !== 'win32'
+        ?   new URL(parentUrl).pathname
+        :   new URL(parentUrl).pathname
+                .replace(/^(\\|\/)+/gi, '')
+                .replace(/\//gi, '\\');
+
     const base = pathAlias.isTsNode
         ?   resolve(pathAlias.opts.baseUrl)
         :   leftReplacer(
@@ -34,14 +40,21 @@ export function replace(input: string, parentUrl?: string): string | undefined {
                 ?   join(fullPath, leftReplacer(input, found.alias, ''))
                 :   fullPath;
 
+            let out: string;
             if (pathAlias.isTsNode) {
-                return result
+                out = result
                     .replace(/\.js$/gi, '.ts')
                     .replace(/\.mjs$/gi, '.mts');
             } else {
-                return result
+                out = result
                     .replace(/\.ts$/gi, '.js')
                     .replace(/\.mts$/gi, '.mjs');
+            }
+
+            if (process.platform === 'win32') {
+                return pathToFileURL(out).href;
+            } else {
+                return out;
             }
         }
     }
