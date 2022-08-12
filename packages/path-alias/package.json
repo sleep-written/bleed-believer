@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/path-alias",
-  "version": "0.10.15",
+  "version": "0.10.16",
   "description": "Assign path alias using tsconfig.json file",
   "type": "module",
   "main": "./dist/cjs/index.js",
