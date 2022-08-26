@@ -1,0 +1,21 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "module": "ES2022",
+
+        "rootDir": "./src",
+        "outDir": "./dist/esm",
+
+        "typeRoots": [
+            "../../node_modules/@types",
+            "./node_modules/@types",
+            "./src/type/"
+        ]
+    },
+    "exclude": [
+        "./dist",
+        "./src/**/*.test.ts",
+        "./src/**/*.test.cts",
+        "./src/**/*.cts"
+    ]
+}

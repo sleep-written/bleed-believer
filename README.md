@@ -26,6 +26,12 @@ An scalable endpoint router for [express.js](https://www.npmjs.com/package/expre
 
 Create alias for your recurrent paths in end-user applications using your `tsconfig.json`.
 
+<br />
+
+## [@bleed-believer/state](/packages/state/README.md)
+
+An agnostic simple frontend state managment.
+
 ## TODO:
 
 * [ ] Add documentation into remaining objects.

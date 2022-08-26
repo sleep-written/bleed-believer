@@ -1,0 +1,62 @@
+{
+  "name": "@bleed-believer/state",
+  "version": "0.10.16",
+  "description": "Assign path alias using tsconfig.json file",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./cjs": {
+      "require": "./dist/cjs/register/index.cjs"
+    },
+    "./esm": {
+      "import": "./dist/esm/loader/index.mjs"
+    },
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sleep-written/bleed-believer.git"
+  },
+  "keywords": [
+    "ts",
+    "typescript",
+    "tsconfig",
+    "ts-config",
+    "tsconfig.json",
+    "path",
+    "alias",
+    "mapping"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "sleep-written",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sleep-written/bleed-believer/issues"
+  },
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "module-alias": "^2.2.2",
+    "tsconfck": "^2.0.1",
+    "tsconfig-paths": "^4.0.0"
+  },
+  "peerDependencies": {
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
+  },
+  "devDependencies": {
+    "@types/module-alias": "^2.0.1"
+  }
+}
