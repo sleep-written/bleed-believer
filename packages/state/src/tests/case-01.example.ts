@@ -7,14 +7,14 @@ export interface Person {
 
 export class PersonState extends State<Person> {
     changeName(name: string): Promise<void> {
-        return this.setContext(o => ({
+        return this.setState(o => ({
             ...o,
             name
         }));
     }
 
     changeAge(age: number): Promise<void> {
-        return this.setContext(o => ({
+        return this.setState(o => ({
             ...o,
             age
         }));

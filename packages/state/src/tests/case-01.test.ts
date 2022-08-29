@@ -14,7 +14,7 @@ test.before(t => {
         name: 'Pendejo',
         age: 5
     });
-    const subsc = state.context.subscribe({
+    const subsc = state.state.subscribe({
         next: input => queue.push(input)
     });
 

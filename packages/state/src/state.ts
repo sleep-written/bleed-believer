@@ -1,17 +1,15 @@
-import { Serial } from './serial/index.js';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { Serial } from './serial.js';
 
 export class State<T> {
     #serial = new Serial();
     #value: T;
 
-    readonly context: Subject<T>;
+    readonly state: BehaviorSubject<T>;
 
-    constructor(initial: T, emitAtInit?: boolean) {
+    constructor(initial: T) {
         this.#value = initial;
-        this.context =  emitAtInit
-            ?   new BehaviorSubject<T>(initial)
-            :   new Subject<T>();
+        this.state =  new BehaviorSubject<T>(initial);
 
         Object.defineProperty(this, 'context', {
             configurable: false,
@@ -20,12 +18,12 @@ export class State<T> {
         });
     }
 
-    protected setContext(callback: (input: T) => T | Promise<T>): Promise<void> {
+    protected setState(callback: (input: T) => T | Promise<T>): Promise<void> {
         return this.#serial.push(async () => {
             // Update the memory
             const newMemory = await callback(this.#value);
             this.#value = newMemory;
-            this.context.next(this.#value);
+            this.state.next(this.#value);
         });
     }
 }

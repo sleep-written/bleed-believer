@@ -19,7 +19,7 @@ test.before(t => {
         queue,
         state,
         subsc: state
-            .context
+            .state
             .subscribe({ next })
     };
 });

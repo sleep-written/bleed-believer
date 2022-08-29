@@ -25,14 +25,14 @@ export interface Body {
 
 export class BodyState extends State<Body> {
     setUser(user?: User): Promise<void> {
-        return this.setContext(input => ({
+        return this.setState(input => ({
             ...input,
             user
         }));
     }
 
     addProductRow(index: number): Promise<void> {
-        return this.setContext(input => {
+        return this.setState(input => {
             const productos = input.contr.products instanceof Array
                 ?   input.contr.products
                 :   [];
@@ -59,7 +59,7 @@ export class BodyState extends State<Body> {
     }
 
     updateproductRow(index: number, value: Product): Promise<void> {
-        return this.setContext(input => {
+        return this.setState(input => {
             const products = input.contr.products?.slice() ?? [];
             if (!products[index]) {
                 throw new Error('Kill it!');
