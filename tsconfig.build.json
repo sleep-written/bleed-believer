@@ -14,7 +14,7 @@
         { "path": "./packages/espresso/tsconfig.json" },
 
         { "path": "./packages/path-alias/tsconfig.cjs.json" },
-        { "path": "./packages/path-alias/tsconfig.json" }
+        { "path": "./packages/path-alias/tsconfig.json" },
 
         { "path": "./packages/state/tsconfig.cjs.json" },
         { "path": "./packages/state/tsconfig.json" }

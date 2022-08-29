@@ -8,6 +8,7 @@
     },
     "exclude": [
         "./dist",
+        "./src/**/*.example.ts",
         "./src/**/*.test.ts",
         "./src/**/*.test.mts",
         "./src/**/*.mts"

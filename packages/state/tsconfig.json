@@ -14,6 +14,7 @@
     },
     "exclude": [
         "./dist",
+        "./src/**/*.example.ts",
         "./src/**/*.test.ts",
         "./src/**/*.test.cts",
         "./src/**/*.cts"
