@@ -45,8 +45,9 @@ test.serial('Change age again', async t => {
 
 test.serial('Check queue', async t => {
     t.deepEqual(t.context.queue, [
-        { name: 'Pendejo', age: 10 },
-        { name: 'Joder', age: 10 },
-        { name: 'Joder', age: 666 },
+        { name: 'Pendejo',  age:   5 },
+        { name: 'Pendejo',  age:  10 },
+        { name: 'Joder',    age:  10 },
+        { name: 'Joder',    age: 666 },
     ]);
 });

@@ -72,6 +72,9 @@ test.serial('Modify a product row (throws an error and the data doesn\'t change)
 
 test.serial('Check queue', t => {
     t.deepEqual(t.context.queue, [
+        {   // Initial state
+            contr: {}
+        },
         {   // Add an user
             user: {
                 id: 66,
