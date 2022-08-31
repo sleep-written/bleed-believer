@@ -1,0 +1,1 @@
+export type StateUpdateOn = 'change' | 'blur' | 'submit';

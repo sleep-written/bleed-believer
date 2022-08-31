@@ -2,6 +2,6 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.10.17",
+  "version": "independent",
   "useWorkspaces": true
 }
