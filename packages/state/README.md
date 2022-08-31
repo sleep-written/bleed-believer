@@ -1,5 +1,5 @@
 # @bleed-believer/state
-A simple state management using only [RxJS](https://rxjs.dev/) to emit changes. This module only exports 2 classes, for the most common operations, you may only need to use `State` class. Otherwise if you need to implement a custom async FIFO you could check the `Serial` class instead.
+A simple state management using only [RxJS](https://rxjs.dev/) to emit changes. This module includes a variant of `FormGroup` to create reactive forms without worring to deal with control the emissions 
 
 ## Installation
 Just execute this command in your terminal:
@@ -103,8 +103,121 @@ import { CounterState } from './counter.state';
 export class ContrVentaComponent {
   counter = new CounterState();
 }
-
 ```
+
+## `StateForm` class usage
+In certain cases when you work with __Angular__, you may need to use state management in conjunction with __Reactive Forms__. If you have a lot of forms, everyone with a part of the whole state, the control of the value emission could be converted in a painful task. To deal with that, this package includes this class. Escencially, this class extends `FormGroup` class, adding some methods to avoid emit changes when you don't need that.
+
+For example:
+-   `test-state.service.ts`
+    ```ts
+    import { Injectable } from '@angular/core';
+    import { State } from '@bleed-believer/state';
+
+    export interface TestState {
+        // ... bla bla bla
+        // ... bla bla bla
+
+        code: string;
+        desc: string;
+    }
+
+    export class TestStateService extends State<TestState> {
+        constructor() {
+            super({
+                // ... bla bla bla
+                // ... bla bla bla
+            });
+        }
+        
+        // ... bla bla bla
+        // ... bla bla bla
+
+        setItem(code: string, desc: string): Promise<void> {
+            return this.setState(v => {
+                return { ...v, code, desc };
+            });
+        }
+    }
+    ```
+
+-   `test.component.html`
+    ```html
+    <form
+    [formGroup]="this.form">
+        <div>
+            <label>Code:</label>
+            <input type="text" formControlName="code" />
+        </div>
+        <div>
+            <label>Description:</label>
+            <input type="text" formControlName="desc" />
+        </div>
+    </form>
+    ```
+
+-   `test.component.ts`
+    ```ts
+    import {
+        ChangeDetectionStrategy, ChangeDetectorRef, Component,
+        OnDestroy, OnInit
+    } from '@angular/core';
+    import { Subscription } from 'rxjs';
+
+    import { TestState, TestStateService } from './test-state.sev';
+
+    @Component({
+        selector: 'app-test',
+        templateUrl: './test.component.html',
+        styleUrls: ['./test.component.scss'],
+        changeDetection: ChangeDetectionStrategy.OnPush
+    })
+    export class TestComponent implements OnInit, OnDestroy {
+        #subs: Subscription[];
+
+        // Create the instance here
+        form = new StateForm({
+            code:   ['', Validators.required],
+            desc:   ['', Validators.required],
+        });
+
+        constructor(
+            private _testState: TestStateService,
+        ) {}
+
+        ngOnInit(): void {
+            this.#subs = [
+                // Listens from changes by the user
+                this.form
+                    .valueChangesByUser
+                    .subscribe(this.onFormChanges.bind(this)),
+                
+                // Listens from changes by the state
+                this._testState
+                    .state
+                    .subscribe(this.onStateChanges.bind(this)),
+            ]
+        }
+
+        onStateChange(state: TestState): void {
+            // Updates the form data without emit a change
+            this.form.setValueSilently({
+                code: state.code,
+                desc: state.desc
+            });
+        }
+
+        onFormChanges(): void {
+            // Ignores changes emited in "this.onStateChange"
+            if (this.form.invalid) { return; }
+            const { code, desc } = this.form.partialValue;
+            this._testServ.setItem(
+                code as string,
+                desc as string
+            );
+        }
+    }
+    ```
 
 ## `Serial` class usage
 In certain cases, you may need to implement a method that you need a certainty that will __be called only once__, even if is called while the first call still in progress. So for those cases exist the  `Serial` class.
