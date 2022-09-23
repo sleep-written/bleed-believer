@@ -1,6 +1,7 @@
+import type { StateFormStruct } from './interfaces/index.js';
+
 import { filter, Observable, map } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
-import { StateFormStruct } from './interfaces/index.js';
+import { FormGroup, FormControl } from '@angular/forms';
 
 /**
  * An extension of `FormGroup` from [@angular/forms](https://angular.io/api/forms/FormGroup)

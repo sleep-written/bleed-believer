@@ -1,11 +1,11 @@
-import { MetaManager } from '@bleed-believer/meta';
-import { Path } from '../path/index.js';
-
-import {
+import type {
     ControllerRoutingDecorator,
     ControllerRoutingOptions,
     ControllerRoutingMeta,
 } from './interfaces/index.js';
+
+import { MetaManager } from '@bleed-believer/meta';
+import { Path } from '../path/index.js';
 
 export const CONTROLLER_ROUTING = new MetaManager<ControllerRoutingMeta>();
 

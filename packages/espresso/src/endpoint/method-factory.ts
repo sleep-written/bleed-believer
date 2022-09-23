@@ -1,8 +1,9 @@
-import { EndpointDecorator, EndpointMeta } from './interfaces/index.js';
-import { DuplicatedEndpointError } from '../errors/index.js';
+import type { EndpointDecorator, EndpointMeta } from './interfaces/index.js';
+import type { ControllerMeta } from '../controller/index.js';
+import type { HttpMethods } from '../interfaces/index.js';
 
-import { ControllerMeta, CONTROLLER } from '../controller/index.js';
-import { HttpMethods } from '../interfaces/index.js';
+import { DuplicatedEndpointError } from '../errors/index.js';
+import { CONTROLLER } from '../controller/index.js';
 import { Path } from '../path/index.js';
 
 export function methodFactory(method: keyof HttpMethods) {

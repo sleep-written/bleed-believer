@@ -9,10 +9,12 @@ export {
     Trace,
     Patch,
     All,
+} from './endpoint/index.js';
+export type {
     EndpointDecorator,
 } from './endpoint/index.js';
 
-export {
+export type {
     HttpMethods,
     ErrorCallback,
 } from './interfaces/index.js';
@@ -20,12 +22,16 @@ export {
 export {
     Controller,
     ControllerPath,
+} from './controller/index.js';
+export type {
     ControllerClass,
     ControllerDecorator,
 } from './controller/index.js';
 
 export {
     ControllerRouting,
+} from './controller-routing/index.js';
+export type {
     ControllerRoutingClass,
     ControllerRoutingOptions,
     ControllerRoutingDecorator,

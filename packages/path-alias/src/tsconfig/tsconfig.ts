@@ -1,8 +1,9 @@
+import type { TsconfigOpts } from './interfaces/index.js';
+
 import { resolve } from 'path';
 
 import { ConfigNotFoundError } from './errors/index.js';
 import { getCompilerOptions } from './get-compiler-options.js';
-import { TsconfigOpts } from './interfaces/index.js';
 
 export class Tsconfig {
     #path: string;

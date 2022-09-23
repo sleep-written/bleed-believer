@@ -1,5 +1,5 @@
-import { ControllerClass } from '../controller/index.js';
-import { HttpMethods } from '../interfaces/index.js';
+import type { ControllerClass } from '../controller/index.js';
+import type { HttpMethods } from '../interfaces/index.js';
 
 export interface FlattedRoute {
     key: string | symbol;

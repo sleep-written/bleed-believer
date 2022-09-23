@@ -1,7 +1,9 @@
-import { Command, Executable } from '../command/index.js';
+import type { Executable } from '../command/index.js';
+import type { Argv } from '../argv-parser/index.js';
+
 import { CommandRouting } from '../command-routing/index.js';
+import { Command } from '../command/index.js';
 import { GetArgv } from './get-argv.js';
-import { Argv } from '../argv-parser/index.js';
 
 export const tail = new class {
     private _value!: any;

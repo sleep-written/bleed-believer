@@ -1,3 +1,3 @@
-export { Argv } from './argv.js';
-export { ArgvData } from './argv-data.js';
-export { ParserOptions } from './parser-options.js';
+export type { Argv } from './argv.js';
+export type { ArgvData } from './argv-data.js';
+export type { ParserOptions } from './parser-options.js';

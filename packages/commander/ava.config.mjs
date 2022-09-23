@@ -8,7 +8,7 @@ export default {
         mts: 'module',
     },
     nodeArguments: [
-        // '--loader=esbuild-node-loader',
+        '--no-warnings',
         '--loader=ts-node/esm',
     ]
 };

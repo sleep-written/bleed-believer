@@ -1,9 +1,9 @@
+import type { TsconfigMain } from './interfaces/index.js';
+
 import { readFileSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 import { toJson } from 'tsconfck';
-
-import { TsconfigMain } from './interfaces/index.js';
 
 export class Json {
     private _path: string;

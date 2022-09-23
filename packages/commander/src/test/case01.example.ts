@@ -1,5 +1,8 @@
-import { CommandRoute, CommandRouting } from '../command-routing/index.js';
-import { Command, Executable } from '../command/index.js';
+import type { CommandRoute } from '../command-routing/index.js';
+import type { Executable } from '../command/index.js';
+
+import { CommandRouting } from '../command-routing/index.js';
+import { Command } from '../command/index.js';
 
 export const mem = new class {
     private _value: string[] = [];

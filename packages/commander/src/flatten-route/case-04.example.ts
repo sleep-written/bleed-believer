@@ -1,5 +1,7 @@
+import type { Executable } from '../command/index.js';
+
 import { CommandRouting } from '../command-routing/index.js';
-import { Command, Executable } from '../command/index.js';
+import { Command } from '../command/index.js';
 
 @Command({
     name: 'command 01',

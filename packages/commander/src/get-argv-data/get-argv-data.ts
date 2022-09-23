@@ -1,8 +1,9 @@
 import { MetaManager } from '@bleed-believer/meta';
 
+import type { GetArgvDataDecorator } from './get-argv-data.decorator.js';
+import type { ArgvData } from '../argv-parser/index.js';
+
 import { Commander, InstanceNotExecutedError } from '../commander/index.js';
-import { GetArgvDataDecorator } from './get-argv-data.decorator.js';
-import { ArgvData } from '../argv-parser/index.js';
 
 export const GET_ARGV_DATA = new MetaManager<ArgvData>();
 

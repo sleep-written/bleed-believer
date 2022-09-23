@@ -1,8 +1,10 @@
+import type { ErrorCallback, EspressoOptions } from './interfaces/index.js';
+import type { ControllerRoutingClass } from './controller-routing/index.js';
+import type { FlattedRoute } from './flattern-routes/index.js';
+
 import { Express } from 'express';
 
-import { ErrorCallback, EspressoOptions } from './interfaces/index.js';
-import { FlattedRoute, flattenRoutes } from './flattern-routes/index.js';
-import { ControllerRoutingClass } from './controller-routing/index.js';
+import { flattenRoutes } from './flattern-routes/index.js';
 
 /**
  * This class wraps an `express.js` instance, for routing injection.

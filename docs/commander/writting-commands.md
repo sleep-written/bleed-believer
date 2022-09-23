@@ -35,7 +35,7 @@ The object sended as `@Command` parameter has this properties:
 
 ## Getting the `Argv` object
 
-You can get the parsed execution arguments using the `@GetArgv()` decorator. When your class is instanciated, that property will returns an object with the structure of the `Argv` interface ([more details here](./execution-arguments.md/#the-argv-interface)). For example:
+You can get the parsed execution arguments using the `@GetArgv()` decorator. When your class is instanciated, that property will returns an object with the structure of the `Argv` interface ([more details here](./execution-arguments.md#the-argv-interface)). For example:
 
 ```ts
 import { Command, Executable, Argv, GetArgv } from '@bleed-believer/commander';

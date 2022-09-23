@@ -1,2 +1,2 @@
-export { EndpointMeta } from './endpoint.meta.js';
-export { EndpointDecorator } from './endpoint.decorator.js';
+export type { EndpointMeta } from './endpoint.meta.js';
+export type { EndpointDecorator } from './endpoint.decorator.js';

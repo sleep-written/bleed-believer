@@ -1,1 +1,1 @@
-export { FlattenedCommand } from './flattened-command.js';
+export type { FlattenedCommand } from './flattened-command.js';

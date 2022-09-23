@@ -1,9 +1,11 @@
-import { config } from 'dotenv';
+import type { TsconfigOpts } from './tsconfig/index.js';
+
 import { join, resolve } from 'path';
 import { fileURLToPath } from 'url';
+import { config } from 'dotenv';
 
-import { Tsconfig, TsconfigOpts } from './tsconfig/index.js';
 import { leftReplacer } from './tool/left-replacer.js';
+import { Tsconfig } from './tsconfig/index.js';
 
 /**
  * A custom symbol to mark if ts-node is already used

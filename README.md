@@ -31,8 +31,3 @@ Create alias for your recurrent paths in end-user applications using your `tscon
 ## [@bleed-believer/state](/packages/state/README.md)
 
 An agnostic simple frontend state managment.
-
-## TODO:
-
-* [ ] Add documentation into remaining objects.
-* [ ] Create a CLI.

@@ -1,5 +1,7 @@
+import type { TestFn } from 'ava';
+
 import "@angular/compiler";
-import rawTest, { TestFn } from 'ava';
+import rawTest from 'ava';
 import { Subscription } from 'rxjs';
 import { Validators } from '@angular/forms';
 

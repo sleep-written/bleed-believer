@@ -5,7 +5,7 @@ export {
     InstanceNotExecutedError
 } from './commander/index.js';
 
-export {
+export type {
     Argv,
     ArgvData,
     ParserOptions
@@ -13,29 +13,36 @@ export {
 
 export {
     Command,
+    InvalidPathError,
+} from './command/index.js';
+export type {
     Executable,
     CommandOptions,
     CommandDecorator,
-    InvalidPathError,
 } from './command/index.js';
 
 export {
+    CommandRouting,
+} from './command-routing/index.js';
+export type{
     AfterCommand,
     BeforeCommand,
     FailedCommand,
-
     CommandRoute,
-    CommandRouting,
     CommandRoutingOptions,
     CommandRoutingDecorator,
 } from './command-routing/index.js';
 
 export {
     GetArgv,
-    GetArgvDecorator
+} from './get-argv/index.js';
+export type {
+    GetArgvDecorator,
 } from './get-argv/index.js';
 
 export {
     getArgvData,
-    GetArgvDataDecorator
+} from './get-argv-data/index.js';
+export type {
+    GetArgvDataDecorator,
 } from './get-argv-data/index.js';

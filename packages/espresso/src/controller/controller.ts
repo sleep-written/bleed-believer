@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import { MetaManager } from '@bleed-believer/meta';
+import type { Request, Response } from 'express';
+import type { ControllerMeta } from './interfaces/index.js';
 
-import { ControllerMeta } from './interfaces/index.js';
+import { MetaManager } from '@bleed-believer/meta';
 
 export const CONTROLLER = new MetaManager<ControllerMeta>();
 

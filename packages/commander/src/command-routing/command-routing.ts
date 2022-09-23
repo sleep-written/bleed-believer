@@ -1,7 +1,7 @@
 import { MetaManager } from '@bleed-believer/meta';
 import { ArgvParser } from '../argv-parser/index.js';
 
-import {
+import type {
     CommandRoutingDecorator,
     CommandRoutingOptions,
     CommandRoutingMeta,

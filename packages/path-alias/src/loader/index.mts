@@ -1,6 +1,8 @@
+import type { ResolveFn } from 'ts-node/esm';
+
 import * as tsConfigPaths from 'tsconfig-paths';
 
-import { resolve as resolveTs, ResolveFn } from 'ts-node/esm';
+import { resolve as resolveTs } from 'ts-node/esm';
 import { pathToFileURL } from 'url';
 import { pathAlias } from '../path-alias.js';
 import { replace } from './replace.mjs';

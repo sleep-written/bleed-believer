@@ -1,13 +1,15 @@
 import { MetaManager } from '@bleed-believer/meta';
 
-import { CommandNotFoundError, DuplicatedInstanceError } from './errors/index.js';
-import { ArgvParser, ParserOptions } from '../argv-parser/index.js';
-import { CommandRoutingClass } from '../command-routing/index.js';
-import { CommanderMeta } from './commander.meta.js';
-import { flattenRoute } from '../flatten-route/index.js';
+import type { CommandRoutingClass } from '../command-routing/index.js';
+import type { ParserOptions } from '../argv-parser/index.js';
+import type { CommanderMeta } from './commander.meta.js';
 
-import { GET_ARGV_DATA } from '../get-argv-data/get-argv-data.js';
-import { GET_ARGV } from '../get-argv/get-argv.js';
+import { CommandNotFoundError, DuplicatedInstanceError } from './errors/index.js';
+import { flattenRoute } from '../flatten-route/index.js';
+import { ArgvParser } from '../argv-parser/index.js';
+
+import { GET_ARGV_DATA } from '../get-argv-data/index.js';
+import { GET_ARGV } from '../get-argv/index.js';
 
 export const COMMANDER = new MetaManager<CommanderMeta>();
 

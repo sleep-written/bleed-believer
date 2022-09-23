@@ -1,6 +1,6 @@
-import { resolve } from 'path';
+import type { TsconfigOpts } from './interfaces/index.js';
 
-import { TsconfigMain, TsconfigOpts } from './interfaces/index.js';
+import { resolve } from 'path';
 import { Json } from './json.js';
 
 export function getCompilerOptions(

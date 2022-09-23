@@ -1,2 +1,2 @@
 export { flattenRoutes } from './flatten-routes.js';
-export { FlattedRoute } from './flatted-route.js';
+export type { FlattedRoute } from './flatted-route.js';

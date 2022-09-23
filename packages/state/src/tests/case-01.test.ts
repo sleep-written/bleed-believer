@@ -1,7 +1,10 @@
-import rawTest, { TestFn } from 'ava';
-import { Subscription } from 'rxjs';
+import type { TestFn } from 'ava';
+import type { Person } from './case-01.example.js';
 
-import { Person, PersonState } from './case-01.example.js';
+import rawTest from 'ava';
+
+import { Subscription } from 'rxjs';
+import { PersonState } from './case-01.example.js';
 
 const test = rawTest as TestFn<{
     state: PersonState;

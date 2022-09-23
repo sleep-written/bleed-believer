@@ -1,3 +1,5 @@
+import type { ModuleRef } from './module-ref.cjs';
+
 import { REGISTER_INSTANCE } from 'ts-node';
 import { addAlias } from 'module-alias';
 import { Module } from 'module';
@@ -5,7 +7,6 @@ import { join } from 'path';
 
 import { BB_TS_NODE, pathAlias } from '../path-alias.js';
 import { leftReplacer } from '../tool/left-replacer.js';
-import { ModuleRef } from './module-ref.cjs';
 
 // Declare the base path of the code to execute
 pathAlias.showInConsole(true);

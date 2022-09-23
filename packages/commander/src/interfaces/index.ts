@@ -1,1 +1,1 @@
-export { TypedPropertyDecorator } from './typed-property-decorator.js';
+export type { TypedPropertyDecorator } from './typed-property-decorator.js';

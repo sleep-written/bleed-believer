@@ -1,5 +1,6 @@
+import type { ControllerDecorator } from './interfaces/index.js';
+
 import { EmptyControllerError } from '../errors/index.js';
-import { ControllerDecorator } from './interfaces/index.js';
 import { CONTROLLER } from './controller.js';
 import { Path } from '../path/index.js';
 

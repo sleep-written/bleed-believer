@@ -1,5 +1,6 @@
+import type { FlattenedCommand } from './interfaces/index.js';
+
 import { CommandRoutingClass, COMMAND_ROUTING } from '../command-routing/index.js';
-import { FlattenedCommand } from './interfaces/index.js';
 import { COMMAND } from '../command/index.js';
 
 export function flattenRoute(base: CommandRoutingClass): FlattenedCommand[] {

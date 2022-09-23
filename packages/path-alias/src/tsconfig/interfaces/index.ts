@@ -1,2 +1,2 @@
-export { TsconfigMain } from './tsconfig-main.js';
-export { TsconfigOpts } from './tsconfig-opts.js';
+export type { TsconfigMain } from './tsconfig-main.js';
+export type { TsconfigOpts } from './tsconfig-opts.js';

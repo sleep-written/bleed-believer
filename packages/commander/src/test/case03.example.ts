@@ -1,7 +1,9 @@
-import { Command, Executable } from '../command/index.js';
+import type { Executable } from '../command/index.js';
+import type { ArgvData } from '../argv-parser/index.js';
+
 import { CommandRouting } from '../command-routing/index.js';
-import { getArgvData } from '../get-argv-data/get-argv-data.js';
-import { ArgvData } from '../argv-parser/index.js';
+import { getArgvData } from '../get-argv-data/index.js';
+import { Command } from '../command/index.js';
 
 export const mem = new class {
     private _value: string[] = [];

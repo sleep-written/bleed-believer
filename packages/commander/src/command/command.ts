@@ -1,8 +1,8 @@
 import { MetaManager } from '@bleed-believer/meta';
 
-import { CommandDecorator, CommandMeta, CommandOptions } from './interfaces/index.js';
+import type { CommandDecorator, CommandMeta, CommandOptions } from './interfaces/index.js';
 import { InvalidPathError } from './errors/index.js';
-import { ArgvParser } from '../argv-parser/argv-parser.js';
+import { ArgvParser } from '../argv-parser/index.js';
 
 export const COMMAND = new MetaManager<CommandMeta>('@bleed-believer/commander:command');
 /**

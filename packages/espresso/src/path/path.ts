@@ -1,14 +1,14 @@
-export module Path {
-    export function fromInstance(o: Object): string {
+export class Path {
+    static fromInstance(o: Object): string {
         return Path.fromClass(o.constructor);
     }
 
-    export function fromClass(c: Function): string {
+    static fromClass(c: Function): string {
         const name = c.name;
         return '/' + name.replace(/Controller$/g, '');
     }
 
-    export function normalize(path?: string): string | undefined {
+    static normalize(path?: string): string | undefined {
         if (typeof path !== 'string') {
             return undefined;
         } else if (path.trim().length) {
@@ -24,7 +24,7 @@ export module Path {
         }
     }
 
-    export function toLower(input: string): string {
+    static toLower(input: string): string {
         const chars = input.split('');
         if (input.startsWith('/')) {
             chars.shift();
