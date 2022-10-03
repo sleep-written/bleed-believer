@@ -1,0 +1,38 @@
+{
+  "name": "@bleed-believer/meta",
+  "version": "0.10.1",
+  "description": "Manage partitions in linux.",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sleep-written/bleed-believer.git"
+  },
+  "keywords": [
+    "meta",
+    "metadata",
+    "symbol"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "sleep-written",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sleep-written/bleed-believer/issues"
+  },
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme"
+}

@@ -17,6 +17,9 @@
         { "path": "./packages/path-alias/tsconfig.json" },
 
         { "path": "./packages/state/tsconfig.cjs.json" },
-        { "path": "./packages/state/tsconfig.json" }
+        { "path": "./packages/state/tsconfig.json" },
+
+        { "path": "./packages/mnt/tsconfig.cjs.json" },
+        { "path": "./packages/mnt/tsconfig.json" }
     ]
 }
