@@ -1,0 +1,4 @@
+hello         world
+    333           pass
+3       fail
+3.3           fail

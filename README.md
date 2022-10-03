@@ -31,3 +31,9 @@ Create alias for your recurrent paths in end-user applications using your `tscon
 ## [@bleed-believer/state](/packages/state/README.md)
 
 An agnostic simple frontend state managment.
+
+<br />
+
+## [@bleed-believer/mnt](/packages/mnt/README.md)
+
+Manages partitions and shared folders in linux.
