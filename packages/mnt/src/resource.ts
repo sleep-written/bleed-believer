@@ -15,7 +15,7 @@ export class Resource {
         // Executes the command
         const comm = await cmd('findmnt', ['-lo', 'fstype,source,target,size']);
         if (comm.stderr) {
-            const text = comm.stderr.toString('utf-8');
+            const text = comm.stderr.toString('utf-8').trim();
             throw new Error(text);
         } else if (!comm.stdout) {
             throw new Error('Response not received');
@@ -108,7 +108,7 @@ export class Resource {
             :   await cmd('mount', argv);
 
         if (resp.stderr) {
-            const text = resp.stderr.toString('utf-8');
+            const text = resp.stderr.toString('utf-8').trim();
             throw new Error(text);
         }
 
@@ -143,7 +143,7 @@ export class Resource {
             :   await cmd('mount', ['-a']);
 
         if (resp.stderr) {
-            const text = resp.stderr.toString('utf-8');
+            const text = resp.stderr.toString('utf-8').trim();
             throw new Error(text);
         }
 
@@ -161,7 +161,7 @@ export class Resource {
             :   await cmd('umount', [target]);
 
         if (resp.stderr) {
-            const text = resp.stderr.toString('utf-8');
+            const text = resp.stderr.toString('utf-8').trim();
             throw new Error(text);
         }
     }
