@@ -1,5 +1,5 @@
 # @bleed-believer/state
-A simple state management using only [RxJS](https://rxjs.dev/) to emit changes. This module includes a variant of `FormGroup` to create reactive forms without worring to deal with control the emissions 
+A simple state management using only [RxJS](https://rxjs.dev/) to emit changes, orientated to be used in Angular projects. This module includes a variant of `FormGroup` and of `FormArray` to create reactive forms without worring to deal with changes emitted endlessly.
 
 ## Installation
 Just execute this command in your terminal:
@@ -105,7 +105,7 @@ export class ContrVentaComponent {
 }
 ```
 
-## `StateForm` class usage
+## `StateFormGroup` class usage
 In certain cases when you work with __Angular__, you may need to use state management in conjunction with __Reactive Forms__. If you have a lot of forms, everyone with a part of the whole state, the control of the value emission could be converted in a painful task. To deal with that, this package includes this class. Escencially, this class extends `FormGroup` class, adding some methods to avoid emit changes when you don't need that.
 
 For example:
@@ -163,8 +163,9 @@ For example:
         OnDestroy, OnInit
     } from '@angular/core';
     import { Subscription } from 'rxjs';
+    import { StateFormGroup } from '@bleed-believer/state';
 
-    import { TestState, TestStateService } from './test-state.sev';
+    import { TestState, TestStateService } from './test-state.service';
 
     @Component({
         selector: 'app-test',
@@ -176,7 +177,7 @@ For example:
         #subs: Subscription[];
 
         // Create the instance here
-        form = new StateForm({
+        form = new StateFormGroup<TestState>({
             code:   ['', Validators.required],
             desc:   ['', Validators.required],
         });
@@ -199,7 +200,7 @@ For example:
             ]
         }
 
-        onStateChange(state: TestState): void {
+        onStateChanges(state: TestState): void {
             // Updates the form data without emit a change
             this.form.setValueSilently({
                 code: state.code,
@@ -210,11 +211,138 @@ For example:
         onFormChanges(): void {
             // Ignores changes emited in "this.onStateChange"
             if (this.form.invalid) { return; }
+
+            // Emit a change
             const { code, desc } = this.form.partialValue;
             this._testServ.setItem(
                 code as string,
                 desc as string
             );
+        }
+    }
+    ```
+
+## `StateFormArray`
+
+This class extends `FormArray`, with the same utilities given by `StateFormGroup`. When you create the instance, simply declare the structure of all inner forms, and use the methods `setValueSilently` or `patchValueSilently` to rewrite all inner forms (these methods create more forms or delete the leftover forms).
+
+For example:
+-   `test-state.service.ts`
+    ```ts
+    import { Injectable } from '@angular/core';
+    import { State } from '@bleed-believer/state';
+
+    export interface TestState {
+        code: string;
+        desc: string;
+    }
+
+    export class TestStateService extends State<TestState[]> {
+        constructor() {
+            super([]);
+        }
+        
+        // ... bla bla bla
+        // ... bla bla bla
+
+        setData(data: TestState[]): Promise<void> {
+            return this.setState(() => {
+                return TestState.map(x => { ...x });
+            });
+        }
+    }
+    ```
+
+-   `test.component.html`
+    ```html
+    <form
+    [formArray]="this.form">
+        <table>
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let form of this.form.controls; let i = index"
+                [formGroup]="form">
+                    <td>
+                        <input type="text" formControlName="code" />
+                    </td>
+                    <td>
+                        <input type="text" formControlName="desc" />
+                    </td>
+                    <td>
+                        <button
+                        type="button"
+                        (click)="this.form.createAt(i)">
+                            <span>Create at</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    ```
+
+-   `test.component.ts`
+    ```ts
+    import {
+        ChangeDetectionStrategy, ChangeDetectorRef, Component,
+        OnDestroy, OnInit
+    } from '@angular/core';
+    import { Subscription } from 'rxjs';
+    import { StateFormArray } from '@bleed-believer/state';
+
+    import { TestState, TestStateService } from './test-state.service';
+
+    @Component({
+        selector: 'app-test',
+        templateUrl: './test.component.html',
+        styleUrls: ['./test.component.scss'],
+        changeDetection: ChangeDetectionStrategy.OnPush
+    })
+    export class TestComponent implements OnInit, OnDestroy {
+        #subs: Subscription[];
+
+        // Create the instance here
+        form = new StateFormArray<TestState>({
+            code:   ['', Validators.required],
+            desc:   ['', Validators.required],
+        });
+
+        constructor(
+            private _testState: TestStateService,
+        ) {}
+
+        ngOnInit(): void {
+            this.#subs = [
+                // Listens from changes by the user
+                this.form
+                    .valueChangesByUser
+                    .subscribe(this.onFormChanges.bind(this)),
+                
+                // Listens from changes by the state
+                this._testState
+                    .state
+                    .subscribe(this.onStateChanges.bind(this)),
+            ]
+        }
+
+        onStateChanges(state: TestState[]): void {
+            // Updates the form data without emit a change
+            this.form.setValueSilently(state);
+        }
+
+        onFormChanges(): void {
+            // Ignores changes emited in "this.onStateChange"
+            if (this.form.invalid) { return; }
+
+            // Emit a change
+            const data = this.form.partialValue;
+            this._testServ.setData(data);
         }
     }
     ```

@@ -7,7 +7,7 @@ import { FormGroup, FormControl } from '@angular/forms';
  * An extension of `FormGroup` from [@angular/forms](https://angular.io/api/forms/FormGroup)
  * with alternative methods to change its internal value and listen for changes.
  */
-export class StateForm<T extends Record<string, any>> extends FormGroup {
+export class StateFormGroup<T extends Record<string, any>> extends FormGroup {
     #ready = true;
 
     /**

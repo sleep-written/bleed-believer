@@ -5,7 +5,7 @@ import rawTest from 'ava';
 import { Subscription } from 'rxjs';
 import { Validators } from '@angular/forms';
 
-import { StateForm } from './state-form.js';
+import { StateFormGroup } from './state-form-group.js';
 
 interface FormStruct {
     nick: string;
@@ -18,13 +18,13 @@ interface Historical {
 }
 
 const test = rawTest as TestFn<{
-    form: StateForm<FormStruct>;
+    form: StateFormGroup<FormStruct>;
     hist: Historical;
     subs: Subscription[];
 }>;
 
 test.before(t => {
-    const form = new StateForm<FormStruct>({
+    const form = new StateFormGroup<FormStruct>({
         nick:   [null, Validators.required],
         pass:   [null, Validators.required],
     });
