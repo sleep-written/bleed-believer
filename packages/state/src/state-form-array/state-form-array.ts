@@ -62,7 +62,7 @@ export class StateFormArray<T extends Record<string, any>> extends FormArray<Sta
      * - __Doesn't emits the change__ in `this.valueChangesByUser`.
      * @param data The array with the data to be setted to the whole form.
      */
-    setValueSilently(data: Partial<T>[]): void {
+    setValueSilently(data: { [K in keyof T]: T[K] | null; }[]): void {
         // Lock the form
         if (!this.#ready) { return; }
         this.#ready = false;
@@ -82,7 +82,7 @@ export class StateFormArray<T extends Record<string, any>> extends FormArray<Sta
      * - __Doesn't emits the change__ in `this.valueChangesByUser`.
      * @param data The array with the data of the controls and their values to be changed.
      */
-    patchValueSilently(data: Partial<T>[]): void {
+    patchValueSilently(data: { [K in keyof T]: T[K] | null; }[]): void {
         // Lock the form
         if (!this.#ready) { return; }
         this.#ready = false;
@@ -99,9 +99,15 @@ export class StateFormArray<T extends Record<string, any>> extends FormArray<Sta
      * @param index Index in the array to insert the control. If `index` is negative, wraps around
      * from the back. If `index` is greatly negative (less than `-length`), prepends to the array.
      * This behavior is the same as `Array.splice(index, 0, control)`.
+     * @param item The values of the new `StateFormGroup` instance to insert.
      */
-    createAt(index: number): void {
+    createAt(index: number, item?: { [K in keyof T]: T[K] | null; }): void {
         const form = new StateFormGroup(this.#struct);
+
+        if (item) {
+            form.setValueSilently(item);
+        }
+
         this.insert(index, form);
     }
 }
