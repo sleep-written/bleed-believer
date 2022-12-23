@@ -17,6 +17,7 @@
     "exclude": [
         "./packages/*/dist",
         "./**/*.example.ts",
-        "./**/*.test.ts"
+        "./**/*.test.ts",
+        "./examples/*"
     ]
 }

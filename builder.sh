@@ -12,13 +12,15 @@ for folder in $FOLDERS; do
     rm -rf $folder/dist
     
     if [[ $1 != "--clean" && $1 != "-c" ]]; then
-        echo creating: \"$folder/dist/cjs/package.json\"
-        mkdir -p $folder/dist/cjs
-        echo $JSON_CJS > $folder/dist/cjs/package.json
+        if test -f $folder/dist/cjs/package.json; then
+            echo creating: \"$folder/dist/cjs/package.json\"
+            mkdir -p $folder/dist/cjs
+            echo $JSON_CJS > $folder/dist/cjs/package.json
 
-        echo creating: \"$folder/dist/esm/package.json\"
-        mkdir -p $folder/dist/esm
-        echo $JSON_ESM > $folder/dist/esm/package.json
+            echo creating: \"$folder/dist/esm/package.json\"
+            mkdir -p $folder/dist/esm
+            echo $JSON_ESM > $folder/dist/esm/package.json
+        fi
 
         echo "Done!"
         echo ""

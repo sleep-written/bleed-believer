@@ -1,0 +1,13 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "clear && rm -rf ./dist && tsc",
+        "start": "./start.sh ./src/index.ts",
+        "start:dist": "npm run build && ./start.sh ./dist/index.ts"
+    },
+    "devDependencies": {
+        "@types/node": "^18.11.17",
+        "typescript": "^4.9.4"
+    }
+}

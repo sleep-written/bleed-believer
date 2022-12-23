@@ -4,13 +4,23 @@ declare module 'ts-node/esm' {
         parentURL: string | undefined,
     }
 
-    export type ResolveFn = (
-        specifier: string,
-        context: Context,
-        defaultResolve: ResolveFn
-    ) => Promise<{ url: string }>;
+    // export type ResolveFn = (
+    //     specifier: string,
+    //     context: Context,
+    //     defaultResolve: ResolveFn
+    // ) => Promise<{ url: string }>;
 
-    export const resolve: ResolveFn;
-    export function load(): any;
+    export function load(
+        url: string,
+        context:  { format: string },
+        defaultLoad: typeof load | Function
+    ): any;
+
+    export function resolve(
+            specifier: string,
+            context: Context,
+            defaultResolve: typeof resolve | Function
+        ): Promise<{ url: string }>;
+
     export function transformSource(): any;
 }
