@@ -8,9 +8,6 @@ import { Tsconfig } from './tsconfig/index.js';
 
 let data: TsconfigOpts | undefined = undefined;
 export function pathResolve(...input: string[]): string {
-    console.log(Object.getOwnPropertySymbols(process));
-    console.log((process as any)[PathAlias.SYMBOL]);
-
     if (!data) {
         data = new Tsconfig().getOptions();
         data.outDir = resolve(data.outDir);
