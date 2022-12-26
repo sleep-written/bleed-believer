@@ -204,12 +204,12 @@ console.log('if ts-node is running?', response);
 
 ### Function `pathResolve`
 
-Resolve any subfolder of `"rootDir"` depending if __ts-node__ is running. For example, imagine do you want to resolve the path `"./src/folder-a/*"`:
+Resolve any subfolder of `"rootDir"` depending if __ts-node__ is running. For example, imagine do you want to resolve the path `"./src/folder-a/inner/*"`:
 
 ```ts
 import { pathResolve } from '@bleed-believer/path-alias';
 
-const path = pathResolve('./folder-a/*');
+const path = pathResolve('folder-a', 'inner', '*');
 console.log('path:', path);
 ```
 
@@ -219,7 +219,7 @@ node \
 --loader @bleed-believer/path-alias/esm \
 ./src/index.ts
 
-# path: src/folder-a/*
+# path: src/folder-a/inner/*
 ```
 
 With the transpiled code:
@@ -228,7 +228,7 @@ node \
 --loader @bleed-believer/path-alias/esm \
 ./dist/index.js
 
-# path: dist/folder-a/*
+# path: dist/folder-a/inner/*
 ```
 
 ## About SWC
