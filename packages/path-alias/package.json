@@ -3,16 +3,19 @@
   "version": "0.10.17",
   "description": "Assign path alias using tsconfig.json file",
   "type": "module",
-  "module": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
   "exports": {
-    "./esm": {
-      "import": "./dist/loader/index.mjs"
-    },
     ".": {
-      "import": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./esm": {
+      "types": "./dist/loader/index.d.mts",
+      "import": "./dist/loader/index.mjs"
     }
   },
   "scripts": {

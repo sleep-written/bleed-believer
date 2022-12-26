@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json.schemastore.org/swcrc",
+    "jsc": {
+        "parser": {
+            "syntax": "typescript",
+            "decorators": true,
+            "dynamicImport": true
+        },
+        "transform": {
+            "decoratorMetadata": true
+        },
+        "preserveAllComments": true,
+        "target": "es2022",
+        "baseUrl": "./src",
+        "paths": {
+            "@tool/*": ["./tool/*"]
+        }
+    },
+    "exclude": [
+        "./**/*.test.ts"
+    ],
+    "isModule": true,
+    "sourceMaps": true,
+    "minify": false
+}

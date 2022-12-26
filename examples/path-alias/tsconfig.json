@@ -2,6 +2,7 @@
     "compilerOptions": {
         "target": "ES2022",
         "module": "ES2022",
+        "moduleResolution": "node",
 
         "outDir": "./dist",
         "rootDir": "./src",
@@ -10,8 +11,7 @@
         "strict": true,
         "baseUrl": "./src",
         "paths": {
-            "@tool/*": ["./tool/*"],
-            "@base": ["./base.ts"]
+            "@tool/*": ["./tool/*"]
         }
     }
 }

@@ -3,11 +3,17 @@
     "type": "module",
     "scripts": {
         "build": "clear && rm -rf ./dist && tsc",
+        "build:swc": "clear && rm -rf ./dist && swc ./src -d ./dist",
         "start": "./start.sh ./src/index.ts",
         "start:dist": "npm run build && ./start.sh ./dist/index.ts"
     },
     "devDependencies": {
         "@types/node": "^18.11.17",
         "typescript": "^4.9.4"
+    },
+    "dependencies": {
+        "@bleed-believer/path-alias": "file:../../packages/path-alias",
+        "@swc/cli": "^0.1.59",
+        "@swc/core": "^1.3.24"
     }
 }

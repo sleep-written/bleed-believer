@@ -1,51 +1,65 @@
 import { fileURLToPath, pathToFileURL } from 'url';
 import { resolve, extname, join } from 'path';
-import { leftReplacer } from '../../tool/left-replacer.js';
+import { leftReplacer } from '../tool/left-replacer.js';
 
-import { Tsconfig } from '../../tsconfig/tsconfig.js';
+import { PathAlias } from '../path-alias.js';
+import { Tsconfig } from '../tsconfig/tsconfig.js';
 
 export class Resolver {
     static #tsconfig = new Tsconfig().getOptions();
-    static #isTsNode = false;
-    static isTsNode(): boolean {
-        return Resolver.#isTsNode;
+
+    static #setExt(input: string, to: 't' | 'j'): string {
+        let key = input.at(-2);
+        const from = to === 'j' ? 't' : 'j';
+        switch (key) {
+            case from.toUpperCase():
+                key = from === 't' ? 'J' : 'T';
+                break;
+            case from:
+                key = from === 't' ? 'j' : 't';
+                break;
+        }
+
+        return input.slice(0, -2) + key + input.slice(-1);
     }
 
     static load(url: string): { url: string; isTsNode: boolean; } {
+        // Prepare library
+        const alias = new PathAlias();
+        alias.initialize();
+
+        // Not modify node libraries
+        let isTsNode = alias.isTsNode();
+        if (url.startsWith('node:')) {
+            return { url, isTsNode };
+        }
+
         // Set value for ts-node
-        if (!Resolver.#isTsNode) {
+        if (!isTsNode) {
             const path = new URL(url).pathname;
             const ext = extname(path).toLowerCase();
             switch (ext) {
                 case '.ts':
                 case '.mts':
-                    Resolver.#isTsNode = true;
+                    alias.markWithTsNode();
+                    isTsNode = true;
                     break;
             }
         }
 
         // Check extension
         const baseUrl = resolve(Resolver.#tsconfig.baseUrl);
-        const base = !Resolver.#isTsNode
+        const base = !isTsNode
             ?   leftReplacer(baseUrl, resolve(Resolver.#tsconfig.rootDir), resolve(Resolver.#tsconfig.outDir))
             :   baseUrl;
 
         const path = fileURLToPath(url);
-        if (path.startsWith(base) && Resolver.#isTsNode) {
-            let key = url.at(-2);
-            switch (key) {
-                case 'J':
-                    key = 'T';
-                    break;
-                case 'j':
-                    key = 't';
-                    break;
-            }
-
-            url = url.slice(0, -2) + key + url.slice(-1);
+        if (path.startsWith(base) && isTsNode) {
+            url = this.#setExt(url, 't');
         }
 
-        return { url, isTsNode: Resolver.#isTsNode };
+        // Return response
+        return { url, isTsNode };
     }
 
     #specifierUrl?: URL;
@@ -61,12 +75,8 @@ export class Resolver {
         }
     }
 
-    isTsNode(): boolean {
-        return Resolver.#isTsNode;
-    }
-
     resolve(): { specifier: string; isTsNode: boolean; } {
-        const isTsNode = Resolver.#isTsNode;
+        const isTsNode = new PathAlias().isTsNode();
         let specifier = this.#specifier;
 
         if (!this.#specifierUrl) {
@@ -88,7 +98,7 @@ export class Resolver {
                         const tail = leftReplacer(this.#specifier, prefix, '');
 
                         let fullPath = join(start, tail);
-                        if (!Resolver.#isTsNode) {
+                        if (!isTsNode) {
                             fullPath = leftReplacer(
                                 fullPath,
                                 rootDir,
@@ -102,7 +112,12 @@ export class Resolver {
                 } else if (specifier === alias) {
                     // It's a full path
                     let fullPath = resolve(baseUrl, paths[alias][0]);
-                    if (!Resolver.#isTsNode) {
+                    fullPath = Resolver.#setExt(
+                        fullPath,
+                        isTsNode ? 't' : 'j'
+                    )
+
+                    if (!isTsNode) {
                         fullPath = leftReplacer(
                             fullPath,
                             rootDir,

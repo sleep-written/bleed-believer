@@ -1,6 +1,9 @@
 import { Context, resolve as tsNodeResolve } from 'ts-node/esm';
-import { Resolver } from './core/resolver.js';
+import { Resolver } from './resolver.js';
 
+/**
+ * Function used by the loader through `node --loader @bleed-believer/path-alias ./src/index.ts`.
+ */
 export function resolve(
     specifier: string,
     context: Context,

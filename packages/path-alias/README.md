@@ -1,6 +1,6 @@
 # @bleed-believer/path-alias
 
-A package to bind paths alias, resolving the `source` directory when the app is launched with ts-node, or resolving the `out` directory when ts-node isn't used. Includes some utilities in case if you need to generate paths dinamically depending of the code that is  running.
+A package to bind paths alias, resolving the `source` directory when the app is launched with ts-node, or resolving the `out` directory when ts-node isn't used. Includes some utilities in case if you need to generate paths dinamically depending of the code that is  running. Now you can use this package with proyects transpiled by [swc](https://swc.rs) (see details [here](#about-swc)).
 
 This package has been designed to work with CommonJS projects (using [--require](https://nodejs.org/api/cli.html#-r---require-module) flag), and ESM projects (using [--loader](https://nodejs.org/api/esm.html#loaders) flag). This package is a new version of [ts-path-mapping](https://www.npmjs.com/package/ts-path-mapping), which _now will be deprecated._
 
@@ -190,36 +190,16 @@ export default {
 }
 ```
 
-
 ## Utilities
 
-### Verbose mode
-
-If you want to check if the project is runnig with ts-node (\*.ts) or directly with node (\*.js) at the beginning of the execution, you can define this environment variable:
-```env
-BB_PATH_ALIAS_VERBOSE=true
-```
-
-This package includes `dotnet` package, so if you want, create a `.env` file in your current working directory.
-
-### Function `isTsNodeRunning`
+### Function `isTsNode`
 
 If you want to check if `ts-node` is running, you can execute this function:
 ```ts
-import { isTsNodeRunning } from '@bleed-believer/path-alias';
+import { isTsNode } from '@bleed-believer/path-alias';
 
-const response = isTsNodeRunning();  // Returns a boolean
+const response = isTsNode();  // Returns a boolean
 console.log('if ts-node is running?', response); 
-```
-
-### Function `isPathAliasRunning`
-
-If you want to check if `@bleed-believer/path-alias` is running, you can execute this function:
-```ts
-import { isPathAliasRunning } from '@bleed-believer/path-alias';
-
-const response = isPathAliasRunning();  // Returns a boolean
-console.log('if this package is running?', response); 
 ```
 
 ### Function `pathResolve`
@@ -251,16 +231,25 @@ node \
 # path: dist/folder-a/*
 ```
 
-Optionally receives as second parameter an object with this options:
-- `"absolute"`:
-    > If `true`, returns the full path, otherwise returns the path relative to the current working directory.
+## About SWC
 
-- `"ext"`:
-    > If true, converts the extensions `*.ts` / `*.mts` / `*.cts` /  `*.js` / `*.mjs` / `*.cjs` depending if __ts-node__ is running or not.
+In case you want to execute your project using ts-node, the command is the same:
+```bash
+node \
+--loader @bleed-believer/path-alias/esm \
+./src/index.ts
+```
+However if you need to executed your transpiled project by [swc](https://swc.rs), you don't need to use the loader, just call your root file:
 
+```bash
+node ./dist/index.js
+```
+The function `pathResolve` works perfectly with __swc__ using the example of above, so you don't need to use the loader in transpiled code to keep the `pathResolve` function working.
 
 ## Limitations
 
 - The library requires a `"tsconfig.json"` file into the current working directory to work. Doesn't matter if that file extends another file, or be a part of a set of inhetirance, __while all required properties are accesible through its ancestors.__
 
 - The resolve output between `"baseURL"` and the `"paths"` declared in the `"tsconfig.json"` file must always return a path inside of `"rootDir"` folder.
+
+- __swc__ isn't compatible with alias like this: `"@data-source": ["./data-source.ts"]`.
