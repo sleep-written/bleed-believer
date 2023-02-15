@@ -1,4 +1,4 @@
-import { Controller } from '../../controller/index.js';
+import type { Controller } from '../../controller/index.js';
 
 export type EndpointDecorator = (
     target: Controller,

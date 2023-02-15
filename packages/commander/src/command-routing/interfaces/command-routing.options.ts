@@ -1,5 +1,5 @@
-import { CommandClass } from '../../command/interfaces/index.js';
-import { CommandRoutingClass } from './command-routing.class.js';
+import type { CommandClass } from '../../command/interfaces/index.js';
+import type { CommandRoutingClass } from './command-routing.class.js';
 
 export type CommandRoutingOptions = 
     {

@@ -1,5 +1,5 @@
-import { ControllerClass } from '../../controller/index.js';
-import { ControllerRoutingClass } from './controller-routing.class.js';
+import type { ControllerClass } from '../../controller/index.js';
+import type { ControllerRoutingClass } from './controller-routing.class.js';
 
 export interface ControllerRoutingOptions {
     /**

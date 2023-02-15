@@ -1,4 +1,4 @@
-import { Metadata } from './metadata.js';
+import type { Metadata } from './metadata.js';
 import { MetaStorage } from './meta-storage.js';
 import { UndefinedMetaError } from './errors/undefined-meta-error.js';
 

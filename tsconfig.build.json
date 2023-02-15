@@ -20,6 +20,9 @@
         { "path": "./packages/state/tsconfig.json" },
 
         { "path": "./packages/mnt/tsconfig.cjs.json" },
-        { "path": "./packages/mnt/tsconfig.json" }
+        { "path": "./packages/mnt/tsconfig.json" },
+
+        { "path": "./packages/scheduler/tsconfig.cjs.json" },
+        { "path": "./packages/scheduler/tsconfig.json" }
     ]
 }

@@ -1,4 +1,4 @@
-import { EndpointMeta } from '../../endpoint/index.js';
+import type { EndpointMeta } from '../../endpoint/index.js';
 
 export interface ControllerMeta {
     path?: string;

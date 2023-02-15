@@ -1,8 +1,7 @@
 import type { ErrorCallback, EspressoOptions } from './interfaces/index.js';
 import type { ControllerRoutingClass } from './controller-routing/index.js';
 import type { FlattedRoute } from './flattern-routes/index.js';
-
-import { Express } from 'express';
+import type { Express } from 'express';
 
 import { flattenRoutes } from './flattern-routes/index.js';
 

@@ -1,4 +1,4 @@
-import { Metadata } from './metadata.js';
+import type { Metadata } from './metadata.js';
 import { UndefinedMetaError, UndefinedTargetError } from './errors/index.js';
 
 export class MetaStorage {

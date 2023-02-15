@@ -1,3 +1,3 @@
-import { Executable } from './executable.js';
+import type { Executable } from './executable.js';
 
 export type CommandClass = new () => Executable;

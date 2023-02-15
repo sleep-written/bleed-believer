@@ -1,4 +1,4 @@
-import { HttpMethods } from '../interfaces/index.js';
+import type { HttpMethods } from '../interfaces/index.js';
 
 export class DuplicatedEndpointError extends Error {
     constructor();
