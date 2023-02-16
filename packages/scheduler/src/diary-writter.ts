@@ -1,4 +1,4 @@
-import type { Diary, TaskClass } from './interfaces/index.js';
+import type { Diary, TaskClass, DiaryWritterLike } from './interfaces/index.js';
 
 import { readFile, writeFile } from 'fs/promises';
 import { resolve } from 'path';
@@ -6,7 +6,7 @@ import { parse } from 'yaml';
 
 import { DateRef } from './date-ref.js';
 
-export class DiaryWritter {
+export class DiaryWritter implements DiaryWritterLike {
     #path: string;
     get path(): string {
         return this.#path;
