@@ -15,7 +15,8 @@
     }
   },
   "scripts": {
-    "test": "ava"
+    "test": "ava",
+    "start": "ts-node-esm ./src/test.ts"
   },
   "repository": {
     "type": "git",
@@ -34,5 +35,9 @@
   "bugs": {
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
-  "homepage": "https://github.com/sleep-written/bleed-believer#readme"
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "dependencies": {
+    "@bleed-believer/meta": "^0.10.1",
+    "yaml": "^2.2.1"
+  }
 }
