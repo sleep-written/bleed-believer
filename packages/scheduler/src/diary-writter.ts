@@ -23,19 +23,19 @@ export class DiaryWritter implements DiaryWritterLike {
                 text += '\n\n';
             }
 
-            text += `## The name of the task:\n`;
+            text += `# The name of the task:\n`;
             text += `${taskClass.name}:\n`;
-            text += '  ## The days where the current diary will be launched.\n';
-            text += '  ## sunday = 0 ... to saturday = 6\n';
-            text += '  - days: [1, 2, 3, 4, 5]\n\n';
-            text += '  ## The hours where the task will be executed in the selected days\n';
-            text += '  ## format = [hh, mm, ss]; hh = hours; mm = minutes; ss = seconds\n';
+            text += '    # The days where the current diary will be launched.\n';
+            text += '    # sunday = 0 ... to saturday = 6\n';
+            text += '-   days: [1, 2, 3, 4, 5]\n\n';
+            text += '    # The hours where the task will be executed in the selected days\n';
+            text += '    # format = [hh, mm, ss]; hh = hours; mm = minutes; ss = seconds\n';
             text += '    timestamps:\n';
-            text += '      - [ 0,  0,  0]\n';
-            text += '      - [12,  0,  0]\n\n';
-            text += '  - days: [6, 0]\n';
+            text += '    -   [ 0,  0,  0]\n';
+            text += '    -   [12,  0,  0]\n\n';
+            text += '-   days: [6, 0]\n';
             text += '    timestamps:\n';
-            text += '      - [12,  0,  0]';
+            text += '    -   [12,  0,  0]';
         }
 
         return writeFile(this.#path, text, 'utf-8');

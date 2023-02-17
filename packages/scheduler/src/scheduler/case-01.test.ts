@@ -13,7 +13,7 @@ test.before(t => {
     t.context = { scheduler };
 });
 
-test('Execute', async t => {
+test('Execute tasks', async t => {
     t.timeout(3800);
 
     const { scheduler } = t.context;

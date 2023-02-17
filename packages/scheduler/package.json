@@ -1,7 +1,7 @@
 {
   "name": "@bleed-believer/scheduler",
   "version": "0.10.1",
-  "description": "Launches tasks according to a scheduler file.",
+  "description": "A package to run code only at the moment that you need it.",
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

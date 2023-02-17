@@ -23,6 +23,10 @@ export class Scheduler {
         this.#diaryWritter = diaryWritter ?? new DiaryWritter('./scheduler.yml');
     }
 
+    createConfig(): Promise<void> {
+        return this.#diaryWritter.writeFile(this.#classes);
+    }
+
     stop(): void {
         if (this.#clock) {
             clearInterval(this.#clock);
@@ -75,23 +79,5 @@ export class Scheduler {
                 1000
             );
         });
-        // while (this.#isRunning) {
-        //     const now = new DateRef();
-        //     const tasks = dict.get(now.toString());
-        //     if (tasks) {
-        //         for (const task of tasks) {
-        //             this.#serial.push(async () => {
-        //                 try {
-        //                     const instance = new task(this);
-        //                     await instance.launch();
-        //                 } catch (err: any) {
-        //                     console.error(err);
-        //                 }
-        //             });
-        //         }
-        //     }
-
-        //     await new Promise(r => setTimeout(r, 1000));
-        // }
     }
 }

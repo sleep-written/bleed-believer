@@ -35,6 +35,10 @@ export class Task03 extends TaskBase {
 }
 
 export class DiaryFake implements DiaryWritterLike {
+    writeFile(classes: TaskClass[]): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+
     loadFile(): Promise<Map<string, TaskClass[]>> {
         const map = new Map<string, TaskClass[]>();
         const now = new DateRef();
