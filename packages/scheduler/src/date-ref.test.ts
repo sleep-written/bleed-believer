@@ -141,3 +141,47 @@ test('Convert new DateRef(4, 12, 25, 35)', t => {
     t.is(revert.minutes, target.minutes);
     t.is(revert.seconds, target.seconds);
 });
+
+test('Copy instance', t => {
+    const aaa = new DateRef(4, 12, 25, 35);
+    const bbb = aaa.copy();
+
+    t.is(aaa, aaa);
+    t.not(aaa, bbb);
+});
+
+test('Add "day"', t => {
+    const target = new DateRef(0, 0, 0, 0);
+    target.add('dd', 1);
+    t.is(target.day, 1);
+    t.is(target.hours, 0);
+    t.is(target.minutes, 0);
+    t.is(target.seconds, 0);
+});
+
+test('Add "hours"', t => {
+    const target = new DateRef(0, 0, 0, 0);
+    target.add('hh', 1);
+    t.is(target.day, 0);
+    t.is(target.hours, 1);
+    t.is(target.minutes, 0);
+    t.is(target.seconds, 0);
+});
+
+test('Add "minutes"', t => {
+    const target = new DateRef(0, 0, 0, 0);
+    target.add('mm', 1);
+    t.is(target.day, 0);
+    t.is(target.hours, 0);
+    t.is(target.minutes, 1);
+    t.is(target.seconds, 0);
+});
+
+test('Add "seconds"', t => {
+    const target = new DateRef(0, 0, 0, 0);
+    target.add('ss', 1);
+    t.is(target.day, 0);
+    t.is(target.hours, 0);
+    t.is(target.minutes, 0);
+    t.is(target.seconds, 1);
+});

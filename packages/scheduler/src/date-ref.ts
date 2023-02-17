@@ -94,4 +94,32 @@ export class DateRef {
 
         }
     }
+
+    add(unit: 'dd' | 'hh' | 'mm' | 'ss', amount: number): DateRef {
+        switch (unit) {
+            case 'dd':
+                this.#day += amount;
+                break;
+            case 'hh':
+                this.#hours += amount;
+                break;
+            case 'mm':
+                this.#minutes += amount;
+                break;
+            case 'ss':
+                this.#seconds += amount;
+                break;
+        }
+
+        return this;
+    }
+
+    copy(): DateRef {
+        return new DateRef(
+            this.#day,
+            this.#hours,
+            this.#minutes,
+            this.#seconds,
+        );
+    }
 }

@@ -1,23 +1,23 @@
 import rawTest, { TestFn } from 'ava';
 
-import { TaskExample, DiaryFake } from './case-01.example.js';
+import { DiaryFake, Task01, Task02, Task03, queue } from './case-02.example.js';
 import { Scheduler } from './scheduler.js';
 
 const test = rawTest as TestFn<{ scheduler: Scheduler; }>;
 test.before(t => {
     const scheduler = new Scheduler(
-        [ TaskExample ],
+        [ Task01, Task02, Task03 ],
         new DiaryFake()
-    );
+    )
 
     t.context = { scheduler };
 });
 
 test('Execute', async t => {
-    t.timeout(3800);
+    t.timeout(5800);
 
     const { scheduler } = t.context;
     await scheduler.run();
 
-    t.is(TaskExample.count, 3);
+    t.deepEqual(queue, [1, 2, 3, 2, 1]);
 });

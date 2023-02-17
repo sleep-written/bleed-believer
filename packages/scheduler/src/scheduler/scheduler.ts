@@ -9,9 +9,10 @@ export class Scheduler {
     #classes: TaskClass[];
     #diaryWritter: DiaryWritterLike;
 
-    #isRunning = false;
+    #resolver?: () => void;
+    #clock?: NodeJS.Timer;
     get isRunning(): boolean {
-        return this.#isRunning;
+        return !!this.#clock;
     }
 
     constructor(
@@ -23,34 +24,74 @@ export class Scheduler {
     }
 
     stop(): void {
-        this.#isRunning = false;
+        if (this.#clock) {
+            clearInterval(this.#clock);
+            this.#clock = undefined;
+
+            if (this.#resolver) {
+                this.#resolver();
+                this.#resolver = undefined;
+            }
+        }
+    }
+
+    #callback(dict: Map<string, TaskClass[]>): void {
+        const now = new DateRef();
+        const tasks = dict.get(now.toString());
+        if (tasks) {
+            for (const task of tasks) {
+                this.#serial.push(async () => {
+                    try {
+                        const instance = new task(this);
+                        await instance.launch();
+                    } catch (err: any) {
+                        console.error(err);
+                    }
+                });
+            }
+        }
     }
 
     async run(): Promise<void> {
-        if (this.#isRunning) {
+        if (this.#clock) {
             throw new Error('This scheduler instance is already running');
-        } else {
-            this.#isRunning = true;
         }
-
+        
         const dict = await this.#diaryWritter.loadFile(this.#classes);
-        while (this.#isRunning) {
-            const now = new DateRef();
-            const tasks = dict.get(now.toString());
-            if (tasks) {
-                for (const task of tasks) {
-                    this.#serial.push(async () => {
-                        try {
-                            const instance = new task(this);
-                            await instance.launch();
-                        } catch (err: any) {
-                            console.error(err);
-                        }
-                    });
-                }
-            }
+        this.#callback(dict);
 
-            await new Promise(r => setTimeout(r, 1000));
-        }
+        return new Promise((resolve, reject) => {
+            this.#resolver = resolve;
+            this.#clock = setInterval(
+                () => {
+                    try {
+                        this.#callback(dict);
+                    } catch (err) {
+                        this.#resolver = undefined;
+                        clearInterval(this.#clock);
+                        reject(err);
+                    }
+                },
+                1000
+            );
+        });
+        // while (this.#isRunning) {
+        //     const now = new DateRef();
+        //     const tasks = dict.get(now.toString());
+        //     if (tasks) {
+        //         for (const task of tasks) {
+        //             this.#serial.push(async () => {
+        //                 try {
+        //                     const instance = new task(this);
+        //                     await instance.launch();
+        //                 } catch (err: any) {
+        //                     console.error(err);
+        //                 }
+        //             });
+        //         }
+        //     }
+
+        //     await new Promise(r => setTimeout(r, 1000));
+        // }
     }
 }
