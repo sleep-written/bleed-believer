@@ -56,7 +56,7 @@ export class Scheduler {
         }
     }
 
-    async run(): Promise<void> {
+    async run(callback?: () => void): Promise<void> {
         if (this.#clock) {
             throw new Error('This scheduler instance is already running');
         }
@@ -78,6 +78,10 @@ export class Scheduler {
                 },
                 1000
             );
+
+            if (callback) {
+                callback();
+            }
         });
     }
 }
