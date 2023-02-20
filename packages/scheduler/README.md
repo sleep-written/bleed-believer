@@ -1,5 +1,5 @@
 # @bleed-believer/scheduler
-A package to run code only at the moment that you need it. You can adjust which days and at which time to execute your different tasks using a `yaml` file. The package is primarily written for `ES2022`, but (in theory) is compatible with `CommonJS`, and it's available through npm:
+A package to run code only at the days and hours that you need it. You can adjust which days and at which time to execute your different tasks using a `yaml` file. The package is primarily written for `ES2022`, but (in theory) is compatible with `CommonJS`, and it's available through npm:
 ```bash
 npm i --save @bleed-believer/scheduled
 ```
