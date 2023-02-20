@@ -1,8 +1,8 @@
+import type { Subscription } from 'rxjs';
 import type { TestFn } from 'ava';
 import type { Body } from './case-02.example.js';
 
 import rawTest from 'ava';
-import { Subscription } from 'rxjs';
 import { BodyState } from './case-02.example.js';
 
 const test = rawTest as TestFn<{
@@ -27,7 +27,7 @@ test.before(t => {
 });
 test.after(t => {
     t.context.subsc.unsubscribe();
-})
+});
 
 test.serial('Add an user', async t => {
     await t.context.state.setUser({

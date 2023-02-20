@@ -1,9 +1,9 @@
+import type { Subscription } from 'rxjs';
 import type { TestFn } from 'ava';
 import rawTest from 'ava';
 
 import "@angular/compiler";
 import { StateFormArray } from './state-form-array.js';
-import { Subscription } from 'rxjs';
 import { Validators } from '@angular/forms';
 
 interface FormData {

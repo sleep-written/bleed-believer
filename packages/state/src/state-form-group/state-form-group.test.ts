@@ -1,8 +1,8 @@
+import type { Subscription } from 'rxjs';
 import type { TestFn } from 'ava';
 
 import "@angular/compiler";
 import rawTest from 'ava';
-import { Subscription } from 'rxjs';
 import { Validators } from '@angular/forms';
 
 import { StateFormGroup } from './state-form-group.js';
@@ -72,7 +72,7 @@ test.serial('patchValueSilently -> pass: "jajaja111"', t => {
     form.patchValueSilently({
         pass: 'jajaja111'
     });
-    
+
     t.true(form.valid);
     t.deepEqual(form.partialValue, {
         nick: 'pendejo',

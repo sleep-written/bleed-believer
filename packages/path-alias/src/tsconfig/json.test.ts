@@ -9,7 +9,7 @@ test('Read tsconfig.json (async)', async t => {
     t.is(json.extends, '../../tsconfig.json');
     t.is(json.compilerOptions?.module, 'ES2022');
     t.is(json.compilerOptions?.rootDir, './src');
-    t.is(json.compilerOptions?.outDir, './dist/esm');
+    t.is(json.compilerOptions?.outDir, './dist');
 });
 
 test('Read tsconfig.json', t => {
@@ -19,5 +19,5 @@ test('Read tsconfig.json', t => {
     t.is(json.extends, '../../tsconfig.json');
     t.is(json.compilerOptions?.module, 'ES2022');
     t.is(json.compilerOptions?.rootDir, './src');
-    t.is(json.compilerOptions?.outDir, './dist/esm');
+    t.is(json.compilerOptions?.outDir, './dist');
 });
