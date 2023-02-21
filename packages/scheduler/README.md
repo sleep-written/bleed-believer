@@ -73,6 +73,11 @@ VeryImportantTask:
     # case will be executed from monday to friday
 -   days: [ 1, 2, 3, 4, 5 ]
 
+    # If you sets this property, the task wil be in the time interval setled.
+    # If you use this property, the other one "timestamps" will be ignore.
+    # The format is an array like [ hours, minutes, seconds ].
+    interval: [ 0, 30,  0]
+
     # The time when the task must be launched, the format
     # is an array with [ hours, minutes, seconds ], and you
     # can omit the second or the minutes too
