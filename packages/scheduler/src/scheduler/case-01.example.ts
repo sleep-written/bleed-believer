@@ -9,6 +9,10 @@ export class TaskExample extends Task {
         return TaskExample.#count;
     }
 
+    static reset(): void {
+        TaskExample.#count = 0;
+    }
+
     launch() {
         if (++TaskExample.#count >= 3) {
             this.scheduler.stop();
@@ -17,7 +21,7 @@ export class TaskExample extends Task {
 }
 
 export class DiaryFake implements DiaryWritterLike {
-    writeFile(classes: TaskClass[]): Promise<void> {
+    writeFile(_: any): Promise<void> {
         throw new Error('Method not implemented.');
     }
 

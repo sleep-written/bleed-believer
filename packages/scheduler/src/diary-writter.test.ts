@@ -1,6 +1,6 @@
 import rawTest, { TestFn } from 'ava';
-import { readFile, rm } from 'fs/promises';
-import { parse } from 'yaml';
+import { readFile, rm, writeFile } from 'fs/promises';
+import { parse, stringify } from 'yaml';
 
 import { DiaryWritter } from './diary-writter.js';
 import { Task } from './task.js';
@@ -9,14 +9,12 @@ export class TaskA extends Task {
     async launch(): Promise<void> {
         throw new Error('Method not implemented.');
     }
-    
 }
 
 export class TaskB extends Task {
     async launch(): Promise<void> {
         throw new Error('Method not implemented.');
     }
-    
 }
 
 const test = rawTest as TestFn<{ diary: DiaryWritter; }>;
@@ -93,4 +91,39 @@ test.serial('Load file', async t => {
     t.deepEqual(dict.get('date-ref:5120000'), [TaskA]);
     t.deepEqual(dict.get('date-ref:6120000'), [TaskA]);
     t.deepEqual(dict.get('date-ref:0120000'), [TaskA]);
+});
+
+test.serial('Generale and load a file with interval', async t => {
+    // Write a fake file with the interval to test
+    await rm(t.context.diary.path);
+    await writeFile(t.context.diary.path, stringify({
+        TaskA: [{
+            days: [1],
+            timestamps: [
+                [0, 0, 0]
+            ]
+        }],
+        TaskB: [{
+            days: [2],
+            interval: [0, 30]
+        }]
+    }), 'utf-8');
+
+    // Load the file
+    const map = await t.context.diary.loadFile([TaskA, TaskB]);
+    t.is(map.size, 49);
+    
+    // Get the first keys
+    const keys = Array
+        .from(map.keys())
+        .slice(0, 5);
+
+    // Comapre keys
+    t.deepEqual(keys, [
+        'date-ref:1000000',
+        'date-ref:2000000',
+        'date-ref:2003000',
+        'date-ref:2010000',
+        'date-ref:2013000',
+    ]);
 });

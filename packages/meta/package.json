@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/meta",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Manage multiple tags into your objects.",
   "type": "module",
   "main": "./dist/cjs/index.js",

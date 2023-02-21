@@ -9,6 +9,9 @@ export class Scheduler {
     #classes: TaskClass[];
     #diaryWritter: DiaryWritterLike;
 
+    #beforeEach:   ((x: { name: string }) => void)[] = [];
+    #afterEach:    ((x: { name: string }) => void)[] = [];
+
     #resolver?: () => void;
     #clock?: NodeJS.Timer;
     get isRunning(): boolean {
@@ -39,6 +42,28 @@ export class Scheduler {
         }
     }
 
+    onBeforeEach(callback: (x: { name: string }) => void): void {
+        this.#beforeEach.push(callback);
+    }
+
+    onAfterEach(callback: (x: { name: string }) => void): void {
+        this.#afterEach.push(callback);
+    }
+
+    offBeforeEach(callback: (x: { name: string }) => void): void {
+        const i = this.#beforeEach.findIndex(x => x === callback);
+        if (i >= 0) {
+            this.#beforeEach.splice(i, 1);
+        }
+    }
+
+    offAfterEach(callback: (x: { name: string }) => void): void {
+        const i = this.#afterEach.findIndex(x => x === callback);
+        if (i >= 0) {
+            this.#afterEach.splice(i, 1);
+        }
+    }
+
     #callback(dict: Map<string, TaskClass[]>): void {
         const now = new DateRef();
         const tasks = dict.get(now.toString());
@@ -46,8 +71,12 @@ export class Scheduler {
             for (const task of tasks) {
                 this.#serial.push(async () => {
                     try {
+                        this.#beforeEach.forEach(fn => fn(task));
+
                         const instance = new task(this);
                         await instance.launch();
+
+                        this.#afterEach.forEach(fn => fn(task));
                     } catch (err: any) {
                         console.error(err);
                     }
@@ -56,7 +85,7 @@ export class Scheduler {
         }
     }
 
-    async run(callback?: () => void): Promise<void> {
+    async run(ready?: () => void): Promise<void> {
         if (this.#clock) {
             throw new Error('This scheduler instance is already running');
         }
@@ -79,9 +108,20 @@ export class Scheduler {
                 1000
             );
 
-            if (callback) {
-                callback();
+            if (ready) {
+                ready();
             }
         });
+    }
+
+    async runNow(): Promise<void> {
+        for (const target of this.#classes) {
+            this.#beforeEach.forEach(fn => fn(target));
+
+            const obj = new target(this);
+            await obj.launch();
+
+            this.#afterEach.forEach(fn => fn(target)); 
+        }
     }
 }

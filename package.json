@@ -1,5 +1,6 @@
 {
     "name": "bleed-believer",
+    "version": "0.2.0",
     "private": true,
     "repository": {
         "type": "git",

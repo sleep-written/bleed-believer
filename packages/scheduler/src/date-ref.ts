@@ -1,4 +1,31 @@
 export class DateRef {
+    static getIntervals(day: number, hours: number, minutes?: number, seconds?: number): DateRef[] {
+        const output: DateRef[] = [];
+        let ref = new DateRef(day);
+        output.push(ref);
+
+        while (true) {
+            ref = ref.copy();
+            if (typeof hours === 'number' && hours > 0) {
+                ref.add('hh', hours);
+            }
+
+            if (typeof minutes === 'number' && minutes > 0) {
+                ref.add('mm', minutes);
+            }
+
+            if (typeof seconds === 'number' && seconds > 0) {
+                ref.add('ss', seconds);
+            }
+
+            if (ref.day === day) {
+                output.push(ref);
+            } else {
+                return output;
+            }
+        }
+    }
+
     #day: number;
     get day(): number {
         return this.#day;
@@ -96,19 +123,35 @@ export class DateRef {
     }
 
     add(unit: 'dd' | 'hh' | 'mm' | 'ss', amount: number): DateRef {
-        switch (unit) {
-            case 'dd':
-                this.#day += amount;
-                break;
-            case 'hh':
-                this.#hours += amount;
-                break;
-            case 'mm':
-                this.#minutes += amount;
-                break;
-            case 'ss':
-                this.#seconds += amount;
-                break;
+        if (unit === 'ss') {
+            this.#seconds += amount;
+            if (this.#seconds >= 60) {
+                unit = 'mm';
+                amount = Math.trunc(this.#seconds / 60);
+                this.#seconds = this.#seconds % 60;
+            }
+        }
+
+        if (unit === 'mm') {
+            this.#minutes += amount;
+            if (this.#minutes >= 60) {
+                unit = 'hh';
+                amount = Math.trunc(this.#minutes / 60);
+                this.#minutes = this.#minutes % 60;
+            }
+        }
+
+        if (unit === 'hh') {
+            this.#hours += amount;
+            if (this.#hours >= 24) {
+                unit = 'dd';
+                amount = Math.trunc(this.#hours / 24);
+                this.#hours = this.#hours % 24;
+            }
+        }
+
+        if (unit === 'dd') {
+            this.#day += amount;
         }
 
         return this;

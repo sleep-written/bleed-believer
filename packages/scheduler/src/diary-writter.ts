@@ -24,12 +24,15 @@ export class DiaryWritter implements DiaryWritterLike {
                 text += `# The exact name of the task class\n`;
                 text += `${taskClass.name}:\n`;
                 text += '  # From monday (1) to friday (5)\n';
-                text += '- days: [1, 2, 3, 4, 5]\n';
+                text += '- days: [1, 2, 3, 4, 5]\n\n';
+                text += '  # If you uncomment this, the current task will be';
+                text += ' triggered every 30 mins, ignoring the "timestamps" field\n';
+                text += '  # interval: [ 0, 30,  0]\n\n';
                 text += '  # At 00:00:00 and 12:00:00 (24 hrs format)\n';
                 text += '  timestamps:\n';
                 text += '  - [ 0,  0,  0]\n';
                 text += '  - [12,  0,  0]\n\n';
-                text += '  # Saturday (6) and sunday (0)\n';
+                text += '  # At saturday (6) and sunday (0)\n';
                 text += '- days: [6, 0]\n';
                 text += '  # At 12:00:00 (24 hrs format)\n';
                 text += '  timestamps:\n';
@@ -71,23 +74,27 @@ export class DiaryWritter implements DiaryWritterLike {
                     diaryItem.forEach(group => {
                         // Iterate through days
                         group.days.forEach(dd => {
+                            // Gets or generate timestamps
+                            const clocks = group.interval instanceof Array
+                                ?   DateRef.getIntervals(dd, ...group.interval)
+                                :   group.timestamps?.map(([hh, mm, ss]) => {
+                                        if (typeof hh === 'string') {
+                                            hh = parseInt(hh, 10);
+                                        }
+
+                                        if (typeof mm === 'string') {
+                                            mm = parseInt(mm, 10);
+                                        }
+
+                                        if (typeof ss === 'string') {
+                                            ss = parseInt(ss, 10);
+                                        }
+
+                                        return new DateRef(dd, hh, mm, ss);
+                                    });
+                
                             // Iterate through timestamps
-                            group.timestamps.forEach(([ hh, mm, ss ]) => {
-                                if (typeof hh === 'string') {
-                                    hh = parseInt(hh, 10);
-                                }
-
-                                if (typeof mm === 'string') {
-                                    mm = parseInt(mm, 10);
-                                }
-
-                                if (typeof ss === 'string') {
-                                    ss = parseInt(ss, 10);
-                                }
-
-                                // Creates a new key using the DateRef class
-                                const date = new DateRef(dd, hh, mm, ss);
-    
+                            clocks?.forEach(date => {
                                 const targets = map.get(date.toString());
                                 if (!targets) {
                                     // Create a new registry

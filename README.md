@@ -40,6 +40,6 @@ Manages partitions and shared folders in linux.
 
 <br />
 
-## [@bleed-believer/mnt](/packages/scheduler/README.md)
+## [@bleed-believer/scheduler](/packages/scheduler/README.md)
 
 A package to run code only at the days and hours that you need it.

@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/commander",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "Create CLI with routing using classes and decorators.",
   "type": "module",
   "main": "./dist/cjs/index.js",
@@ -38,6 +38,6 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "@bleed-believer/meta": "^0.10.1"
+    "@bleed-believer/meta": "^0.10.2"
   }
 }

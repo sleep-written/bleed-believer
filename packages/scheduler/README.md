@@ -58,6 +58,9 @@ const scheduler = new Scheduler([
 
 // Launch the tasks
 await scheduler.run();
+
+// ...or if you need to lauch all tacks once
+await scheduler.runNow();
 ```
 
 ### About the configuration file
