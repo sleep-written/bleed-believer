@@ -46,9 +46,7 @@ test.serial('Save file', async t => {
             },
             {
                 days: [6, 0],
-                timestamps: [
-                    [12, 0, 0]
-                ],
+                interval: [0, 30, 0]
             }
         ],
         TaskB: [
@@ -65,19 +63,6 @@ test.serial('Save file', async t => {
 test.serial('Load file', async t => {
     const { diary } = t.context;
     const dict = await diary.loadFile([TaskA, TaskB]);
-
-    t.notDeepEqual(dict.get('date-ref:1000000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:1120000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:2000000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:2120000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:3000000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:3120000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:4000000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:4120000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:5000000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:5120000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:6120000'), [TaskA, TaskA]);
-    t.notDeepEqual(dict.get('date-ref:0120000'), [TaskA, TaskA]);
 
     t.deepEqual(dict.get('date-ref:1000000'), [TaskA, TaskB]);
     t.deepEqual(dict.get('date-ref:1120000'), [TaskA]);

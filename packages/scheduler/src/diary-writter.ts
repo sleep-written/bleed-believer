@@ -16,6 +16,15 @@ export class DiaryWritter implements DiaryWritterLike {
         this.#path = resolve(path);
     }
 
+    async exists(): Promise<boolean> {
+        try {
+            await access(this.#path);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
     writeFile(classes: TaskClass[]): Promise<void> {
         let text = '';
         for (const taskClass of classes) {
@@ -25,18 +34,14 @@ export class DiaryWritter implements DiaryWritterLike {
                 text += `${taskClass.name}:\n`;
                 text += '  # From monday (1) to friday (5)\n';
                 text += '- days: [1, 2, 3, 4, 5]\n\n';
-                text += '  # If you uncomment this, the current task will be';
-                text += ' triggered every 30 mins, ignoring the "timestamps" field\n';
-                text += '  # interval: [ 0, 30,  0]\n\n';
                 text += '  # At 00:00:00 and 12:00:00 (24 hrs format)\n';
                 text += '  timestamps:\n';
                 text += '  - [ 0,  0,  0]\n';
                 text += '  - [12,  0,  0]\n\n';
                 text += '  # At saturday (6) and sunday (0)\n';
                 text += '- days: [6, 0]\n';
-                text += '  # At 12:00:00 (24 hrs format)\n';
-                text += '  timestamps:\n';
-                text += '  - [12,  0,  0]';
+                text += '  # This will be triggered every 30 mins, ignoring the "timestamps" field\n';
+                text += '  interval: [ 0, 30,  0]\n\n';
 
             } else {
                 text += '\n\n';

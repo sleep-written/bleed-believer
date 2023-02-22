@@ -73,11 +73,6 @@ VeryImportantTask:
     # case will be executed from monday to friday
 -   days: [ 1, 2, 3, 4, 5 ]
 
-    # If you sets this property, the task wil be in the time interval setled.
-    # If you use this property, the other one "timestamps" will be ignore.
-    # The format is an array like [ hours, minutes, seconds ].
-    interval: [ 0, 30,  0]
-
     # The time when the task must be launched, the format
     # is an array with [ hours, minutes, seconds ], and you
     # can omit the second or the minutes too
@@ -88,6 +83,14 @@ VeryImportantTask:
     -   [ 12, 30 ]
         # Will be executed at 14:45:30
     -   [ 14, 45, 30 ]
+
+    # To be executed 
+-   days: [ 6, 0 ]
+
+    # If you set this property, the task will be in the time interval setled.
+    # If you use this property, the other one "timestamps" will be ignore.
+    # The format is an array like [ hours, minutes, seconds ].
+    interval: [ 0, 30,  0]
 
 
 # This is the exact name of the Task class created before
@@ -102,3 +105,22 @@ AnotherTask:
     -   [ 8, 30 ]
 ```
 
+## Extras
+- To check if the configuration file exists:
+    ```ts
+    // file: ./start.ts
+    import { Scheduler } from '@bleed-believer/scheduler';
+
+    import { VeryImportantTask } from './very-important-task.js';
+    import { AnotherTask } from './another-task.js';
+
+    // Making the instance
+    const scheduler = new Scheduler([
+        VeryImportantTask,
+        AnotherTask
+    ]);
+
+    // Returns a boolean
+    const exists = await scheduler.exists();
+    ```
+    

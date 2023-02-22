@@ -5,9 +5,9 @@ import { DiaryWritter } from '../diary-writter.js';
 import { SerialTasker } from '../serial-tasker/serial-tasker.js';
 
 export class Scheduler {
-    #serial = new SerialTasker();
-    #classes: TaskClass[];
     #diaryWritter: DiaryWritterLike;
+    #classes: TaskClass[];
+    #serial = new SerialTasker();
 
     #beforeEach:   ((x: { name: string }) => void)[] = [];
     #afterEach:    ((x: { name: string }) => void)[] = [];
@@ -24,6 +24,10 @@ export class Scheduler {
     ) {
         this.#classes = classes;
         this.#diaryWritter = diaryWritter ?? new DiaryWritter('./scheduler.yml');
+    }
+
+    exists(): Promise<boolean> {
+        return this.#diaryWritter.exists();
     }
 
     createConfig(): Promise<void> {

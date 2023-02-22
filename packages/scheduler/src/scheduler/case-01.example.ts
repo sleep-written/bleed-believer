@@ -21,6 +21,10 @@ export class TaskExample extends Task {
 }
 
 export class DiaryFake implements DiaryWritterLike {
+    exists(): Promise<boolean> {
+        return Promise.resolve(true);
+    }
+
     writeFile(_: any): Promise<void> {
         throw new Error('Method not implemented.');
     }
