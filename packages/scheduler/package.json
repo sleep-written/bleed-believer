@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/scheduler",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A package to run code only at the days and hours that you need it.",
   "type": "module",
   "main": "./dist/cjs/index.js",
