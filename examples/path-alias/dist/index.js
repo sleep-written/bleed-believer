@@ -1,10 +1,9 @@
-import { launch } from "./tool/launch.js";
-import { other } from "./other.js";
-// import { base } from '@base';
-import { pathResolver } from "@bleed-believer/path-alias";
+import { launch } from '@tool/launch.js';
+import { other } from './other.js';
+import { parse } from 'yaml';
+import { pathResolve } from '@bleed-believer/path-alias';
 launch();
 other();
-// base();
-console.log('path:', pathResolver('./joder.ts'));
-
+console.log('path:', pathResolve('./joder.ts'));
+console.log('yaml:', parse('- foo\n- bar'));
 //# sourceMappingURL=index.js.map

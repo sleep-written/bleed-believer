@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/other.ts"],"sourcesContent":["export function other(): void {\n    console.log('soy el other!!!');\n}"],"names":["other","console","log"],"mappings":"AAAA,OAAO,SAASA,QAAc;IAC1BC,QAAQC,GAAG,CAAC;AAChB,CAAC"}
+{"version":3,"file":"other.js","sourceRoot":"","sources":["../src/other.ts"],"names":[],"mappings":"AAAA,MAAM,UAAU,KAAK;IACjB,OAAO,CAAC,GAAG,CAAC,iBAAiB,CAAC,CAAC;AACnC,CAAC"}

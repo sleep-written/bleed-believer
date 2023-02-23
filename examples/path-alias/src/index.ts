@@ -1,10 +1,11 @@
 import { launch } from '@tool/launch.js';
 import { other } from './other.js';
-// import { base } from '@base';
+import { parse } from 'yaml';
 
 import { pathResolve } from '@bleed-believer/path-alias';
 
 launch();
 other();
-// base();
+
 console.log('path:', pathResolve('./joder.ts'));
+console.log('yaml:', parse('- foo\n- bar'));

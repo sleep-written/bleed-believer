@@ -1,1 +1,1 @@
-{"version":3,"sources":["../../src/tool/launch.ts"],"sourcesContent":["export function launch(): void {\n    console.log('JajjAJ');\n}"],"names":["launch","console","log"],"mappings":"AAAA,OAAO,SAASA,SAAe;IAC3BC,QAAQC,GAAG,CAAC;AAChB,CAAC"}
+{"version":3,"file":"launch.js","sourceRoot":"","sources":["../../src/tool/launch.ts"],"names":[],"mappings":"AAAA,MAAM,UAAU,MAAM;IAClB,OAAO,CAAC,GAAG,CAAC,QAAQ,CAAC,CAAC;AAC1B,CAAC"}

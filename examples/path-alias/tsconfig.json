@@ -2,7 +2,10 @@
     "compilerOptions": {
         "target": "ES2022",
         "module": "ES2022",
+
+        "esModuleInterop": true,
         "moduleResolution": "node",
+        "importsNotUsedAsValues": "error",
 
         "outDir": "./dist",
         "rootDir": "./src",
@@ -13,5 +16,8 @@
         "paths": {
             "@tool/*": ["./tool/*"]
         }
-    }
+    },
+    "exclude": [
+        "./node_modules/**"
+    ]
 }

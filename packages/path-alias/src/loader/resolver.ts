@@ -7,6 +7,7 @@ import { Tsconfig } from '../tsconfig/tsconfig.js';
 
 export class Resolver {
     static #tsconfig = new Tsconfig().getOptions();
+    static #nodeModulesFolder = /(^|\\|\/)node_modules(\\|\/)/g;
 
     static #setExt(input: string, to: 't' | 'j'): string {
         let key = input.at(-2);
@@ -50,11 +51,20 @@ export class Resolver {
         // Check extension
         const baseUrl = resolve(Resolver.#tsconfig.baseUrl);
         const base = !isTsNode
-            ?   leftReplacer(baseUrl, resolve(Resolver.#tsconfig.rootDir), resolve(Resolver.#tsconfig.outDir))
+            ?   leftReplacer(
+                    baseUrl,
+                    resolve(Resolver.#tsconfig.rootDir),
+                    resolve(Resolver.#tsconfig.outDir)
+                )
             :   baseUrl;
 
+        // Change the extension
         const path = fileURLToPath(url);
-        if (path.startsWith(base) && isTsNode) {
+        if (
+            isTsNode &&
+            path.startsWith(base) &&
+            !Resolver.#nodeModulesFolder.test(path)
+        ) {
             url = this.#setExt(url, 't');
         }
 
