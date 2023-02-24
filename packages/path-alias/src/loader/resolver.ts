@@ -63,7 +63,7 @@ export class Resolver {
         if (
             isTsNode &&
             path.startsWith(base) &&
-            !Resolver.#nodeModulesFolder.test(path)
+            !path.match(Resolver.#nodeModulesFolder)
         ) {
             url = this.#setExt(url, 't');
         }
