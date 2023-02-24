@@ -8,16 +8,17 @@
         "importsNotUsedAsValues": "error",
 
         "outDir": "./dist",
-        "rootDir": "./src",
+        "rootDir": ".",
         "sourceMap": true,
 
         "strict": true,
-        "baseUrl": "./src",
+        "baseUrl": ".",
         "paths": {
-            "@tool/*": ["./tool/*"]
+            "@tool/*": ["./src/tool/*"]
         }
     },
     "exclude": [
+        "./dist",
         "./node_modules/**"
     ]
 }
