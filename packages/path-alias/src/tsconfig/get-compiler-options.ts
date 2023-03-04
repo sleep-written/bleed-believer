@@ -1,11 +1,12 @@
 import type { TsconfigOpts } from './interfaces/index.js';
 
-import { resolve } from 'path';
+import { dirname, join, resolve } from 'path';
 import { Json } from './json.js';
 
 export function getCompilerOptions(
     path: string,
-    input: Partial<TsconfigOpts>
+    input: Partial<TsconfigOpts>,
+    extendsPath = '.'
 ): TsconfigOpts {
     const keys = ['baseUrl', 'rootDir', 'outDir', 'paths'];
     const json = new Json(path).loadSync();
@@ -25,7 +26,7 @@ export function getCompilerOptions(
                 }
                 default: {
                     if (typeof value === 'string') {
-                        (input as any)[k] = value;
+                        (input as any)[k] = join(extendsPath, value);
                         empty = false;
                     } break;
                 }
@@ -36,7 +37,7 @@ export function getCompilerOptions(
 
     if (pending.length && typeof json.extends === 'string') {
         const newPath = resolve(path, '..', json.extends);
-        return getCompilerOptions(newPath, input);
+        return getCompilerOptions(newPath, input, join(extendsPath, dirname(json.extends)));
     } else {
         return input as any;
     }
