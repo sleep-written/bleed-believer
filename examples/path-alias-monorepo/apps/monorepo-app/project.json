@@ -1,0 +1,16 @@
+{
+  "name": "monorepo-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/monorepo-app",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/monorepo-app",
+        "commands": ["./start.sh ./src/main.ts"]
+      }
+    }
+  }
+}
