@@ -9,7 +9,21 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/monorepo-app",
-        "commands": ["./start.sh ./src/main.ts"]
+        "commands": [
+          "node --no-warnings --loader ../../../../packages/path-alias/dist/loader/index.mjs ./src/main.mts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/monorepo-app",
+        "commands": [
+          "tsc",
+          "tsc-alias",
+          "node --no-warnings --loader ../../../../packages/path-alias/dist/loader/index.mjs ../../dist/apps/monorepo-app/src/main.mjs"
+        ],
+        "parallel": false
       }
     }
   }

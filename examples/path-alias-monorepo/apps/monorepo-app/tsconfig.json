@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../../dist/apps/monorepo-app"
+    "outDir": "../../dist"
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.mts", "src/main.mts"]
 }
