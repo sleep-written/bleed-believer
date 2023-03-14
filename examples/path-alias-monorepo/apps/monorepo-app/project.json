@@ -10,7 +10,7 @@
       "options": {
         "cwd": "apps/monorepo-app",
         "commands": [
-          "node --no-warnings --loader ../../../../packages/path-alias/dist/loader/index.mjs ./src/main.mts"
+          "node --no-warnings --loader @bleed-believer/path-alias/esm ./src/main.mts"
         ]
       }
     },
@@ -21,7 +21,7 @@
         "commands": [
           "tsc",
           "tsc-alias",
-          "node --no-warnings --loader ../../../../packages/path-alias/dist/loader/index.mjs ../../dist/apps/monorepo-app/src/main.mjs"
+          "node ../../dist/apps/monorepo-app/src/main.mjs"
         ],
         "parallel": false
       }
