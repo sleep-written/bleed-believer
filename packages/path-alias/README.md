@@ -1,13 +1,6 @@
 # @bleed-believer/path-alias
 
-A package to bind paths alias, resolving the `source` directory when the app is launched with ts-node, or resolving the `out` directory when ts-node isn't used. Includes some utilities in case if you need to generate paths dinamically depending of the code that is  running. Now you can use this package with proyects transpiled by [swc](https://swc.rs) (see details [here](#about-swc)).
-
-## About monorepo support
-Now this package has monorepo support, thanks for [arjunyel](https://github.com/arjunyel) colaboration, and for now it's an _<u>__experimental function.__</u>_ This functionality was tested only with [NX](https://nx.dev/) monorepo, for that reason please first check [this example](https://github.com/sleep-written/bleed-believer/tree/master/examples/path-alias-monorepo) and test the package functionality in your specific use cases __before to implement in production.__
-
-Since __ESM__ hs been heavely adopted by the whole `node.js` community (including transpilers, unit testing, and many other libraries), from now (from [v0.10.17](https://www.npmjs.com/package/@bleed-believer/path-alias/v/0.10.17) exactly) the __CJS__ support has been removed. If you still needs the __CJS__ compatibility, considerate these options:
-- [@bleed-believer/path-alias v0.10.16](https://www.npmjs.com/package/@bleed-believer/path-alias/v/0.10.16) or earlier.
-- [ts-path-mapping](https://www.npmjs.com/package/ts-path-mapping) _(deprecated)._
+A package to bind paths alias, resolving the `source` directory when the app is launched with ts-node, or resolving the `out` directory when ts-node isn't used. Includes some utilities in case if you need to generate paths dinamically depending of the code that is  running. Now you can use this package with proyects transpiled by [swc](https://swc.rs) (see details [here](#about-swc)) and now has monorepo support (see [here](#about-monorepo-support) for details).
 
 With this package, you can forget about those ugly imports like:
 ```ts
@@ -21,7 +14,13 @@ import { Jajaja } from '@alias-a/jajaja.js';
 import { Gegege } from '@alias-b/gegege.js';
 ```
 
-## Disclaimer
+## About monorepo support
+Now this package has monorepo support, thanks for [arjunyel](https://github.com/arjunyel) colaboration, and for now it's an _<u>__experimental function.__</u>_ This functionality was tested only with [NX](https://nx.dev/) monorepo, for that reason please first check [this example](https://github.com/sleep-written/bleed-believer/tree/master/examples/path-alias-monorepo) and test the package functionality in your specific use cases __before to implement in production.__
+
+## Disclaimers
+Since __ESM__ hs been heavely adopted by the whole `node.js` community (including transpilers, unit testing, and many other libraries), from now (from [v0.10.17](https://www.npmjs.com/package/@bleed-believer/path-alias/v/0.10.17) exactly) the __CJS__ support has been removed. If you still needs the __CJS__ compatibility, considerate these options:
+- [@bleed-believer/path-alias v0.10.16](https://www.npmjs.com/package/@bleed-believer/path-alias/v/0.10.16) or earlier.
+- [ts-path-mapping](https://www.npmjs.com/package/ts-path-mapping) _(deprecated)._
 
 This package is heavely inspired in [this response](https://github.com/TypeStrong/ts-node/discussions/1450#discussioncomment-1806115), so I give my gratitude to the [charles-hallen](https://github.com/charles-allen) work. If you see that the [Loader API](https://nodejs.org/api/esm.html#loaders) has been changed and this package stopped working, create an GitHub Issue notifying of the problem.
 
