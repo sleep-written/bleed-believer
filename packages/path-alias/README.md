@@ -2,7 +2,12 @@
 
 A package to bind paths alias, resolving the `source` directory when the app is launched with ts-node, or resolving the `out` directory when ts-node isn't used. Includes some utilities in case if you need to generate paths dinamically depending of the code that is  running. Now you can use this package with proyects transpiled by [swc](https://swc.rs) (see details [here](#about-swc)).
 
-This package has been designed to work with CommonJS projects (using [--require](https://nodejs.org/api/cli.html#-r---require-module) flag), and ESM projects (using [--loader](https://nodejs.org/api/esm.html#loaders) flag). This package is a new version of [ts-path-mapping](https://www.npmjs.com/package/ts-path-mapping), which _now will be deprecated._
+## About monorepo support
+Now this package has monorepo support, thanks for [arjunyel](https://github.com/arjunyel) colaboration, and for now it's an _<u>__experimental function.__</u>_ This functionality was tested only with [NX](https://nx.dev/) monorepo, for that reason please first check [this example](https://github.com/sleep-written/bleed-believer/tree/master/examples/path-alias-monorepo) and test the package functionality in your specific use cases __before to implement in production.__
+
+Since __ESM__ hs been heavely adopted by the whole `node.js` community (including transpilers, unit testing, and many other libraries), from now (from [v0.10.17](https://www.npmjs.com/package/@bleed-believer/path-alias/v/0.10.17) exactly) the __CJS__ support has been removed. If you still needs the __CJS__ compatibility, considerate these options:
+- [@bleed-believer/path-alias v0.10.16](https://www.npmjs.com/package/@bleed-believer/path-alias/v/0.10.16) or earlier.
+- [ts-path-mapping](https://www.npmjs.com/package/ts-path-mapping) _(deprecated)._
 
 With this package, you can forget about those ugly imports like:
 ```ts
@@ -19,8 +24,6 @@ import { Gegege } from '@alias-b/gegege.js';
 ## Disclaimer
 
 This package is heavely inspired in [this response](https://github.com/TypeStrong/ts-node/discussions/1450#discussioncomment-1806115), so I give my gratitude to the [charles-hallen](https://github.com/charles-allen) work. If you see that the [Loader API](https://nodejs.org/api/esm.html#loaders) has been changed and this package stopped working, create an GitHub Issue notifying of the problem.
-
-This package is designed to work in end-user backend aplications (because of how [module alias works](https://github.com/ilearnio/module-alias/blob/dev/README.md#using-within-another-npm-package)). So this probably doesn't work in front-end applications, or apps that uses a bundler (like webpack for example).
 
 Also, this package is __experimental__ and probably can generate unexpected behaviors, or performance issues. For that reason, <u>__you must test intensively this package in all possible use cases if do you want to implement in production.__</u>
 
@@ -69,7 +72,6 @@ project-folder
 │   ├── folder-b
 │   │   ├── ...
 │   │   └── ...
-│   ├── file-x.ts
 │   └── ...
 │
 │   # The project configuration files
@@ -81,15 +83,17 @@ project-folder
 ### Configure your `tsconfig.json`
 
 This package reads the `tsconfig.json` file (and is capable to find values if the file extends another configuration files) to declare the alias. A typical configuration coul be similar to this:
-```json
+```json5
 {
     "compilerOptions": {
+        "target": "es2022",
+        "module": "es2022", /* or "esnext" if you want (not tested yet) */
+
         "rootDir": "./src",
         "outDir": "./dist",
 
         "baseUrl": "./src",
         "paths": {
-            "@file-x": ["./file-x.ts"],
             "@alias-a/*": ["./folder-a/*"],
             "@alias-b/*": ["./folder-b/*"],
         }
@@ -99,8 +103,6 @@ This package reads the `tsconfig.json` file (and is capable to find values if th
 
 The fields listed in the example of above are all required in order to the correct working of the package.
 
-### ...with __ESM__ projects
-
 - Execute the source code with __ts-node:__
     ```bash
     node \
@@ -113,49 +115,12 @@ The fields listed in the example of above are all required in order to the corre
     node \
     --loader @bleed-believer/path-alias/esm \
     ./dist/index.js
-    ```
-
-
-### ...with __CommonJS__ projects
-
-- Execute the source code with __ts-node:__
-    ```bash
-    node \
-    --require ts-node/register \
-    --require @bleed-believer/path-alias/cjs \
-    ./src/index.ts
-    ```
-
-- Execute the transpiled code:
-    ```bash
-    node \
-    --loader @bleed-believer/path-alias/cjs \
-    ./dist/index.js
-    ```
-
-- Also as alternative (only with commonjs), you can put at the top of your entry file this line:
-    ```ts
-    import '@bleed-believer/path-alias/cjs';
-    import { Jajaja } from 'jajaja';
-    import { Gegege } from 'gegege';
-
-    // Bla bla bla
-    // Bla bla bla
-    ```
-    ...and to execute, simply with ts:
-    ```bash
-    npx ts-node ./src/index.ts
-    ```
-    ...or:
-    ```bash
-    node ./dist/index.js
     ```
 
 ## Unit testing with [ava](https://www.npmjs.com/package/ava)
 
 Create in your folder where your package.json is located a file called `"ava.config.mjs"`. Assuming that your `"rootDir"` is `"./src"`, set that file like this:
 
-### With __ESM__:
 ```js
 export default {
     files: [
@@ -168,24 +133,6 @@ export default {
     },
     nodeArguments: [
         '--loader=@bleed-believer/path-alias/esm',
-    ]
-}
-```
-
-### With __CommonJS__:
-```js
-export default {
-    files: [
-        './src/**/*.test.ts',
-        './src/**/*.test.cts',
-    ],
-    extensions: {
-        ts: 'commonjs',
-        cts: 'commonjs',
-    },
-    require: [
-        'ts-node/register',
-        '@bleed-believer/path-alias/cjs',
     ]
 }
 ```
@@ -209,7 +156,7 @@ Resolve any subfolder of `"rootDir"` depending if __ts-node__ is running. For ex
 ```ts
 import { pathResolve } from '@bleed-believer/path-alias';
 
-const path = pathResolve('folder-a', 'inner', '*');
+const path = pathResolve('folder-a', 'index.ts');
 console.log('path:', path);
 ```
 
@@ -217,18 +164,18 @@ With __ts-node__ the output is:
 ```bash
 node \
 --loader @bleed-believer/path-alias/esm \
-./src/index.ts
+./src/folder-a/index.ts
 
-# path: src/folder-a/inner/*
+# path: /current/working/directory/src/folder-a/index.ts
 ```
 
 With the transpiled code:
 ```bash
 node \
 --loader @bleed-believer/path-alias/esm \
-./dist/index.js
+./dist/folder-a/index.js
 
-# path: dist/folder-a/inner/*
+# path: /current/working/directory/dist/folder-a/index.js
 ```
 
 ## About SWC
@@ -252,4 +199,4 @@ The function `pathResolve` works perfectly with __swc__ using the example of abo
 
 - The resolve output between `"baseURL"` and the `"paths"` declared in the `"tsconfig.json"` file must always return a path inside of `"rootDir"` folder.
 
-- __swc__ isn't compatible with alias like this: `"@data-source": ["./data-source.ts"]`.
+- __swc__ isn't compatible with alias for a single file, like this: `"@data-source": ["./data-source.ts"]`.

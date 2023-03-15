@@ -8,13 +8,13 @@
         "importsNotUsedAsValues": "error",
 
         "outDir": "./dist",
-        "rootDir": ".",
+        "rootDir": "./src",
         "sourceMap": true,
 
         "strict": true,
-        "baseUrl": ".",
+        "baseUrl": "./src",
         "paths": {
-            "@tool/*": ["./src/tool/*"]
+            "@tool/*": ["./tool/*"]
         }
     },
     "exclude": [

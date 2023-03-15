@@ -1,0 +1,30 @@
+{
+  "name": "monorepo-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/monorepo-app",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/monorepo-app",
+        "commands": [
+          "node --no-warnings --loader @bleed-believer/path-alias/esm ./src/main.mts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/monorepo-app",
+        "commands": [
+          "tsc",
+          "tsc-alias",
+          "node ../../dist/apps/monorepo-app/src/main.mjs"
+        ],
+        "parallel": false
+      }
+    }
+  }
+}
