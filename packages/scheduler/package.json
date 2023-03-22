@@ -3,20 +3,18 @@
   "version": "0.2.0",
   "description": "A package to run code only at the days and hours that you need it.",
   "type": "module",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
   "files": [
     "dist"
   ],
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js"
+      "import": "./dist/index.js"
     }
   },
   "scripts": {
-    "test": "ava",
-    "start": "ts-node-esm ./src/test.ts"
+    "test": "ava"
   },
   "repository": {
     "type": "git",

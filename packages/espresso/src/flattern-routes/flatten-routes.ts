@@ -1,6 +1,7 @@
+import type { ControllerRoutingClass } from '../controller-routing/index.js';
 import type { FlattedRoute } from './flatted-route.js';
 
-import { ControllerRoutingClass, CONTROLLER_ROUTING } from '../controller-routing/index.js';
+import { CONTROLLER_ROUTING } from '../controller-routing/index.js';
 import { CONTROLLER } from '../controller/index.js';
 import { Path } from '../path/index.js';
 

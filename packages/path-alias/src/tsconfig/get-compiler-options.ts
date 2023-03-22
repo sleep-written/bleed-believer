@@ -36,13 +36,23 @@ export function getCompilerOptions(
             return empty;
         });
 
-    if (pending.length && typeof json.extends === 'string') {
-        const newPath = resolve(path, '..', json.extends);
-        return getCompilerOptions(newPath, input, join(
-            extendsNullishPath,
-            dirname(json.extends)
-        ));
-    } else {
-        return input as any;
+    if (pending.length > 0) {
+        if (typeof json.extends === 'string') {
+            const newPath = resolve(path, '..', json.extends);
+            input = getCompilerOptions(newPath, input, join(
+                extendsNullishPath,
+                dirname(json.extends)
+            ));
+        } else if (json.extends instanceof Array) {
+            for (const extendPath of json.extends) {
+                const newPath = resolve(path, '..', extendPath);
+                input = getCompilerOptions(newPath, input, join(
+                    extendsNullishPath,
+                    dirname(extendPath)
+                ));
+            }
+        }
     }
+
+    return input as any;
 }

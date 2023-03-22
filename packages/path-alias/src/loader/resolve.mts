@@ -1,4 +1,6 @@
-import { Context, resolve as tsNodeResolve } from 'ts-node/esm';
+import type { Context } from 'ts-node/esm';
+
+import { resolve as tsNodeResolve } from 'ts-node/esm';
 import { Resolver } from './resolver.js';
 
 /**

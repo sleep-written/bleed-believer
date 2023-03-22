@@ -1,0 +1,10 @@
+{
+    "extends": [
+        "./tsconfig.04.01.json",
+        "./tsconfig.04.02.json",
+        "./tsconfig.04.03.json"
+    ],
+    "compilerOptions": {
+        "sourceMap": true
+    }
+}

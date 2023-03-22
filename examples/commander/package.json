@@ -1,0 +1,12 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "ts-node-esm ./src/index.ts"
+  },
+  "dependencies": {
+    "@bleed-believer/commander": "file:../../packages/commander"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  }
+}

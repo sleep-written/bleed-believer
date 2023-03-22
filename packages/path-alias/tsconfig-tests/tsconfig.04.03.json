@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./src",
+        "paths": {
+            "@command-a": [ "./command-a/*" ],
+            "@command-b": [ "./command-b/*" ],
+            "@command-c": [ "./command-c/*" ]
+        }
+    }
+}
