@@ -1,8 +1,11 @@
 # @bleed-believer/scheduler
-A package to run code only at the days and hours that you need it. You can adjust which days and at which time to execute your different tasks using a `yaml` file. The package is primarily written for `ES2022`, but (in theory) is compatible with `CommonJS`, and it's available through npm:
+A package to run code only at the days and hours that you need it. You can adjust which days and at which time to execute your different tasks using a `yaml` file. The package is available through npm:
 ```bash
-npm i --save @bleed-believer/scheduled
+npm i --save @bleed-believer/scheduler
 ```
+
+## Disclaimer
+Since __ESM__ hs been heavely adopted by the whole `node.js` community (including transpilers, unit testing, and many other libraries), the __CJS__ support has been removed. If you still needs the __CJS__ compatibility, please use [this version](https://www.npmjs.com/package/@bleed-believer/scheduler/v/0.2.0) or earlier.
 
 ## Usage
 ### About the Tasks

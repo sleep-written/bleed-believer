@@ -131,7 +131,8 @@ export default {
         mts: 'module',
     },
     nodeArguments: [
-        '--loader=@bleed-believer/path-alias/esm',
+        '--no-warnings',
+        '--loader=@bleed-believer/path-alias/esm'
     ]
 }
 ```

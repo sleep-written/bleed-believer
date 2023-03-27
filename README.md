@@ -1,6 +1,6 @@
 # Bleed Believer
 
-This monorepo contains several packages to make applications easily, with support to __CommonJS__ and __ESM__ projects.
+This monorepo contains several packages to make applications easily, written in __ESM__.
 
 <br />
 

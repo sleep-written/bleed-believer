@@ -1,16 +1,16 @@
 # @bleed-believer/mnt
+Manage partitions in linux.
 
-Manage partitions in linux. The package is available in __ESM__ and __CommonJS__ and fully compatible with __Typescript__.
+## Disclaimer
+Since __ESM__ hs been heavely adopted by the whole `node.js` community (including transpilers, unit testing, and many other libraries), the __CJS__ support has been removed. If you still needs the __CJS__ compatibility, please use [this version](https://www.npmjs.com/package/@bleed-believer/mnt/v/0.0.3) or earlier.
 
 ## Installation
-
 Simply use:
 ```bash
 npm i --save @bleed-believer/mnt
 ```
 
 ## Usage
-
 - Gets all mounted resources:
     ```ts
     import { Resource } from '@bleed-believer/mnt';
