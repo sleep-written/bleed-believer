@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/scheduler",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A package to run code only at the days and hours that you need it.",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "@bleed-believer/meta": "^0.10.3",
+    "@bleed-believer/meta": "^0.11.0",
     "yaml": "^2.2.1"
   }
 }
