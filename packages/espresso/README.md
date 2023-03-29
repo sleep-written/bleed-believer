@@ -2,7 +2,7 @@
 An scalable endpoint router for [express.js](https://www.npmjs.com/package/express) applications, using classes as Controller and decorators.
 
 ## Disclaimer
-Since __ESM__ hs been heavely adopted by the whole `node.js` community (including transpilers, unit testing, and many other libraries), the __CJS__ support has been removed. If you still needs the __CJS__ compatibility, please use [this version](https://www.npmjs.com/package/@bleed-believer/espresso/v/0.10.3) or earlier.
+Since __ESM__ hs been heavely adopted by the whole `node.js` community (including transpilers, unit testing, and many other libraries), the __CJS__ support has been removed. If you still needs the __CJS__ compatibility, please use [this version](https://www.npmjs.com/package/@bleed-believer/meta/v/0.10.3) or earlier.
 
 ## Prerequisites
 In your project you must have installed locally [express.js](https://www.npmjs.com/package/express) framework with its type definitions:

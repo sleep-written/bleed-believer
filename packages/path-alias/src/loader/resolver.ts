@@ -1,9 +1,9 @@
 import { fileURLToPath, pathToFileURL } from 'url';
 import { resolve, extname, join } from 'path';
-import { leftReplacer } from '../tool/left-replacer.js';
 
+import { leftReplacer } from '../tool/left-replacer.js';
 import { PathAlias } from '../path-alias.js';
-import { Tsconfig } from '../tsconfig/tsconfig.js';
+import { Tsconfig } from '../tsconfig/index.js';
 
 export class Resolver {
     static #tsconfig = new Tsconfig().getOptions();

@@ -105,14 +105,14 @@ The fields listed in the example of above are all required in order to the corre
 - Execute the source code with __ts-node:__
     ```bash
     node \
-    --loader @bleed-believer/path-alias/esm \
+    --loader @bleed-believer/path-alias \
     ./src/index.ts
     ```
 
 - Execute the transpiled code:
     ```bash
     node \
-    --loader @bleed-believer/path-alias/esm \
+    --loader @bleed-believer/path-alias \
     ./dist/index.js
     ```
 
@@ -132,7 +132,7 @@ export default {
     },
     nodeArguments: [
         '--no-warnings',
-        '--loader=@bleed-believer/path-alias/esm'
+        '--loader=@bleed-believer/path-alias'
     ]
 }
 ```
@@ -163,7 +163,7 @@ console.log('path:', path);
 With __ts-node__ the output is:
 ```bash
 node \
---loader @bleed-believer/path-alias/esm \
+--loader @bleed-believer/path-alias \
 ./src/folder-a/index.ts
 
 # path: /current/working/directory/src/folder-a/index.ts
@@ -172,7 +172,7 @@ node \
 With the transpiled code:
 ```bash
 node \
---loader @bleed-believer/path-alias/esm \
+--loader @bleed-believer/path-alias \
 ./dist/folder-a/index.js
 
 # path: /current/working/directory/dist/folder-a/index.js
@@ -183,7 +183,7 @@ node \
 In case you want to execute your project using ts-node, the command is the same:
 ```bash
 node \
---loader @bleed-believer/path-alias/esm \
+--loader @bleed-believer/path-alias \
 ./src/index.ts
 ```
 However if you need to executed your transpiled project by [swc](https://swc.rs), you don't need to use the loader, just call your root file:

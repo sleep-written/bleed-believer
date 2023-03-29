@@ -12,10 +12,6 @@
     ".": {
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
-    },
-    "./esm": {
-      "types": "./dist/loader/index.d.mts",
-      "import": "./dist/loader/index.mjs"
     }
   },
   "scripts": {
@@ -45,7 +41,6 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "dotenv": "^16.0.1",
     "tsconfck": "^2.1.1"
   },
   "peerDependencies": {
