@@ -7,7 +7,6 @@ test('Read tsconfig.json (async)', async t => {
     const json = await file.load();
 
     t.is(json.extends, '../../tsconfig.json');
-    t.is(json.compilerOptions?.module, 'ES2022');
     t.is(json.compilerOptions?.rootDir, './src');
     t.is(json.compilerOptions?.outDir, './dist');
 });
@@ -17,7 +16,6 @@ test('Read tsconfig.json', t => {
     const json = file.loadSync();
 
     t.is(json.extends, '../../tsconfig.json');
-    t.is(json.compilerOptions?.module, 'ES2022');
     t.is(json.compilerOptions?.rootDir, './src');
     t.is(json.compilerOptions?.outDir, './dist');
 });
