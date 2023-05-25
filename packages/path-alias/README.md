@@ -100,8 +100,34 @@ This package reads the `tsconfig.json` file (and is capable to find values if th
 }
 ```
 
-The fields listed in the example of above are all required in order to the correct working of the package.
+The fields `"rootDir"`, `"outDir"` and `"baseUrl"` are all optional. If you don't define any of these parameters, the loader will set __your current working directory__ as value. If you don't define `"paths"`, the loader will skip the paths alias routing (but if you make that, what's the sense of using this library in first place?).
 
+## Executing your code
+You have 2 ways to launch your program, using directly the loader provided, or using the cli included in the package.
+
+### Using the cli
+- Execute the source code with __ts-node:__
+    ```bash
+    npx bb-path-alias ./src/index.ts
+    ```
+
+- Execute the transpiled code:
+    ```bash
+    npx bb-path-alias ./dist/index.js
+    ```
+
+### Using the cli (installed globally with `npm i --g @bleed-believer/path-alias`)
+- Execute the source code with __ts-node:__
+    ```bash
+    bb-path-alias ./src/index.ts
+    ```
+
+- Execute the transpiled code:
+    ```bash
+    bb-path-alias ./dist/index.js
+    ```
+
+### Using the loader
 - Execute the source code with __ts-node:__
     ```bash
     node \
@@ -182,11 +208,18 @@ node \
 
 In case you want to execute your project using ts-node, the command is the same:
 ```bash
+# Using the cli locally
+npx bb-path-alias ./src/index.ts
+
+# ...or using the cli globally
+bb-path-alias ./src/index.ts
+
+# ...or using the loader
 node \
 --loader @bleed-believer/path-alias \
 ./src/index.ts
 ```
-However if you need to executed your transpiled project by [swc](https://swc.rs), you don't need to use the loader, just call your root file:
+However if you need to executed your transpiled project by [swc](https://swc.rs), you don't need to use the loader, just call your root file (because swc replaces the alias for the real paths by itself):
 
 ```bash
 node ./dist/index.js

@@ -14,6 +14,9 @@
       "import": "./dist/index.mjs"
     }
   },
+  "bin": {
+    "bb-path-alias": "./dist/cli.js"
+  },
   "scripts": {
     "test": "ava"
   },
@@ -41,7 +44,8 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "tsconfck": "^2.1.1"
+    "tsconfck": "^2.1.1",
+    "tslog": "^4.8.2"
   },
   "peerDependencies": {
     "ts-node": "^10.9.1",

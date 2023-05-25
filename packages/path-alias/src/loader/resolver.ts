@@ -2,11 +2,11 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { resolve, extname, join } from 'path';
 
 import { leftReplacer } from '../tool/left-replacer.js';
+import { TsconfigV2 } from '../tsconfig/index.js';
 import { PathAlias } from '../path-alias.js';
-import { Tsconfig } from '../tsconfig/index.js';
 
 export class Resolver {
-    static #tsconfig = new Tsconfig().getOptions();
+    static #tsconfig = new TsconfigV2('./tsconfig.json').getOptions();
     static #nodeModulesFolder = /(^|\\|\/)node_modules(\\|\/)/g;
 
     static #setExt(input: string, to: 't' | 'j'): string {

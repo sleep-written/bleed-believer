@@ -1,6 +1,6 @@
 import { join, parse, format } from 'path';
 
-import { Tsconfig } from './tsconfig/index.js';
+import { TsconfigV2 } from './tsconfig/index.js';
 import { isTsNode } from './is-ts-node.js';
 import { Charset } from './tool/charset.js';
 
@@ -22,7 +22,7 @@ export class PathResolver {
     ]) {
         if (args.length === 0) {
             // Read from tsconfig
-            const data = new Tsconfig().getOptions();
+            const data = new TsconfigV2('./tsconfig.json').getOptions();
             this.#outDir = data.outDir;
             this.#rootDir = data.rootDir;
             this.#isTsNode = isTsNode();
