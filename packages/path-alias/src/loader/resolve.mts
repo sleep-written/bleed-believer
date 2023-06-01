@@ -1,3 +1,4 @@
+/// <reference path="../../types/ts-node.d.ts" />
 import type { Context } from 'ts-node/esm';
 
 import { resolve as tsNodeResolve } from 'ts-node/esm';

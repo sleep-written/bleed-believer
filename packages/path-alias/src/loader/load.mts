@@ -1,3 +1,4 @@
+/// <reference path="../../types/ts-node.d.ts" />
 import { load as tsNodeLoad } from 'ts-node/esm';
 import { Resolver } from './resolver.js';
 
