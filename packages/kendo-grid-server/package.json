@@ -1,0 +1,40 @@
+{
+  "name": "@bleed-believer/kendo-grid-server",
+  "version": "0.0.0",
+  "description": "Parses the querystrings built with @bleed-believer/kendo-grid-client fro TypeORM",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sleep-written/bleed-believer.git"
+  },
+  "keywords": [
+    "typeorm",
+    "odata",
+    "kendo-ui",
+    "progress"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "sleep-written",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sleep-written/bleed-believer/issues"
+  },
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "dependencies": {
+  }
+}
