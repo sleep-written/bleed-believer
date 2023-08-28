@@ -10,6 +10,8 @@
         { "path": "./packages/path-alias/tsconfig.json" },
         { "path": "./packages/state/tsconfig.json" },
         { "path": "./packages/mnt/tsconfig.json" },
-        { "path": "./packages/scheduler/tsconfig.json" }
+        { "path": "./packages/scheduler/tsconfig.json" },
+        { "path": "./packages/kendo-grid-client/tsconfig.json" },
+        { "path": "./packages/kendo-grid-server/tsconfig.json" }
     ]
 }
