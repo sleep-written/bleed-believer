@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/kendo-grid-server",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Parses the querystrings built with @bleed-believer/kendo-grid-client fro TypeORM",
   "type": "module",
   "types": "./dist/index.d.ts",
