@@ -1,0 +1,11 @@
+{
+    "watch": "./src",
+    "ext": "ts,json",
+    "execMap": {
+        "ts": "node"
+    },
+    "execArgs": [
+        "--loader=@bleed-believer/path-alias",
+        "--no-warnings"
+    ]
+}

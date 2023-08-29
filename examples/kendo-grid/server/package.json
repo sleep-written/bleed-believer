@@ -1,0 +1,26 @@
+{
+  "type": "module",
+  "scripts": {
+    "nodemon": "clear && nodemon ./src/index.ts",
+    "start": "clear && bb-path-alias ./src/index.ts"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.5.4",
+    "@types/npmlog": "^4.1.4",
+    "ava": "^5.3.1",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@progress/kendo-data-query": "^1.6.0",
+    "@bleed-believer/espresso": "file:../../../packages/espresso",
+    "@bleed-believer/commander": "file:../../../packages/commander",
+    "@bleed-believer/path-alias": "file:../../../packages/path-alias",
+    "@bleed-believer/kendo-grid-server": "file:../../../packages/kendo-grid-server",
+    "npmlog": "^7.0.1",
+    "sqlite3": "^5.1.6",
+    "typeorm": "^0.3.17"
+  }
+}

@@ -1,0 +1,36 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Dummy table</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <kendo-grid
+        [data]="this.data"
+        [skip]="this.skip"
+        [sort]="this.sort"
+        [filter]="this.filter"
+        [loading]="this.loading"
+        [pageable]="this.pageable"
+        [pageSize]="this.pageSize"
+        [sortable]="this.sortable"
+        [filterable]="this.filterable"
+        (pageChange)="this.onPageChange($event)"
+        (sortChange)="this.onSortChange($event)"
+        (filterChange)="this.onFilterChange($event)">
+            <kendo-grid-column
+            title="title"
+            field="title">
+            </kendo-grid-column>
+
+            <kendo-grid-column
+            title="User"
+            field="user.name">
+            </kendo-grid-column>
+
+            <kendo-grid-column
+            title="Mensaje"
+            field="body">
+            </kendo-grid-column>
+        </kendo-grid>
+    </mat-card-content>
+</mat-card>
