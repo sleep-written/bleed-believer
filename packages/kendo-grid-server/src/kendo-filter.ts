@@ -5,6 +5,7 @@ import type { KendoTransformer } from './interfaces/kendo-transformer.js';
 import { FilterOperator, normalizeFilters } from '@progress/kendo-data-query';
 import { Brackets, SelectQueryBuilder } from 'typeorm';
 import { switchFn } from './switch-fn.js';
+import type { JoinAttribute } from 'typeorm/query-builder/JoinAttribute.js';
 
 export class KendoFilter<T extends ObjectLiteral> implements KendoTransformer<T> {
     #i = 0;
@@ -23,6 +24,7 @@ export class KendoFilter<T extends ObjectLiteral> implements KendoTransformer<T>
     #recursiveTransform(
         composite: CompositeFilterDescriptor,
         query: SelectQueryBuilder<T> | WhereExpressionBuilder,
+        joins: JoinAttribute[]
     ): SelectQueryBuilder<T> | WhereExpressionBuilder {
         for (const filter of composite.filters) {
             // Gets the filter type
@@ -34,7 +36,7 @@ export class KendoFilter<T extends ObjectLiteral> implements KendoTransformer<T>
             if ((filter as CompositeFilterDescriptor).filters instanceof Array) {
                 // Nested composite
                 const innerComposite = filter as CompositeFilterDescriptor;
-                query = whereFn(new Brackets(qb => this.#recursiveTransform(innerComposite, qb)));
+                query = whereFn(new Brackets(qb => this.#recursiveTransform(innerComposite, qb, joins)));
             } else {
                 // Leaf filter
                 let { operator, field, value } = filter as FilterDescriptor;
@@ -44,8 +46,27 @@ export class KendoFilter<T extends ObjectLiteral> implements KendoTransformer<T>
                     throw new Error(`The field provided to apply a filter is invalid`);
                 } else if (!field?.match(/(^[a-z0-9]+($|(\.[a-z0-9]+$)*)|^\[[^\[\]]+\]$)/gi)) {
                     throw new Error(`The field format provided to apply a filter is invalid`);
-                } else if (!field.includes('.') && typeof mainAlias?.name == 'string' && this.#appendMain) {
-                    field = `${mainAlias.name}.${field}`;
+                } else if (this.#appendMain) {
+                    if (field.includes('.')) {
+                        // Campo con prefijo, probablemente de un join
+                        const parts = field.split('.');
+                        const path = parts
+                            .slice(0, -1)
+                            .join('.');
+
+                        const join = joins.find(x => x
+                            .relation
+                            ?.propertyPath === path
+                        );
+
+                        if (join) {
+                            field = `${join.alias.name}.${parts.at(-1)}`;
+                        }
+
+                    } else if (typeof mainAlias?.name === 'string') {
+                        // Campo sin prefijo, debe ser de la tabla base
+                        field = `${mainAlias.name}.${field}`;
+                    }
                 }
 
                 if (
@@ -53,7 +74,7 @@ export class KendoFilter<T extends ObjectLiteral> implements KendoTransformer<T>
                     !field?.match(/(^[a-z0-9]+($|(\.[a-z0-9]+$)*)|^\[[^\[\]]+\]$)/gi)
                 ) {
                     throw new Error(`The field provided to apply filter is invalid`);
-                } else if (!field.includes('.'))
+                }
 
                 if (typeof operator === 'function') {
                     throw new Error('Custom function operators aren\'t supported');
@@ -127,6 +148,7 @@ export class KendoFilter<T extends ObjectLiteral> implements KendoTransformer<T>
 
     transform(query: SelectQueryBuilder<T>): SelectQueryBuilder<T> {
         this.#i = 0;
-        return this.#recursiveTransform(this.#composite, query) as any;
+        const joins = query.expressionMap.joinAttributes;
+        return this.#recursiveTransform(this.#composite, query, joins) as any;
     }
 }

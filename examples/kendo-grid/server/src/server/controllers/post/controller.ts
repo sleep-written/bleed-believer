@@ -7,7 +7,12 @@ export class PostController extends Controller {
     async get(): Promise<void> {
         const query = Post
             .createQueryBuilder('Post')
-            .innerJoinAndSelect('Post.user', 'User');
+            .innerJoinAndSelect('Post.user', 'User')
+            // .select([
+            //     'Post.title AS title',
+            //     'Post.body AS body',
+            //     'User.name AS name',
+            // ]);
 
         const prog = new KendoUITypeORM(query);
         const resp = await prog.getMany(this.request);

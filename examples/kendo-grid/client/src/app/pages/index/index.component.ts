@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { KendoGridBase } from '@bleed-believer/kendo-grid-client';
-import { SortSettings } from '@progress/kendo-angular-grid';
+import { PagerSettings, SortSettings } from '@progress/kendo-angular-grid';
 
 import { PostService } from '@services/post';
 import { Post } from '@entities/post.entity';
@@ -13,8 +13,10 @@ import { Post } from '@entities/post.entity';
 })
 export class IndexComponent extends KendoGridBase<Post> implements OnInit {
   loading = false;
-  override sortable: SortSettings = {
-    mode: 'multiple'
+
+  override pageable: PagerSettings = {
+    pageSizes: [ 10, 50, 100 ],
+    responsive: true
   };
 
   constructor(
