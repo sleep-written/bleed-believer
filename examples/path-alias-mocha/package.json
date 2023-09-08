@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "test": "mocha",
+    "start": "bb-path-alias ./app/index.mts"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.6",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.5.9",
+    "chai": "^4.3.8",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@bleed-believer/path-alias": "file:../../packages/path-alias"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "node-option": [
+    "no-warnings",
+    "loader=@bleed-believer/path-alias"
+  ],
+  "spec": "./test/**/*.test.mts"
+}
