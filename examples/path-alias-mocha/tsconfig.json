@@ -5,12 +5,13 @@
         "module": "ES2022",
 
         "verbatimModuleSyntax": true,
-        "moduleResolution": "Node16",
+        "moduleResolution": "Node",
         "esModuleInterop": true,
 
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "sourceMap": true,
+        "outDir": "./dist",
 
         "baseUrl": ".",
         "paths": {

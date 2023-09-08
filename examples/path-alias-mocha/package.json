@@ -1,7 +1,10 @@
 {
   "scripts": {
     "test": "mocha",
-    "start": "bb-path-alias ./app/index.mts"
+    "start": "bb-path-alias ./app/index.mts",
+    "start:dist": "bb-path-alias ./dist/index.mjs",
+    "build": "tsc -p ./tsconfig.build.json",
+    "clean": "rm -rf ./dist"
   },
   "devDependencies": {
     "@types/chai": "^4.3.6",
