@@ -13,7 +13,7 @@ export class Scheduler {
     #afterEach:    ((x: { name: string }) => void)[] = [];
 
     #resolver?: () => void;
-    #clock?: NodeJS.Timer;
+    #clock?: NodeJS.Timeout;
     get isRunning(): boolean {
         return !!this.#clock;
     }

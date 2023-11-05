@@ -11,15 +11,14 @@ separator();
 // Getting the loader path
 const loaderPath = join(
     fileURLToPath(import.meta.url),
-    '..', 'index.mjs'
+    '..', 'index.js'
 );
 
 // Execute the program as a child process
 await new Promise<void>((resolve, reject) => {
     try {
         const argv = [
-            '--no-warnings',
-            `--loader`,
+            `--import`,
             loaderPath,
             ...process.argv.slice(2)
         ];
