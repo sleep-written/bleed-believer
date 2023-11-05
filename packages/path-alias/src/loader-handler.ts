@@ -56,7 +56,10 @@ export class LoaderHandler {
         specifier: string;
     } {
         const isSourceFile = this.isSourceFile(specifier, context);
-        if (typeof context.parentURL !== 'string') {
+        if (
+            (typeof context.parentURL !== 'string') ||
+            (!specifier.match(/\.m?(t|j)s$/gi))
+        ) {
             return { isSourceFile, specifier };
         }
 
@@ -125,7 +128,6 @@ export class LoaderHandler {
             specifier = specifier.replace(/(?<=\.m?)js$/gi, 'ts');
         }
 
-        console.log('parsed specified:', specifier);
         return { isSourceFile, specifier };
     }
 }

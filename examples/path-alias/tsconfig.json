@@ -5,7 +5,7 @@
 
         "esModuleInterop": true,
         "moduleResolution": "node",
-        "importsNotUsedAsValues": "error",
+        "verbatimModuleSyntax": true,
 
         "outDir": "./dist",
         "rootDir": "./src",

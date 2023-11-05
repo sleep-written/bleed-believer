@@ -46,12 +46,12 @@ A package to run code only at the days and hours that you need it.
 
 <br />
 
-### [@bleed-believer/kendo-grid-client](/packages/kendo-grid-client/README.md)
+## [@bleed-believer/kendo-grid-client](/packages/kendo-grid-client/README.md)
 
 Quickly create tables with filtering, pagination, and sorting in Angular applications using [@progress/kendo-angular-grid](https://www.npmjs.com/package/@progress/kendo-angular-grid).
 
 <br />
 
-### [@bleed-believer/kendo-grid-server](/packages/kendo-grid-server/README.md)
+## [@bleed-believer/kendo-grid-server](/packages/kendo-grid-server/README.md)
 
 Server-side package that seamlessly integrates with [@progress/kendo-angular-grid](https://www.npmjs.com/package/@progress/kendo-angular-grid) to handle pagination, filtering, and sorting through TypeORM.
