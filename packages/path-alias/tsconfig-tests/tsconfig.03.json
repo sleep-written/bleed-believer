@@ -1,0 +1,6 @@
+{
+    "extends": "./tsconfig.03.01.json",
+    "compilerOptions": {
+        "baseUrl": "./src"
+    }
+}

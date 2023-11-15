@@ -17,11 +17,27 @@ const loaderPath = join(
 // Execute the program as a child process
 await new Promise<void>((resolve, reject) => {
     try {
-        const argv = [
-            `--import`,
-            loaderPath,
-            ...process.argv.slice(2)
-        ];
+        const version = parseInt(
+            process.version.match(/(?<=^v)[0-9]+/gi) as any ?? '0'
+        );
+
+        let argv: string[];
+        if (version >= 20) {
+            argv = [
+                `--import`,
+                loaderPath,
+                ...process.argv.slice(2)
+            ];
+            console.log('executing --import');
+        } else {
+            argv = [
+                `--no-warnings`,
+                `--loader`,
+                '@bleed-believer/path-alias/loader',
+                ...process.argv.slice(2)
+            ];
+            console.log('executing --loader');
+        }
         
         const proc = spawn('node', argv, { stdio: 'inherit' });
         proc.on('close', ___ => { resolve(); });

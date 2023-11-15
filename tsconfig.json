@@ -9,7 +9,7 @@
         
         "strict": true,
         "removeComments": false,
-        "moduleResolution": "node",
+        "moduleResolution": "Node",
         "verbatimModuleSyntax": true,
 
         "declaration": true,

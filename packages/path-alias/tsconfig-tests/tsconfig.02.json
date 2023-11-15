@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.02.01.json",
+    "compilerOptions": {
+        "baseUrl": "./src",
+        "paths": {
+            /** joder chaval me llenaré de comas **/
+            "@models/*": ["./models/*"],
+            "@tool/*": ["./tool/*"],
+        }
+    },
+}

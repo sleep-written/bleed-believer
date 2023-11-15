@@ -1,0 +1,12 @@
+{
+    /** JajajJAja soy un comentario que rompe los JSON! **/
+    "compilerOptions": {
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "baseUrl": "./src",
+        "paths": {
+            "@models/*": ["./models/*"],
+            "@tool/*": ["./tool/*"],
+        }
+    }
+}
