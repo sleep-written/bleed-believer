@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/meta",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Manage multiple tags into your objects.",
   "type": "module",
   "types": "./dist/index.d.ts",
