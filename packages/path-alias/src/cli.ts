@@ -28,15 +28,8 @@ await new Promise<void>((resolve, reject) => {
                 loaderPath,
                 ...process.argv.slice(2)
             ];
-            console.log('executing --import');
         } else {
-            argv = [
-                `--no-warnings`,
-                `--loader`,
-                '@bleed-believer/path-alias/loader',
-                ...process.argv.slice(2)
-            ];
-            console.log('executing --loader');
+            throw new Error('Node version not supported');
         }
         
         const proc = spawn('node', argv, { stdio: 'inherit' });
