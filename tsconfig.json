@@ -1,24 +1,18 @@
 {
     "compilerOptions": {
         "target": "ES2022",
-        "module": "ES2022",
-        "composite": true,
-
+        "module": "Node16",
+        "esModuleInterop": true,
+        "moduleResolution": "Node16",
+        
+        "strict": true,
+        "skipLibCheck": true,
+        "verbatimModuleSyntax": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         
-        "strict": true,
-        "removeComments": false,
-        "moduleResolution": "Node",
-        "verbatimModuleSyntax": true,
-
+        "sourceMap": false,
         "declaration": true,
-        "sourceMap": false
-    },
-    "exclude": [
-        "./packages/*/dist",
-        "./**/*.example.ts",
-        "./**/*.test.ts",
-        "./examples/*"
-    ]
+        "removeComments": false
+    }
 }

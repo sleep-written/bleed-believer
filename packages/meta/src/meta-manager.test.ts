@@ -1,4 +1,4 @@
-import anyTest, { TestFn } from 'ava';
+import anyTest, { type TestFn } from 'ava';
 import { MetaManager } from './meta-manager.js';
 
 interface Struct {

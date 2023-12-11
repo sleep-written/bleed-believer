@@ -17,19 +17,20 @@
         "packages/*"
     ],
     "scripts": {
-        "build": "./builder.sh",
-        "watch": "./builder.sh --watch",
-        "clean": "./builder.sh --clean",
-        "prepare": "./builder.sh"
+        "build": "turbo build",
+        "watch": "turbo watch",
+        "clean": "turbo clean",
+        "prepare": "npm run clean && npm run build"
     },
     "devDependencies": {
         "@types/express": "^4.17.14",
         "@types/node": "^20.8.10",
-        "ava": "^5.3.0",
-        "lerna": "^7.1.5",
+        "turbo": "^1.11.1",
         "typescript": "^5.0.4"
     },
     "dependencies": {
-        "@bleed-believer/path-alias": "^1.0.0"
+        "@bleed-believer/path-alias": "^1.0.0",
+        "ava": "^6.0.1",
+        "lerna": "^8.0.0"
     }
 }

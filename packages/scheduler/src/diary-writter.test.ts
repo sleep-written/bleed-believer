@@ -1,4 +1,4 @@
-import rawTest, { TestFn } from 'ava';
+import rawTest, { type TestFn } from 'ava';
 import { readFile, rm, writeFile } from 'fs/promises';
 import { parse, stringify } from 'yaml';
 

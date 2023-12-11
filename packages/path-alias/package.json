@@ -19,6 +19,9 @@
     "bb-path-alias": "./dist/cli.js"
   },
   "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "tsc --project ./tsconfig.build.json --sourceMap false",
+    "watch": "tsc --project ./tsconfig.build.json --watch",
     "test": "ava"
   },
   "repository": {
@@ -49,10 +52,13 @@
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
     "ts-node": "^10.9.1",
-    "tsconfck": "^2.1.1",
+    "tsconfck": "^3.0.0",
     "tslog": "^4.8.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "@bleed-believer/path-alias": "^0.15.2"
   }
 }

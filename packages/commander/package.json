@@ -14,6 +14,9 @@
     }
   },
   "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "tsc --project ./tsconfig.build.json",
+    "watch": "tsc --project ./tsconfig.build.json --watch --sourceMap true",
     "test": "ava"
   },
   "repository": {
