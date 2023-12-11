@@ -14,7 +14,9 @@ import { Gegege } from '@alias-b/gegege.js';
 ```
 
 ## About Node v20
-The usage of `--loader` flag has changed since node v20. That means now from this version, every loader has been executed in isolated threads. Besides, the node's documentation now recommends to use the `--import` flag instead. That means made a lot of changes in the library source code to make this library works with the new flag, and the utility functions like `isTsNode` or `pathResolve` now has been removed.
+The usage of `--loader` flag has changed since node v20. That means now from this version, every loader has been executed in isolated threads. Besides, the node's documentation now recommends to use the `--import` flag instead. That means made a lot of changes in the library source code to make this library works with the new flag.
+
+That means the utility function `isTsNode` doesn't work for now. The function `pathResolve` has beed modified, now using an environment variable to detect if you want to use source or transpiled code.
 
 If you still need support for earler node versions, check:
 - [@bleed-believer/path-alias v0.15.2](https://www.npmjs.com/package/@bleed-believer/path-alias/v/0.15.2) or earlier.
@@ -123,6 +125,40 @@ You have 2 ways to launch your program, using directly the loader provided, or u
     ```bash
     node --import @bleed-believer/path-alias ./dist/index.js
     ```
+
+## Using `pathResolve` Function
+
+The `pathResolve` function in `@bleed-believer/path-alias` dynamically resolves paths based on your project's context, influenced by the `RESOLVE_SRC` environment variable.
+
+### Configuration in `tsconfig.json`
+- `outDir`: `./dist`
+- `rootDir`: `./src`
+
+### Setting Environment Variables
+To set the `RESOLVE_SRC` environment variable, you can prepend it when executing your TypeScript code. This dictates how `pathResolve` functions:
+
+```bash
+# Set RESOLVE_SRC=true for source code resolution
+RESOLVE_SRC=true ts-node your-script.ts
+
+# Without setting RESOLVE_SRC, or setting it to false, for transpiled code resolution
+ts-node your-script.ts
+```
+
+### Example Usage
+```ts
+import { pathResolve } from '@bleed-believer/path-alias';
+
+// With RESOLVE_SRC=true
+console.log(pathResolve('path/to/file.js'));
+// Output: home/user/project/src/path/to/file.js
+
+// With RESOLVE_SRC not set or set to a value other than true
+console.log(pathResolve('path/to/file.js'));
+// Output: home/user/project/dist/path/to/file.js
+```
+
+This approach gives you flexibility in managing paths during development and production stages of your project.
 
 ## Unit testing with [ava](https://www.npmjs.com/package/ava)
 
