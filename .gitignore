@@ -3,6 +3,6 @@ node_modules
 packages/*/node_modules
 
 # Ignore transpiled files
-examples/*/dist
+examples/*/.turbo
 packages/*/dist
 *.tsbuildinfo
