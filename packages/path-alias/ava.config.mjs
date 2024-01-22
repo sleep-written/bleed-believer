@@ -8,6 +8,6 @@ export default {
         mts: 'module',
     },
     nodeArguments: [
-        '--import=@bleed-believer/path-alias',
+        '--import=./dist/index.js',
     ]
 };

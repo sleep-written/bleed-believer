@@ -22,7 +22,7 @@
     "clean": "rm -rf ./dist",
     "build": "tsc --project ./tsconfig.build.json --sourceMap false",
     "watch": "tsc --project ./tsconfig.build.json --watch",
-    "test": "ava"
+    "test": "npm run build && ava && npm run clean"
   },
   "repository": {
     "type": "git",
@@ -57,8 +57,5 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.4"
-  },
-  "devDependencies": {
-    "@bleed-believer/path-alias": "^0.15.2"
   }
 }
