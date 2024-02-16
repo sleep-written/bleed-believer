@@ -11,13 +11,31 @@ function setEnv(value: string | null): void {
     }
 }
 
-test.serial('RESOLVE_SRC=true', t => {
+test.serial('RESOLVE_SRC=true; path/to/file.ts', t => {
     setEnv('true');
-    const res = pathResolve('path/to/file.js');
-    t.is(res, resolve('src/path/to/file.js'));
+    const res = pathResolve('path/to/file.ts');
+    t.is(res, resolve('src/path/to/file.ts'));
 });
 
-test.serial('RESOLVE_SRC=false', t => {
+test.serial('RESOLVE_SRC=true; path/to/file.js', t => {
+    setEnv('true');
+    const res = pathResolve('path/to/file.js');
+    t.is(res, resolve('src/path/to/file.ts'));
+});
+
+test.serial('RESOLVE_SRC=false; path/to/file.ts', t => {
+    setEnv('false');
+    const res = pathResolve('path/to/file.ts');
+    t.is(res, resolve('dist/path/to/file.js'));
+});
+
+test.serial('RESOLVE_SRC=false; path/to/file.TS', t => {
+    setEnv('false');
+    const res = pathResolve('path/to/file.TS');
+    t.is(res, resolve('dist/path/to/file.JS'));
+});
+
+test.serial('RESOLVE_SRC=false; path/to/file.js', t => {
     setEnv('false');
     const res = pathResolve('path/to/file.js');
     t.is(res, resolve('dist/path/to/file.js'));

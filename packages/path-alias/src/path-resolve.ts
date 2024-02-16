@@ -15,7 +15,8 @@ import { options } from './global.js';
  * 
  * // Environment variable RESOLVE_SRC=true
  * console.log(pathResolve('path/to/file.js'));
- * // output: home/user/project/src/path/to/file.js
+ * // output: home/user/project/src/path/to/file.ts
+ * // (check the file extension)
  * 
  * // Environment variable RESOLVE_SRC!=true
  * console.log(pathResolve('path/to/file.js'));
@@ -28,10 +29,27 @@ export function pathResolve(...pathParts: string[]): string {
         ?.RESOLVE_SRC
         ?.toLowerCase() === 'true';
 
-    return resolve(
+    // Resolve the path
+    let path = resolve(
         resolveAsSrc
         ?   options.rootDir
         :   options.outDir,
         ...pathParts
     );
+
+    // Change extension
+    const isUpper = path.at(-2)?.toUpperCase() === path.at(-2);
+    if (resolveAsSrc) {
+        path = path.replace(
+            /(?<=\.m?)j(?=s$)/gi,
+            isUpper ? 'T' : 't'
+        );
+    } else {
+        path = path.replace(
+            /(?<=\.m?)t(?=s$)/gi,
+            isUpper ? 'J' : 'j'
+        );
+    }
+
+    return path;
 }
