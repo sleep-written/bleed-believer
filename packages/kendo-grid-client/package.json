@@ -36,5 +36,9 @@
   "bugs": {
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
-  "homepage": "https://github.com/sleep-written/bleed-believer#readme"
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "peerDependencies": {
+    "@progress/kendo-angular-grid": "^15.0.1",
+    "@progress/kendo-data-query": "^1.0.0"
+  }
 }
