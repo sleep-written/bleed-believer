@@ -1,6 +1,4 @@
-import type { CompositeFilterDescriptor } from './composite-filter-descriptor.js';
-import type { FilterDescriptor } from './filter-descriptor.js';
-import type { SortDescriptor } from './sort-descriptor.js';
+import type { CompositeFilterDescriptor, FilterDescriptor, SortDescriptor } from '@progress/kendo-data-query';
 
 export interface DataSourceRequest {
     take?: number;

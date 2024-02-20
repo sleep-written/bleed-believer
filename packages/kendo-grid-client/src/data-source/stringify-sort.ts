@@ -1,4 +1,4 @@
-import type { SortDescriptor } from '../interfaces/index.js';
+import type { SortDescriptor } from '@progress/kendo-data-query';
 
 export function stringifySort(s: SortDescriptor[]): string {
     const sort = s

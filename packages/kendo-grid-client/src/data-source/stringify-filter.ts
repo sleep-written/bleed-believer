@@ -1,4 +1,4 @@
-import type { CompositeFilterDescriptor, FilterDescriptor } from '../interfaces/index.js';
+import type { CompositeFilterDescriptor, FilterDescriptor } from '@progress/kendo-data-query';
 
 export function stringifyFilter(d: CompositeFilterDescriptor | FilterDescriptor): string {
     const txt = JSON.stringify(d);
