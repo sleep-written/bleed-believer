@@ -37,13 +37,5 @@
   "bugs": {
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
-  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
-  "dependencies": {
-    "@progress/kendo-data-query": "^1.6.0",
-    "typeorm": "^0.3.17"
-  },
-  "devDependencies": {
-    "@types/qs": "^6.9.7",
-    "qs": "^6.11.2"
-  }
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme"
 }
