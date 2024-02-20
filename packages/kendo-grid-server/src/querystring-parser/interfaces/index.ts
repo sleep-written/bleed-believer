@@ -1,0 +1,1 @@
+export type { ParsedQs } from './parsed-qs.js';
