@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/kendo-grid-client",
-  "version": "0.1.1-alpha.0",
+  "version": "1.0.0",
   "description": "Easy manner to build tables with kendo-grid, using OData protocol.",
   "type": "module",
   "types": "./dist/index.d.ts",
