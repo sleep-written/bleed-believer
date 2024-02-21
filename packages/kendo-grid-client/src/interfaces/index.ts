@@ -1,4 +1,3 @@
 export type { ChangeDetectorRef } from './change-detector-ref.js';
-export type { DataSourceRequest } from './data-source-request.js';
-export type { PageChangeEvent } from './page-change.event.js';
-export type { DataSource } from './data-source.js';
+export type { GridViewRequest } from './grid-view-request.js';
+export type { GridView } from './grid-view.js';

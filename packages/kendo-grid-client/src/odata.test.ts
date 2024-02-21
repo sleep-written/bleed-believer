@@ -1,4 +1,4 @@
-import type { DataSourceRequest } from './interfaces/index.js';
+import type { GridViewRequest } from './interfaces/index.js';
 import test, { type ExecutionContext } from 'ava';
 import { OData } from './odata.js';
 
@@ -11,7 +11,7 @@ interface QsParts {
 
 function buildTest(
     querystringParts: QsParts,
-    dataSourceRequest: DataSourceRequest,
+    dataSourceRequest: GridViewRequest,
     skip?: boolean
 ): void {
     const expect = Object
