@@ -2,10 +2,10 @@ import { rm } from 'fs/promises';
 import test from 'ava';
 
 import { createDataSource, deploySeeds } from '../../dummy-db/index.js';
-import { FilterBuilder } from '../filter-builder.old.js';
+import { FilterBuilder } from '../filter-builder.js';
 import { Event } from '../../dummy-db/entities/event.entity.js';
 
-const database = './append-filter-db.case01.db';
+const database = './append-filter-db.case02.db';
 const dataSource = createDataSource(database);
 test.before(async _ => {
     await dataSource.initialize();
@@ -18,7 +18,7 @@ test.after(async _ => {
 });
 
 test('getMany()', async t => {
-    console.time('Case 01 - getMany');
+    console.time('Case 02 - getMany');
     const target = new FilterBuilder({
         logic: 'and',
         filters: [
@@ -69,11 +69,11 @@ test('getMany()', async t => {
             .flat(1)
             .some(x => x.match(/emily/gi))
     );
-    console.timeEnd('Case 01 - getMany');
+    console.timeEnd('Case 02 - getMany');
 });
 
 test('getRawMany()', async t => {
-    console.time('Case 01 - getRawMany');
+    console.time('Case 02 - getRawMany');
     const target = new FilterBuilder({
         logic: 'and',
         filters: [
@@ -118,5 +118,5 @@ test('getRawMany()', async t => {
             .map(x => x?.['name'] as string)
             .some(x => x.match(/emily/gi))
     );
-    console.timeEnd('Case 01 - getRawMany');
+    console.timeEnd('Case 02 - getRawMany');
 });
