@@ -1,6 +1,6 @@
+import type { DataSourceRequest } from './interfaces/index.js';
 import test, { type ExecutionContext } from 'ava';
-import { DataSource } from './data-source.js';
-import type { DataSourceRequest } from '../interfaces/index.js';
+import { OData } from './odata.js';
 
 interface QsParts {
     $top?: number;
@@ -21,7 +21,7 @@ function buildTest(
 
     const message = `QS = "${expect}"`;
     const callback = (t: ExecutionContext) => {
-        const result = DataSource.stringify(dataSourceRequest);
+        const result = new OData(dataSourceRequest).stringify();
         t.is(result, expect);
     };
 
@@ -34,7 +34,7 @@ function buildTest(
 
 buildTest(
     { $top: 100, $skip: 50 },
-    { take: 100, skip: 50 }
+    { pageSize: 100, skip: 50 }
 );
 
 buildTest(
@@ -43,7 +43,7 @@ buildTest(
         $orderby: 'date asc,cred desc'
     },
     {
-        take: 100, skip: 50, sort: [
+        pageSize: 100, skip: 50, sort: [
             { field: 'date', dir: 'asc' },
             { field: 'cred', dir: 'desc' },
         ]
@@ -64,7 +64,7 @@ buildTest(
             +   `q","value":777}],"logic":"or"}],"logic":"and"}`
     },
     {
-        take: 100,
+        pageSize: 100,
         skip: 50,
         sort: [
             { field: 'date', dir: 'asc' },

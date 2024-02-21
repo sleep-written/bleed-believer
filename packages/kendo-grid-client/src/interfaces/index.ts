@@ -1,11 +1,4 @@
-// export type { CompositeFilterDescriptor } from './composite-filter-descriptor.js';
 export type { ChangeDetectorRef } from './change-detector-ref.js';
 export type { DataSourceRequest } from './data-source-request.js';
-// export type { FilterDescriptor } from './filter-descriptor.js';
 export type { PageChangeEvent } from './page-change.event.js';
-// export type { FilterOperator } from './filter-operator.js';
-// export type { SortDescriptor } from './sort-descriptor.js';
-// export type { PagerSettings } from './pager-settings.js';
-// export type { SortSettings } from './sort-settings.js';
-// export type { ModifierKey } from './modifier-key.js';
-export type { GridView } from './grid-view.js';
+export type { DataSource } from './data-source.js';
