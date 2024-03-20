@@ -115,3 +115,64 @@ test('Mixed scheduled and infinite tasks execution', async t => {
         'ScheduledTask did not execute as expected'
     );
 });
+
+test('Mixed tasks with error handling', async t => {
+    let sharedString = ''; // Reset shared string
+    let taskACount = 0; // Counter for InfiniteTaskA to throw error on 3rd call
+
+    // Tareas que alteran el string, con InfiniteTaskA lanzando error en la 3ra ejecución
+    class InfiniteTaskA implements Task {
+        async action(): Promise<void> {
+            sharedString += 'A';
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
+
+    class InfiniteTaskB implements Task {
+        async action(): Promise<void> {
+            sharedString += 'B';
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
+
+    class ScheduledTask implements Task {
+        async action(): Promise<void> {
+            if (++taskACount === 2) {
+                throw new Error("Simulated error on third execution");
+            }
+            
+            sharedString += 'S';
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
+
+    const launcher = new TaskLauncher(
+        [InfiniteTaskA, InfiniteTaskB, ScheduledTask],
+        (e: Error) => { t.is(e.message, 'Simulated error on third execution') }
+    );
+
+    // Opciones de lanzamiento basadas en la hora actual
+    const launchOptions: TaskLaunchOptions = {
+        InfiniteTaskA: 'infinite',
+        InfiniteTaskB: 'infinite',
+        ScheduledTask: assets.generateSchedule(1000, 3000, 5000)
+    };
+
+    // Esperar unos segundos antes de abortar
+    setTimeout(() => launcher.abort(), 4500); // Espera de 4.5 segundos
+
+    // Lanzar todas las tareas esperando manejar correctamente los errores
+    try {
+        await launcher.execute(launchOptions);
+    } catch (error: any) {
+        // Atrapar errores para verificar que no detengan la ejecución completa
+        t.fail(`Unexpected error halted execution: ${error.message}`);
+    }
+
+    // Evaluar el resultado esperado
+    t.is(
+        sharedString,
+        'ABABSABABABABABABAB',
+        'ScheduledTask did not execute as expected'
+    );
+});

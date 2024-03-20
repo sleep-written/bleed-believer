@@ -2,6 +2,8 @@ import type { TaskLaunchOptions, Task, ScheduledTask } from './interfaces/index.
 import { TaskQueue } from '../task-queue/index.js';
 
 export class TaskLauncher {
+    #onErrorFn: (err: any) => void;
+
     #runningPromises: Promise<void>[] = [];
     #abortResolvers: (() => void)[] = [];
     #tasks: Record<string, {
@@ -9,13 +11,18 @@ export class TaskLauncher {
         queue: TaskQueue;
     }> = {};
 
-    constructor(tasks: { new(): Task; }[]) {
+    constructor(
+        tasks: { new(): Task; }[],
+        onErrorFn?: (err: any) => void
+    ) {
         for (const task of tasks) {
             this.#tasks[task.name] = {
                 task: task,
                 queue: new TaskQueue()
             };
         }
+
+        this.#onErrorFn = onErrorFn ?? console.error;
     }
 
     /**
@@ -45,7 +52,9 @@ export class TaskLauncher {
     ): Promise<void> {
         while (this.#abortResolvers.length === 0) {
             const o = new task();
-            await queue.run(o.action.bind(o));
+            await queue
+                .run(o.action.bind(o))
+                .catch(x => this.#onErrorFn(x));
         }
     }
 
@@ -57,7 +66,9 @@ export class TaskLauncher {
         while (this.#abortResolvers.length === 0) {
             if (this.#yaEsHora(options)) {
                 const o = new task();
-                queue.run(o.action.bind(o));
+                queue
+                    .run(o.action.bind(o))
+                    .catch(x => this.#onErrorFn(x));
             }
             
             await new Promise(r => setTimeout(r, 1000));
