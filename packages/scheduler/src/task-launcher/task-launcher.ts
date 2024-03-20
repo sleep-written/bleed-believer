@@ -1,6 +1,4 @@
-import type { TaskLaunchOptions } from './task-launch-options.js';
-import type { Task } from './task.js';
-
+import type { TaskLaunchOptions, Task, ScheduledTask } from './interfaces/index.js';
 import { TaskQueue } from '../task-queue/index.js';
 
 export class TaskLauncher {
@@ -23,7 +21,7 @@ export class TaskLauncher {
     /**
      * YA ES HORA????? *gif de mona china del pandero...*
      */
-    #yaEsHora({ days, timestamp }: TaskLaunchOptions): boolean {
+    #yaEsHora({ days, timestamps }: ScheduledTask): boolean {
         const now = new Date();
         const dayNow = now.getDay();
         const hhNow = now.getHours();
@@ -34,7 +32,7 @@ export class TaskLauncher {
             return false;
         }
         
-        return timestamp.some(([ hh, mm, ss ]) => (
+        return timestamps.some(([ hh, mm, ss ]) => (
             (hhNow === hh) &&
             (mmNow === mm ?? 0) &&
             (ssNow === ss ?? 0)
@@ -54,7 +52,7 @@ export class TaskLauncher {
     async #scheduledLoop(
         task: { new(): Task; },
         queue: TaskQueue,
-        options: TaskLaunchOptions
+        options: ScheduledTask
     ): Promise<void> {
         while (this.#abortResolvers.length === 0) {
             if (this.#yaEsHora(options)) {
@@ -66,7 +64,7 @@ export class TaskLauncher {
         }
     }
 
-    async execute(options: Record<string, TaskLaunchOptions | 'infinite'>): Promise<void> {
+    async execute(options: TaskLaunchOptions): Promise<void> {
         if (this.#runningPromises.length > 0) {
             throw new Error('First abort the current tasks before to rerun');
         }

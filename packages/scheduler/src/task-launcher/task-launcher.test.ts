@@ -1,8 +1,7 @@
-import type { TaskLaunchOptions } from './task-launch-options.js';
-import type { Task } from './task.js';
+import type { Task, TaskLaunchOptions } from './interfaces/index.js';
 
-import * as assets from './task-launcher.assets.js';
 import { TaskLauncher } from './task-launcher.js';
+import * as assets from './task-launcher.assets.js';
 
 import test from 'ava';
 
@@ -53,31 +52,10 @@ test('Scheduled tasks execution order', async t => {
     // Crear una instancia de TaskLauncher con las tareas
     const launcher = new TaskLauncher([FakeTask01, FakeTask02]);
 
-    // Precalcular el día y los tiempos para las opciones de lanzamiento
-    const { day, hh, mm, ss } = assets.getNow();
-
     // Opciones de lanzamiento basadas en la hora actual
-    const launchOptions: Record<string, TaskLaunchOptions> = {
-        FakeTask01: {
-            days: [day],
-            timestamp: [
-                [hh, mm, (ss + 1) % 60],
-                [hh, mm, (ss + 4) % 60],
-                [hh, mm, (ss + 5) % 60],
-                [hh, mm, (ss + 7) % 60],
-                [hh, mm, (ss + 8) % 60],
-            ]
-        },
-        FakeTask02: {
-            days: [day],
-            timestamp: [
-                [hh, mm, (ss + 2) % 60],
-                [hh, mm, (ss + 3) % 60],
-                [hh, mm, (ss + 4) % 60],
-                [hh, mm, (ss + 6) % 60],
-                [hh, mm, (ss + 8) % 60],
-            ]
-        }
+    const launchOptions: TaskLaunchOptions = {
+        FakeTask01: assets.generateSchedule(1000, 4000, 5000, 7000, 8000),
+        FakeTask02: assets.generateSchedule(2000, 3000, 4000, 6000, 8000)
     };
     
     // Abortar después de 5 segundos
@@ -117,21 +95,11 @@ test('Mixed scheduled and infinite tasks execution', async t => {
 
     const launcher = new TaskLauncher([InfiniteTaskA, InfiniteTaskB, ScheduledTask]);
 
-    // Precalcular el día y los tiempos para las opciones de lanzamiento
-    const { day, hh, mm, ss } = assets.getNow();
-
     // Opciones de lanzamiento basadas en la hora actual
-    const launchOptions: Record<string, TaskLaunchOptions | 'infinite'> = {
+    const launchOptions: TaskLaunchOptions = {
         InfiniteTaskA: 'infinite',
         InfiniteTaskB: 'infinite',
-        ScheduledTask: {
-            days: [day],
-            timestamp: [
-                [hh, mm, (ss + 1) % 60],
-                [hh, mm, (ss + 3) % 60],
-                [hh, mm, (ss + 5) % 60]
-            ]
-        }
+        ScheduledTask: assets.generateSchedule(1000, 3000, 5000)
     };
 
     // Esperar unos segundos antes de abortar
