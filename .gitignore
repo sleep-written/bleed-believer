@@ -6,3 +6,4 @@ packages/*/node_modules
 examples/*/.turbo
 packages/*/dist
 *.tsbuildinfo
+.turbo
