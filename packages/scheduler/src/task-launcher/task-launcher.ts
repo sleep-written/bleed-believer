@@ -1,4 +1,4 @@
-import type { TaskLaunchOptions, Task, ScheduledTask } from './interfaces/index.js';
+import type { TaskLaunchOptions, ScheduledTask, TaskClass } from './interfaces/index.js';
 import { TaskQueue } from '../task-queue/index.js';
 
 export class TaskLauncher {
@@ -7,12 +7,22 @@ export class TaskLauncher {
     #runningPromises: Promise<void>[] = [];
     #abortResolvers: (() => void)[] = [];
     #tasks: Record<string, {
-        task: { new(): Task; };
+        task: TaskClass;
         queue: TaskQueue;
     }> = {};
 
+    get isRunning(): boolean {
+        return this.#runningPromises.length > 0;
+    }
+
+    get tasks(): TaskClass[] {
+        return Object
+            .values(this.#tasks)
+            .map(({ task }) => task);
+    }
+
     constructor(
-        tasks: { new(): Task; }[],
+        tasks: TaskClass[],
         onErrorFn?: (err: any) => void
     ) {
         for (const task of tasks) {
@@ -28,26 +38,35 @@ export class TaskLauncher {
     /**
      * YA ES HORA????? *gif de mona china del pandero...*
      */
-    #yaEsHora({ days, timestamps }: ScheduledTask): boolean {
+    #yaEsHora(scheduledTasks: ScheduledTask[]): boolean {
         const now = new Date();
         const dayNow = now.getDay();
         const hhNow = now.getHours();
         const mmNow = now.getMinutes();
         const ssNow = now.getSeconds();
 
-        if (!days.some(x => x === dayNow)) {
-            return false;
+        for (const { days, timestamps } of scheduledTasks) {
+            const foundDay = days.some(x => x === dayNow);
+            if (!foundDay) {
+                continue;
+            }
+
+            const foundTime = timestamps.some(([ hh, mm, ss ]) => (
+                (hh === hhNow) &&
+                ((mm ?? 0) === mmNow) &&
+                ((ss ?? 0) === ssNow)
+            ));
+
+            if (foundDay && foundTime) {
+                return true;
+            }
         }
-        
-        return timestamps.some(([ hh, mm, ss ]) => (
-            (hhNow === hh) &&
-            (mmNow === mm ?? 0) &&
-            (ssNow === ss ?? 0)
-        ));
+
+        return false;
     }
 
     async #infiniteLoop(
-        task: { new(): Task; },
+        task: TaskClass,
         queue: TaskQueue
     ): Promise<void> {
         while (this.#abortResolvers.length === 0) {
@@ -59,9 +78,9 @@ export class TaskLauncher {
     }
 
     async #scheduledLoop(
-        task: { new(): Task; },
+        task: TaskClass,
         queue: TaskQueue,
-        options: ScheduledTask
+        options: ScheduledTask[]
     ): Promise<void> {
         while (this.#abortResolvers.length === 0) {
             if (this.#yaEsHora(options)) {

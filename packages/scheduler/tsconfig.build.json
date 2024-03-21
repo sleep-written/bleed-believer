@@ -4,6 +4,7 @@
         "./**/*.example.ts",
         "./**/*.assets.ts",
         "./**/*.test.ts",
-        "./dist"
+        "./dist",
+        "./src/example"
     ]
 }

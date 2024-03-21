@@ -17,6 +17,7 @@
     "clean": "rm -rf ./dist",
     "build": "tsc --project ./tsconfig.build.json --sourceMap false",
     "watch": "tsc --project ./tsconfig.build.json --watch",
+    "start": "node --import @bleed-believer/path-alias ./src/example/index.ts",
     "test": "ava"
   },
   "repository": {
@@ -39,6 +40,7 @@
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
     "@bleed-believer/meta": "^0.11.1",
+    "audit-var": "^2.2.1",
     "yaml": "^2.2.1"
   }
 }

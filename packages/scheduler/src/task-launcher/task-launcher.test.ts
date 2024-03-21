@@ -54,8 +54,8 @@ test('Scheduled tasks execution order', async t => {
 
     // Opciones de lanzamiento basadas en la hora actual
     const launchOptions: TaskLaunchOptions = {
-        FakeTask01: assets.generateSchedule(1000, 4000, 5000, 7000, 8000),
-        FakeTask02: assets.generateSchedule(2000, 3000, 4000, 6000, 8000)
+        FakeTask01: [ assets.generateSchedule(1000, 4000, 5000, 7000, 8000) ],
+        FakeTask02: [ assets.generateSchedule(2000, 3000, 4000, 6000, 8000) ]
     };
     
     // Abortar después de 5 segundos
@@ -99,7 +99,7 @@ test('Mixed scheduled and infinite tasks execution', async t => {
     const launchOptions: TaskLaunchOptions = {
         InfiniteTaskA: 'infinite',
         InfiniteTaskB: 'infinite',
-        ScheduledTask: assets.generateSchedule(1000, 3000, 5000)
+        ScheduledTask: [ assets.generateSchedule(1000, 3000, 5000) ]
     };
 
     // Esperar unos segundos antes de abortar
@@ -155,7 +155,7 @@ test('Mixed tasks with error handling', async t => {
     const launchOptions: TaskLaunchOptions = {
         InfiniteTaskA: 'infinite',
         InfiniteTaskB: 'infinite',
-        ScheduledTask: assets.generateSchedule(1000, 3000, 5000)
+        ScheduledTask: [ assets.generateSchedule(1000, 3000, 5000) ]
     };
 
     // Esperar unos segundos antes de abortar
