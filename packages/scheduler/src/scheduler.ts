@@ -1,27 +1,73 @@
-import { TaskLauncher, type TaskClass } from './task-launcher/index.js';
+import type { SchedulerOptions } from './scheduler-options.js';
+import type { TaskClass } from './task-launcher/index.js';
+
+import { TaskLauncher } from './task-launcher/index.js';
 import { TaskConfig } from './index.js';
+import { basename } from 'path';
 
 export class Scheduler {
-    #consoleError: (s: string) => void;
-    // #consoleLog: (e: Error) => void;
+    #onConfigChanges: (path: string) => void;
+    #onAbortTasks: () => void;
+    #onTaskError: (s: Error) => void;
 
     #runningPromise?: Promise<void>;
     #launcher: TaskLauncher;
     #config: TaskConfig;
 
+    constructor(options: SchedulerOptions);
+    constructor(tasks: TaskClass[], verbose?: boolean);
     constructor(
-        options: {
-            consoleError?: (s: string) => void;
-            // consoleLog?: (e: Error) => void;
-            tasks: TaskClass[];
-            path?: string;
-        }
+        ...[ o, verbose ]:
+            [ TaskClass[], boolean? ] |
+            [ SchedulerOptions | never ]
     ) {
-        this.#consoleError = options.consoleError ?? console.error;
-        // this.#consoleLog = options.consoleLog ?? console.log;
+        const isArray = o instanceof Array;
+        this.#onConfigChanges = this.#setFunction(
+            !isArray ? o.onConfigChanges : verbose,
+            path => {
+                console.log(`[SCHEDULER]------------------------------------------`);
+                console.log(`The file "${basename(path)}" has change, reloading...`);
+                console.log(`-----------------------------------------------------`);
+            }
+        );
 
-        this.#launcher = new TaskLauncher(options.tasks, this.#consoleError);
-        this.#config = new TaskConfig(options.path ?? './scheduler.yml');
+        this.#onAbortTasks = this.#setFunction(
+            !isArray ? o.onAbortTasks : verbose,
+            () => {
+                process.stdout.cursorTo(0, undefined, () => {
+                    console.log(`[SCHEDULER]------------------------------------------`);
+                    console.log(`Stopping all pending tasks...`);
+                    console.log(`-----------------------------------------------------`);
+                });
+            }
+        );
+
+        this.#onTaskError = this.#setFunction(
+            !isArray ? o.onTaskError : verbose,
+            err => {
+                console.log(`[SCHEDULER]------------------------------------------`);
+                console.log(err);
+                console.log(`-----------------------------------------------------`);
+            }
+        );
+        
+        let configPath = './scheduler.yml';
+        if (!isArray && typeof o.configPath === 'string') {
+            configPath = o.configPath;
+        }
+
+        this.#config = new TaskConfig(configPath);
+        this.#launcher = new TaskLauncher(isArray ? o : o.tasks, this.#onTaskError);
+    }
+
+    #setFunction<F extends Function>(input: undefined | boolean | F, defaultFn: F): F {
+        if (typeof input === 'function') {
+            return input;
+        } else if (input) {
+            return defaultFn;
+        } else {
+            return (() => {}) as any;
+        }
     }
 
     configExists(): Promise<boolean> {
@@ -44,6 +90,7 @@ export class Scheduler {
                 debounce: 250,
                 callback: async (content) => {
                     if (this.#launcher.isRunning) {
+                        this.#onConfigChanges(this.#config.path);
                         await this.#launcher.abort();
                     }
             
@@ -51,6 +98,7 @@ export class Scheduler {
                 },
                 onFail: async (err) => {
                     if (this.#launcher.isRunning) {
+                        this.#onConfigChanges(this.#config.path);
                         await this.#launcher.abort();
                     }
 
@@ -60,7 +108,8 @@ export class Scheduler {
             });
     
             process.on('SIGINT', async () => {
-                console.log();
+                this.#onAbortTasks();
+
                 await this.#launcher.abort();
                 this.#config?.unwatch();
                 resolve();

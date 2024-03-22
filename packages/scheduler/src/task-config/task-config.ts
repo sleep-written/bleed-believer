@@ -38,6 +38,10 @@ export class TaskConfig {
         }
     });
 
+    get path(): string {
+        return this.#path;
+    }
+
     isWatching(): boolean {
         return !!this.#watcher;
     }

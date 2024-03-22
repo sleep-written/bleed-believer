@@ -1,11 +1,10 @@
 import { Scheduler } from '../index.js';
+
+import { timestamp } from './tool/timestamp.js';
 import { Task01 } from './task-01.js';
 import { Task02 } from './task-02.js';
-import { timestamp } from './tool/timestamp.js';
 
-const scheduler = new Scheduler({
-    tasks: [ Task01, Task02 ]
-});
+const scheduler = new Scheduler([ Task01, Task02 ], true);
 
 if (!await scheduler.configExists()) {
     // Generate a configuration file
