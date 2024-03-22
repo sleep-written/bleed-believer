@@ -67,17 +67,7 @@ test.serial('Watch changes', async t => {
                 {
                     days: [1, 2, 3, 4, 5],
                     timestamps: [
-                        [9, 0, 0],
-                        [12, 0, 0],
-                        [15, 30, 0]
-                    ]
-                },
-                {
-                    days: [6, 0],
-                    timestamps: [
-                        [9, 0, 0],
-                        [12, 0, 0],
-                        [15, 30, 0]
+                        [0, 0, 0]
                     ]
                 }
             ],

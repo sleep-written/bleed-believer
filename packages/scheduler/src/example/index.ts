@@ -5,12 +5,17 @@ import { Task01 } from './task-01.js';
 import { Task02 } from './task-02.js';
 
 const scheduler = new Scheduler([ Task01, Task02 ], true);
-
+    
 if (!await scheduler.configExists()) {
     // Generate a configuration file
     await scheduler.generate();
     timestamp('Configuration file generated');
 } else {
+    // For gracefully abort
+    process.on('SIGINT', () => {
+        scheduler.abort();
+    });
+
     // Start the tasks
     await scheduler.execute();
     timestamp('All process ended sucessfully');

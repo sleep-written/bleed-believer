@@ -1,15 +1,42 @@
+import type { ScheduledTask, TaskLaunchOptions } from '../task-launcher/index.js';
+import type { WatchOptions } from './watch-options.js';
+import type { FSWatcher } from 'fs';
+
 import { access, readFile, writeFile } from 'fs/promises';
-import { watch, type FSWatcher } from 'fs';
-import { parse, stringify } from 'yaml';
-import { resolve } from 'path';
 import { Auditor } from 'audit-var';
+import { resolve } from 'path';
+import { parse } from 'yaml';
+import { watch } from 'fs';
 
-import type { TaskLaunchOptions } from '../task-launcher/index.js';
+import { yamlStringify } from './yaml-stringify.js';
 
+/**
+ * Manages the configuration for task scheduling and execution.
+ * Supports loading, saving, and watching configuration files for changes.
+ */
 export class TaskConfig {
+    /**
+     * The file path of the configuration.
+     * @private
+     */
     #path: string;
+
+    /**
+     * FSWatcher instance for watching file changes.
+     * @private
+     */
     #watcher?: FSWatcher;
+
+    /**
+     * Timer for debouncing the watch callback.
+     * @private
+     */
     #debounceTimer?: NodeJS.Timeout;
+    
+    /**
+     * Auditor instance for validating scheduled tasks against a schema.
+     * @private
+     */
     #auditorScheduled = new Auditor({
         type: 'array',
         items: {
@@ -38,51 +65,33 @@ export class TaskConfig {
         }
     });
 
+    /**
+     * Gets the file path of the configuration.
+     */
     get path(): string {
         return this.#path;
     }
 
+    /**
+     * Determines if the configuration file is being watched for changes.
+     * @returns True if the configuration file is being watched; otherwise, false.
+     */
     isWatching(): boolean {
         return !!this.#watcher;
     }
 
+    /**
+     * Initializes a new instance of the TaskConfig class.
+     * @param path The file path for the task configuration.
+     */
     constructor(path: string) {
         this.#path = resolve(path);
     }
 
-    generate(taskNames: string[]) {
-        const header = `# TaskLauncher Configuration\n# Each task can be scheduled or set to run 'infinite'.\n\n`;
-        const text = taskNames
-            .map((name, i) => i === 0
-                ?   [
-                        `# Task name: ${name}`,
-                        `# For scheduled execution, define an array of 'days' and 'timestamps'.`,
-                        `# For infinite execution, simply use: ${name}: 'infinite'`,
-                        `${name}:`,
-                        `  - days: [1, 2, 3, 4, 5] # Monday to Friday`,
-                        `    timestamps:`,
-                        `      - [9, 0, 0]  # 9:00 AM`,
-                        `      - [12, 0, 0] # Noon`,
-                        `      - [15, 30, 0] # 3:30 PM`,
-                        ``,
-                        `  - days: [6, 0] # Saturday and Sunday`,
-                        `    timestamps:`,
-                        `      - [9, 0, 0]  # 9:00 AM`,
-                        `      - [12, 0, 0] # Noon`,
-                        `      - [15, 30, 0] # 3:30 PM`,
-                    ].join('\n')
-                :   [
-                        `# Task name: ${name}`,
-                        `${name}:`,
-                        `  - days: [1, 2, 3, 4, 5] # Monday to Friday`,
-                        `    timestamps:`,
-                        `      - [0, 0, 0]  # 0:00 AM`,
-                    ].join('\n'))
-            .join('\n\n');
-
-        return writeFile(this.#path, header + text, 'utf-8');
-    }
-
+    /**
+     * Checks if the configuration file exists.
+     * @returns A promise that resolves to true if the file exists; otherwise, false.
+     */
     async exists(): Promise<boolean> {
         try {
             await access(this.#path);
@@ -92,6 +101,11 @@ export class TaskConfig {
         }
     }
 
+    /**
+     * Loads the task configuration from the file.
+     * @returns A promise that resolves to the loaded task launch options.
+     * @throws Error if the file is invalid or cannot be parsed.
+     */
     async load(): Promise<TaskLaunchOptions> {
         const text = await readFile(this.#path, 'utf-8');
         const data = parse(text) as TaskLaunchOptions;
@@ -113,17 +127,40 @@ export class TaskConfig {
         }
     }
 
+    /**
+     * Saves the provided task launch options to the configuration file.
+     * @param v The task launch options to save.
+     */
     async save(v: TaskLaunchOptions): Promise<void> {
-        const text = stringify(v);
+        const text = yamlStringify(v);
         await writeFile(this.#path, text);
     }
 
-    watch(options: {
-        emitAfterLink?: boolean;
-        debounce?: number;
-        callback: (content: TaskLaunchOptions) => void | Promise<void>,
-        onFail: (err: Error) => void | Promise<void>
-    }): void {
+    /**
+     * Generates a default task configuration file with the provided task names.
+     * @param taskNames An array of task names to include in the configuration.
+     */
+    generate(taskNames: string[]) {
+        const entries = taskNames.map(key => [
+                key,
+                [{
+                    days: [ 1, 2, 3, 4, 5 ],
+                    timestamps: [
+                        [ 0, 0, 0 ]
+                    ]
+                }] as ScheduledTask[]
+            ]
+        );
+
+        const object = Object.fromEntries(entries);
+        return this.save(object);
+    }
+
+    /**
+     * Starts watching the configuration file for changes and applies the provided options.
+     * @param options Options for how changes to the configuration file should be handled.
+     */
+    watch(options: WatchOptions): void {
         if (this.#watcher) {
             throw new Error('Watcher already called');
         }
@@ -148,10 +185,16 @@ export class TaskConfig {
         }
     }
 
+    /**
+     * Emits a change event manually for the configuration file watcher.
+     */
     emit(): void {
         this.#watcher?.emit('change');
     }
 
+    /**
+     * Stops watching the configuration file and cleans up resources.
+     */
     unwatch(): void {
         if (this.#debounceTimer) {
             clearTimeout(this.#debounceTimer);
