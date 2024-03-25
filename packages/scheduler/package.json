@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/scheduler",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A package to run code only at the days and hours that you need it.",
   "type": "module",
   "types": "./dist/index.d.ts",
