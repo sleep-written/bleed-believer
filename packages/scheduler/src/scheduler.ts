@@ -177,7 +177,42 @@ export class Scheduler {
                     reject(err);
                 },
             });
-        }); 
+        });
+    }
+
+    /**
+     * Immediately executes specified tasks without waiting for their scheduled times.
+     * If a task name is provided, only the task with that name is executed.
+     * If no name is provided, all configured tasks are executed immediately.
+     * This method can be useful for manual or ad-hoc task invocations.
+     *
+     * @param name Optional. The name of the specific task to execute immediately.
+     * If omitted, all tasks are executed.
+     * @throws Error if no tasks are found to execute, or if a specified task name does not match any configured tasks.
+     */
+    async executeNow(name?: string): Promise<void> {
+        const tasks = this.#launcher
+            .tasks
+            .filter(x => typeof name === 'string'
+                ?   x.name === name
+                :   true
+            );
+
+        if (tasks.length === 0) {
+            throw new Error('No tasks found to execute');
+        }
+
+        const promises = tasks
+            .map(async x => {
+                try {
+                    const o = new x();
+                    await o.action();
+                } catch (err: any) {
+                    this.#onTaskError(err);
+                }
+            });
+
+        await Promise.all(promises);
     }
 
     /**
