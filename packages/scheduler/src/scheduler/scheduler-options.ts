@@ -1,4 +1,4 @@
-import type { TaskClass } from './task-launcher/index.js';
+import type { TaskClass } from '../task-launcher/index.js';
 
 export interface SchedulerOptions {
     onConfigChanges?:   boolean | ((path: string) => void);
