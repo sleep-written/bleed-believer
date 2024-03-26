@@ -1,4 +1,4 @@
-import { Scheduler } from '../index.js';
+import { Scheduler, ExecutionMode } from '../index.js';
 
 import { timestamp } from './tool/timestamp.js';
 import { Task01 } from './task-01.js';

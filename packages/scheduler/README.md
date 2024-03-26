@@ -92,25 +92,6 @@ When providing a SchedulerOptions object, you have the flexibility to:
 ### Scheduler Usage
 Once initialized, use scheduler.execute() to start the task execution process. The scheduler will automatically listen for any changes in the configuration file and apply them without requiring a restart.
 
-### Immediate Task Execution
-In addition to scheduling tasks based on the YAML configuration, the `Scheduler` also provides a method to immediately execute tasks:
-```ts
-// Immediately executes a specific task by name, if provided
-// If no name is specified, all tasks will be executed immediately
-await scheduler.executeNow('SpecificTaskName');
-
-// Alternatively, to execute all tasks immediately:
-await scheduler.executeNow();
-```
-
-This feature is particularly useful for testing, manual invocation of tasks, or integrating task execution into other workflows where immediate action is required, bypassing the scheduler's timing mechanisms.
-
--   `executeNow(name?: string): Promise<void>`: Executes tasks immediately.
-    -   `name`: Optional. The name of the task to execute. If omitted, all configured tasks are executed.
-    -   Returns a `Promise<void>` that resolves once the specified tasks have been executed.
-
-By utilizing `executeNow`, users gain additional flexibility in how and when tasks are executed, complementing the dynamic scheduling capabilities of the `@bleed-believer/scheduler` library. This method ensures that tasks can be run on-demand, providing an effective solution for scenarios requiring immediate action.
-
 ### Graceful Shutdown
 Ensure to set up a listener for `SIGINT` to gracefully abort running tasks before starting the scheduler:
 ```ts
@@ -147,7 +128,34 @@ To facilitate task management, the Scheduler provides two methods:
     });
     ```
 
-By providing these flexible initialization and configuration options, the `@bleed-believer/scheduler` library caters to a wide range of scheduling needs, making it a robust choice for task management in Node.js applications.
+### Immediate Task Execution
+The `Scheduler.executeNow` method allows for the immediate execution of tasks, either in serial or parallel mode. This feature is useful for on-demand task execution, such as for testing or manual task triggering.
+Usage
+
+Specify the execution mode (`'serial'` or `'parallel'`) and an optional list of task names. If no names are given, all tasks are executed according to the specified mode.
+
+```ts
+// File: ./src/start-now.js
+import { Scheduler } from '@bleed-believer/scheduler';
+
+import { Task01 } from './tasks/task-01.js';
+import { Task02 } from './tasks/task-02.js';
+import { Task03 } from './tasks/task-03.js';
+import { Task04 } from './tasks/task-04.js';
+
+const scheduler = new Scheduler([
+    Task01, Task02,
+    Task03, Task04
+]);
+
+// Parallel execution of specific tasks
+await scheduler.executeNow(ExecutionMode.Parallel, ['TaskTwo', 'TaskFour']);
+
+// Serial execution of all tasks
+await scheduler.executeNow(ExecutionMode.Serial);
+```
+
+This method offers flexibility by allowing selective or complete task execution outside the predefined schedule, enhancing control over task management.
 
 ## Support and Contribution
 This project supports only ESM, aligning with the Node.js ecosystem's direction. For issues, suggestions, or contributions, please refer to the project's GitHub repository.

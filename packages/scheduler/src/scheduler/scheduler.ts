@@ -182,17 +182,26 @@ export class Scheduler {
         });
     }
 
-    async executeNow(
-        mode?: ExecutionMode,
-        name?: string | string[]
-    ): Promise<void> {
-        const tasks = this.#launcher
-            .tasks
-            .filter(x => {
-                if (typeof name === 'string') {
-                    return x.name === name;
-                } else if (name instanceof Array) {
-                    return name.some(y => y === x.name);
+    /**
+     * Executes a set of tasks immediately based on the specified execution mode and an optional list of task names.
+     * This method allows for on-demand execution of tasks either in serial or parallel, providing flexibility
+     * in how tasks are handled outside the regular scheduling. If no names are provided, all tasks are executed
+     * according to the chosen mode.
+     * 
+     * @param mode The execution mode, determining whether tasks should be run in series ('serial') or in parallel ('parallel').
+     * @param names An optional array of task names to execute. If provided, only tasks with names matching this list
+     * will be executed. If omitted, all tasks are executed.
+     * 
+     * @throws Error if no tasks are found to execute, or if an invalid execution mode is provided.
+     * 
+     * @returns A promise that resolves once all the specified tasks have been executed according to the given mode.
+     * This promise does not resolve with any value. The method leverages individual task `action` methods for execution,
+     * and handles errors by invoking the scheduler's error handling callback.
+     */
+    async executeNow(mode: ExecutionMode, names?: string[]): Promise<void> {
+        const tasks = this.#launcher.tasks.filter(x => {
+                if (names instanceof Array) {
+                    return names.some(y => y === x.name);
                 } else {
                     return true;
                 }
@@ -203,7 +212,7 @@ export class Scheduler {
         }
 
         switch (mode) {
-            case ExecutionMode.Serial: {
+            case 'serial': {
                 for (const task of tasks) {
                     try {
                         const o = new task();
@@ -215,7 +224,7 @@ export class Scheduler {
                 break;
             }
 
-            default: {
+            case 'parallel': {
                 const promises = tasks
                     .map(async x => {
                         try {
@@ -228,6 +237,10 @@ export class Scheduler {
 
                 await Promise.all(promises);
                 break;
+            }
+
+            default: {
+                throw new Error(`Mode "${mode}" is invalid.`);
             }
         }
     }
