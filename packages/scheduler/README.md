@@ -147,7 +147,35 @@ To facilitate task management, the Scheduler provides two methods:
     });
     ```
 
-By providing these flexible initialization and configuration options, the `@bleed-believer/scheduler` library caters to a wide range of scheduling needs, making it a robust choice for task management in Node.js applications.
+### Immediate Task Execution
+The `executeNow` method provides the flexibility to execute tasks immediately, bypassing the scheduler's timing constraints. This feature is particularly useful for triggering specific tasks on demand, during debugging, or in response to external events. The method supports executing tasks in either serial or parallel modes, giving you control over task execution flow based on your application's needs.
+
+To utilize `executeNow`, you must specify the execution mode (`ExecutionMode.Serial` or `ExecutionMode.Parallel`) and optionally, the names of the tasks to execute. If no task names are provided, the method attempts to execute all available tasks.
+
+#### Example
+```ts
+import { Scheduler, ExecutionMode } from '@bleed-believer/scheduler';
+
+import { SendEmailsTask } from './tasks/send-emails.task.js';
+import { BackupDatabaseTask } from './tasks/backup-database.task.js';
+import { CleanTempFilesTask } from './tasks/clean-temp-files.task.js';
+import { GenerateReportsTask } from './tasks/generate-reports.task.js';
+
+const scheduler = new Scheduler({
+    tasks: [
+        SendEmailsTask,
+        BackupDatabaseTask,
+        CleanTempFilesTask,
+        GenerateReportsTask
+    ]
+});
+
+// Execute specific tasks in serial mode
+await scheduler.executeNow(ExecutionMode.Serial, 'BackupDatabaseTask', 'SendEmailsTask');
+
+// Execute all tasks in parallel mode
+await scheduler.executeNow(ExecutionMode.Parallel);
+```
 
 ## Support and Contribution
 This project supports only ESM, aligning with the Node.js ecosystem's direction. For issues, suggestions, or contributions, please refer to the project's GitHub repository.

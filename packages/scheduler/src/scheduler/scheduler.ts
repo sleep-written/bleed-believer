@@ -1,8 +1,9 @@
-import type { TaskClass, TaskLaunchOptions } from './task-launcher/index.js';
+import type { TaskClass, TaskLaunchOptions } from '../task-launcher/index.js';
 import type { SchedulerOptions } from './scheduler-options.js';
 
-import { TaskLauncher } from './task-launcher/index.js';
-import { TaskConfig } from './index.js';
+import { ExecutionMode } from './execution-mode.js';
+import { TaskLauncher } from '../task-launcher/index.js';
+import { TaskConfig } from '../index.js';
 import { basename } from 'path';
 
 /**
@@ -181,39 +182,59 @@ export class Scheduler {
     }
 
     /**
-     * Immediately executes specified tasks without waiting for their scheduled times.
-     * If a task name is provided, only the task with that name is executed.
-     * If no name is provided, all configured tasks are executed immediately.
-     * This method can be useful for manual or ad-hoc task invocations.
-     *
-     * @param name Optional. The name of the specific task to execute immediately.
-     * If omitted, all tasks are executed.
-     * @throws Error if no tasks are found to execute, or if a specified task name does
-     * not match any configured tasks.
+     * Executes specified tasks immediately, either in serial or parallel execution mode. This method filters tasks by their names if provided, otherwise attempts to execute all configured tasks.
+     * In serial mode, tasks are executed one after the other, waiting for each task to complete before starting the next.
+     * In parallel mode, all filtered tasks are started at the same time, and the method waits for all to complete.
+     * If no tasks match the provided names, an error is thrown.
+     * @param mode The execution mode: 'serial' or 'parallel'. Determines how tasks are executed relative to each other.
+     * @param names Optional names of tasks to execute. If no names are provided, all tasks are executed.
+     * @throws Error if no tasks are found that match the provided names or if the mode is invalid.
      */
-    async executeNow(name?: string): Promise<void> {
-        const tasks = this.#launcher
-            .tasks
-            .filter(x => typeof name === 'string'
-                ?   x.name === name
-                :   true
-            );
+    async executeNow(mode: ExecutionMode, ...names: string[]): Promise<void> {
+        const tasks = this.#launcher.tasks.filter(x => {
+                if (names.length > 0) {
+                    return names.some(y => y === x.name);
+                } else {
+                    return true;
+                }
+            });
 
         if (tasks.length === 0) {
             throw new Error('No tasks found to execute');
         }
 
-        const promises = tasks
-            .map(async x => {
-                try {
-                    const o = new x();
-                    await o.action();
-                } catch (err: any) {
-                    this.#onTaskError(err);
+        switch (mode) {
+            case 'serial': {
+                for (const task of tasks) {
+                    try {
+                        const o = new task();
+                        await o.action();
+                    } catch (err: any) {
+                        this.#onTaskError(err);
+                    }
                 }
-            });
+                break;
+            }
 
-        await Promise.all(promises);
+            case 'parallel': {
+                const promises = tasks
+                    .map(async x => {
+                        try {
+                            const o = new x();
+                            await o.action();
+                        } catch (err: any) {
+                            this.#onTaskError(err);
+                        }
+                    });
+
+                await Promise.all(promises);
+                break;
+            }
+
+            default: {
+                throw new Error(`Mode "${mode}" is invalid.`);
+            }
+        }
     }
 
     /**
