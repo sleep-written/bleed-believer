@@ -1,11 +1,10 @@
 import type { TaskClass, TaskLaunchOptions } from '../task-launcher/index.js';
 import type { SchedulerOptions } from './scheduler-options.js';
 
-import { basename } from 'path';
-
 import { ExecutionMode } from './execution-mode.js';
 import { TaskLauncher } from '../task-launcher/index.js';
 import { TaskConfig } from '../index.js';
+import { basename } from 'path';
 
 /**
  * Orchestrates the scheduling and execution of tasks according to a specified or default configuration.
@@ -183,24 +182,17 @@ export class Scheduler {
     }
 
     /**
-     * Executes a set of tasks immediately based on the specified execution mode and an optional list of task names.
-     * This method allows for on-demand execution of tasks either in serial or parallel, providing flexibility
-     * in how tasks are handled outside the regular scheduling. If no names are provided, all tasks are executed
-     * according to the chosen mode.
-     * 
-     * @param mode The execution mode, determining whether tasks should be run in series ('serial') or in parallel ('parallel').
-     * @param names An optional array of task names to execute. If provided, only tasks with names matching this list
-     * will be executed. If omitted, all tasks are executed.
-     * 
-     * @throws Error if no tasks are found to execute, or if an invalid execution mode is provided.
-     * 
-     * @returns A promise that resolves once all the specified tasks have been executed according to the given mode.
-     * This promise does not resolve with any value. The method leverages individual task `action` methods for execution,
-     * and handles errors by invoking the scheduler's error handling callback.
+     * Executes specified tasks immediately, either in serial or parallel execution mode. This method filters tasks by their names if provided, otherwise attempts to execute all configured tasks.
+     * In serial mode, tasks are executed one after the other, waiting for each task to complete before starting the next.
+     * In parallel mode, all filtered tasks are started at the same time, and the method waits for all to complete.
+     * If no tasks match the provided names, an error is thrown.
+     * @param mode The execution mode: 'serial' or 'parallel'. Determines how tasks are executed relative to each other.
+     * @param names Optional names of tasks to execute. If no names are provided, all tasks are executed.
+     * @throws Error if no tasks are found that match the provided names or if the mode is invalid.
      */
-    async executeNow(mode: ExecutionMode, names?: string[]): Promise<void> {
+    async executeNow(mode: ExecutionMode, ...names: string[]): Promise<void> {
         const tasks = this.#launcher.tasks.filter(x => {
-                if (names instanceof Array) {
+                if (names.length > 0) {
                     return names.some(y => y === x.name);
                 } else {
                     return true;

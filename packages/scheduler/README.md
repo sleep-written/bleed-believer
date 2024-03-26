@@ -129,33 +129,34 @@ To facilitate task management, the Scheduler provides two methods:
     ```
 
 ### Immediate Task Execution
-The `Scheduler.executeNow` method allows for the immediate execution of tasks, either in serial or parallel mode. This feature is useful for on-demand task execution, such as for testing or manual task triggering.
-Usage
+The `executeNow` method provides the flexibility to execute tasks immediately, bypassing the scheduler's timing constraints. This feature is particularly useful for triggering specific tasks on demand, during debugging, or in response to external events. The method supports executing tasks in either serial or parallel modes, giving you control over task execution flow based on your application's needs.
 
-Specify the execution mode (`'serial'` or `'parallel'`) and an optional list of task names. If no names are given, all tasks are executed according to the specified mode.
+To utilize `executeNow`, you must specify the execution mode (`ExecutionMode.Serial` or `ExecutionMode.Parallel`) and optionally, the names of the tasks to execute. If no task names are provided, the method attempts to execute all available tasks.
 
+#### Example
 ```ts
-// File: ./src/start-now.js
-import { Scheduler } from '@bleed-believer/scheduler';
+import { Scheduler, ExecutionMode } from '@bleed-believer/scheduler';
 
-import { Task01 } from './tasks/task-01.js';
-import { Task02 } from './tasks/task-02.js';
-import { Task03 } from './tasks/task-03.js';
-import { Task04 } from './tasks/task-04.js';
+import { SendEmailsTask } from './tasks/send-emails.task.js';
+import { BackupDatabaseTask } from './tasks/backup-database.task.js';
+import { CleanTempFilesTask } from './tasks/clean-temp-files.task.js';
+import { GenerateReportsTask } from './tasks/generate-reports.task.js';
 
-const scheduler = new Scheduler([
-    Task01, Task02,
-    Task03, Task04
-]);
+const scheduler = new Scheduler({
+    tasks: [
+        SendEmailsTask,
+        BackupDatabaseTask,
+        CleanTempFilesTask,
+        GenerateReportsTask
+    ]
+});
 
-// Parallel execution of specific tasks
-await scheduler.executeNow(ExecutionMode.Parallel, ['TaskTwo', 'TaskFour']);
+// Execute specific tasks in serial mode
+await scheduler.executeNow(ExecutionMode.Serial, 'BackupDatabaseTask', 'SendEmailsTask');
 
-// Serial execution of all tasks
-await scheduler.executeNow(ExecutionMode.Serial);
+// Execute all tasks in parallel mode
+await scheduler.executeNow(ExecutionMode.Parallel);
 ```
-
-This method offers flexibility by allowing selective or complete task execution outside the predefined schedule, enhancing control over task management.
 
 ## Support and Contribution
 This project supports only ESM, aligning with the Node.js ecosystem's direction. For issues, suggestions, or contributions, please refer to the project's GitHub repository.
