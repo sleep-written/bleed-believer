@@ -79,11 +79,17 @@ export class Scheduler {
         this.#onAbortTasks = this.#setFunction(
             !isArray ? o.onAbortTasks : verbose,
             () => {
-                process.stdout.cursorTo(0, undefined, () => {
+                const print = () => {
                     console.log(`[SCHEDULER]------------------------------------------`);
                     console.log(`Stopping all pending tasks...`);
                     console.log(`-----------------------------------------------------`);
-                });
+                };
+
+                if (process.stdout.cursorTo) {
+                    process.stdout.cursorTo(0, undefined, () => print());
+                } else {
+                    print();
+                }
             }
         );
 
