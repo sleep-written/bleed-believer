@@ -17,7 +17,7 @@
     "clean": "rm -rf ./dist",
     "build": "tsc --project ./tsconfig.build.json --sourceMap false",
     "watch": "tsc --project ./tsconfig.build.json --watch",
-    "setup": "node --import @bleed-believer/path-alias ./src/database/setup.ts",
+    "setup": "node --import @bleed-believer/path-alias ./src/example/setup.ts",
     "test": "ava"
   },
   "repository": {
