@@ -1,5 +1,5 @@
-import { dataSourceTarget } from './data-source.source.js';
-import { dataSourceSource } from './data-source.target.js';
+import { dataSourceSource } from './data-source.source.js';
+import { dataSourceTarget } from './data-source.target.js';
 import { sourceSeeders } from './seeders/source-seeders.js';
 import { targetSeeders } from './seeders/target-seeders.js';
 

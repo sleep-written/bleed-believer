@@ -17,14 +17,20 @@ export class UserSeeder extends Seeder {
     async start(): Promise<void> {
         await this.set(User, 'dni', {
             dni: '1-9',
-            name: 'Brian Carroll',
+            name: 'Buckethead',
             userType: await this.getUserType('ADMIN'),
         });
-    
+
         await this.set(User, 'dni', {
             dni: '11.111.111-1',
             name: 'MD. Dragynfly',
             userType: await this.getUserType('GUEST'),
+        });
+
+        await this.set(User, 'dni', {
+            dni: '1-1',
+            name: 'SleepWritten',
+            userType: await this.getUserType('SYSTEM'),
         });
     }
 }

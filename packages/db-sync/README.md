@@ -9,3 +9,8 @@
     cd ./packages/db-sync
     npm run setup
     ```
+
+-   Now run the unit tests:
+    ```shell
+    npm run test
+    ```
