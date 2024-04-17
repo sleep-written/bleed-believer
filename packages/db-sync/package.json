@@ -1,0 +1,50 @@
+{
+  "name": "@bleed-believer/db-sync",
+  "version": "0.0.1",
+  "description": "Migrates data from one database to another dynamically.",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "tsc --project ./tsconfig.build.json --sourceMap false",
+    "watch": "tsc --project ./tsconfig.build.json --watch",
+    "setup": "node --import @bleed-believer/path-alias ./src/database/setup.ts",
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sleep-written/bleed-believer.git"
+  },
+  "keywords": [
+    "database",
+    "db",
+    "migrate",
+    "migration",
+    "typeorm",
+    "entity"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "sleep-written",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sleep-written/bleed-believer/issues"
+  },
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "peerDependencies": {
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "sqlite3": "^5.1.7"
+  }
+}
