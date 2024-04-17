@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "cod": "SYSTEM",
+        "description": "The owner of this implementation"
+    },
+    {
+        "id": 2,
+        "cod": "ADMIN",
+        "description": "Administrator of this instance"
+    },
+    {
+        "id": 3,
+        "cod": "MOD",
+        "description": "moderator of this instance"
+    },
+    {
+        "id": 4,
+        "cod": "USER",
+        "description": "Standard user"
+    }
+]

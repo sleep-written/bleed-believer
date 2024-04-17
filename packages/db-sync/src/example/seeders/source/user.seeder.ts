@@ -15,22 +15,16 @@ export class UserSeeder extends Seeder {
     }
 
     async start(): Promise<void> {
-        await this.set(User, 'dni', {
-            dni: '1-9',
-            name: 'Buckethead',
-            userType: await this.getUserType('ADMIN'),
-        });
+        const items = await this.getJSONData('./mocks/user.json');
+        for (const item of items) {
+            const userType = new UserType();
+            userType.id = item.userTypeId as number;
 
-        await this.set(User, 'dni', {
-            dni: '11.111.111-1',
-            name: 'MD. Dragynfly',
-            userType: await this.getUserType('GUEST'),
-        });
-
-        await this.set(User, 'dni', {
-            dni: '1-1',
-            name: 'SleepWritten',
-            userType: await this.getUserType('SYSTEM'),
-        });
+            await this.set(User, 'dni', {
+                dni: item.dni,
+                name: item.name,
+                userType,
+            });
+        }
     }
 }

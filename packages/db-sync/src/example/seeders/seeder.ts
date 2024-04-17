@@ -1,4 +1,7 @@
 import type { BaseEntity, EntityManager, ObjectLiteral } from 'typeorm';
+import { fileURLToPath } from 'url';
+import { readFile } from 'fs/promises';
+import { resolve } from 'path';
 
 export abstract class Seeder {
     #manager: EntityManager;
@@ -8,6 +11,22 @@ export abstract class Seeder {
 
     constructor(manager: EntityManager) {
         this.#manager = manager;
+    }
+
+    protected async getJSONData<E extends ObjectLiteral>(
+        path: string
+    ): Promise<E[]> {
+        const resolvedPath = resolve(
+            fileURLToPath(import.meta.url),
+            '../../../../', path
+        );
+
+        const text = await readFile(
+            resolvedPath,
+            'utf-8'
+        );
+
+        return JSON.parse(text);
     }
 
     protected async set<E extends ObjectLiteral>(
@@ -32,7 +51,7 @@ export abstract class Seeder {
                     select: { [pk]: true } as any,
                     where:  { [key]: (data as any)[key] } as any
                 });
-    
+
                 if (tmp) {
                     (o as any)[pk] = (tmp as any)[pk];
                 }
