@@ -1,103 +1,77 @@
-import { readFile } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import test from 'ava';
 
-import { dataSourceTarget } from '@example/data-source.target.js';
-import { UserType } from '@example/entities/user-type.entity.js';
-import { User } from '@example/entities/user.entity.js';
-
 import { EntityStorage } from './entity-storage.js';
-import { EntityMapper } from '@/entity-mapper/index.js';
 
 let files: {
-    userType: EntityStorage<UserType>;
-    user: EntityStorage<User>;
+    userType: EntityStorage;
+    user: EntityStorage;
 };
 
 test.before(async _ => {
-    await dataSourceTarget.initialize();
     files = {
         userType: new EntityStorage(
-            new EntityMapper(dataSourceTarget.manager, UserType),
-            join(tmpdir(), `db-sync.entity-mapper.${UserType.name}.test.ts`)
+            join(tmpdir(), `db-sync.entity.${'UserType'}.test.ts`)
         ),
         user: new EntityStorage(
-            new EntityMapper(dataSourceTarget.manager, User),
-            join(tmpdir(), `db-sync.entity-mapper.${User.name}.test.ts`)
+            join(tmpdir(), `db-sync.entity.${'User'}.test.ts`)
         )
     };
     
     await Promise.all(Object
         .values(files)
-        .map(x => x.delete())
+        .map(x => x.kill())
     );
 });
 
 test.after(async _ => {
-    await dataSourceTarget.destroy();
     await Promise.all(Object
         .values(files)
-        .map(x => x.delete())
+        .map(x => x.kill())
     );
 });
 
-test.serial('Read `UserType` DB content and store in DB', async t => {
-    const data = await UserType.find();
-    await files.userType.write(data);
+test.serial('Write text lines and verify file operation', async t => {
+    const lines = [
+        "ADMIN,Administrator of the system",
+        "GUEST,Guest user"
+    ];
+    await files.userType.write(lines);
     t.pass();
 });
 
-test.serial('Read `UserType` stored in file', async t => {
-    const data: UserType[] = [];
-    await files.userType.read(100, items => {
-        data.push(...items);
+test.serial('Read text lines from file', async t => {
+    const expectedLines = [
+        "ADMIN,Administrator of the system",
+        "GUEST,Guest user"
+    ];
+    const readLines: string[] = [];
+    await files.userType.read(100, lines => {
+        readLines.push(...lines);
     });
 
-    t.deepEqual(
-        JSON.parse(JSON.stringify(data)),
-        [
-            {
-                id: 1,
-                cod: 'ADMIN',
-                description: 'Administrator of the system'
-            },
-            {
-                id: 2,
-                cod: 'GUEST',
-                description: 'Guest user'
-            }
-        ]
-    );
+    t.deepEqual(readLines, expectedLines);
 });
 
-test.serial('Read `User` DB content and store in DB', async t => {
-    const data = await User.find({ relations: { userType: true } });
-    await files.user.write(data);
+test.serial('Handle more complex line structures', async t => {
+    const lines = [
+        "1,1-9,Brian Carroll,ADMIN",
+        "2,11.111.111-1,MD. Dragynfly,GUEST"
+    ];
+    await files.user.write(lines);
     t.pass();
 });
 
-test.serial('Read `User` stored in file', async t => {
-    const data: User[] = [];
-    await files.user.read(100, items => {
-        data.push(...items);
+test.serial('Read complex structured lines from file', async t => {
+    const expectedLines = [
+        "1,1-9,Brian Carroll,ADMIN",
+        "2,11.111.111-1,MD. Dragynfly,GUEST"
+    ];
+    const readLines: string[] = [];
+    await files.user.read(100, lines => {
+        readLines.push(...lines);
     });
 
-    t.deepEqual(
-        JSON.parse(JSON.stringify(data)),
-        [
-            {
-                id: 1,
-                dni: "1-9",
-                name: "Brian Carroll",
-                userType: { id: 1 }
-            },
-            {
-                id: 2,
-                dni: "11.111.111-1",
-                name: "MD. Dragynfly",
-                userType: { id: 2 }
-            },
-        ]
-    );
+    t.deepEqual(readLines, expectedLines);
 });

@@ -1,6 +1,5 @@
-import { ReadStream, createReadStream } from 'fs';
-import { Interface, createInterface } from 'readline';
 import { FileLine } from './file-line.js';
+import LineReader from 'line-by-line';
 
 /**
  * Manages reading lines from a file asynchronously using a `ReadStream` and `Interface` from
@@ -8,8 +7,7 @@ import { FileLine } from './file-line.js';
  */
 export class FileLineReader extends FileLine {
     #reader?: {
-        readerStream: ReadStream;
-        readerInterface: Interface;
+        reader: LineReader;
         promise: Promise<void>;
     };
 
@@ -19,42 +17,6 @@ export class FileLineReader extends FileLine {
      */
     get isReading(): boolean {
         return !!this.#reader;
-    }
-
-    #buildPromise(
-        callback: (line: string, close: () => void) => void | Promise<void>,
-        readerStream: ReadStream,
-        readerInterface: Interface
-    ): Promise<void> {
-        return new Promise((resolve, reject) => {
-            const handleClose = (error?: any) => {
-                readerStream?.once('close', () => {
-                    this.#reader = undefined;
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve();
-                    }
-                });
-
-                readerInterface?.removeAllListeners();
-                readerStream?.destroy();
-            }
-
-            const closeCallback = () => {
-                readerInterface?.close();
-            };
-
-            readerInterface?.once('error', er => handleClose(er));
-            readerInterface?.once('close', () => handleClose());
-            readerInterface?.on('line', async line => {
-                try {
-                    await callback(line, closeCallback);
-                } catch (err: any) {
-                    readerInterface?.emit('error', err);
-                }
-            });
-        });
     }
 
     /**
@@ -78,34 +40,49 @@ export class FileLineReader extends FileLine {
             throw new Error('This instance is already initialized.');
         }
 
-        let promise: Promise<void> | undefined;
-        let readerStream: ReadStream | undefined;
-        let readerInterface: Interface | undefined;
-        try {
-            readerStream = createReadStream(this.path, {
-                encoding: 'utf-8',
-                autoClose: false,
-                highWaterMark: 1024,
+        const reader = new LineReader(this.path, {
+            encoding: 'utf8',
+            skipEmptyLines: true
+        });
+
+        const promise = new Promise<void>((resolve, reject) => {
+            let error: Error | null = null;
+            let stop = false;
+            const closeHandler = () => {
+                stop = true;
+                reader.close();
+            };
+
+            reader.once('end', () => {
+                reader.removeAllListeners();
+                this.#reader = undefined;
+
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve();
+                }
             });
 
-            readerInterface = createInterface({
-                crlfDelay: Infinity,
-                terminal: false,
-                input: readerStream
+            reader.on('line', async line => {
+                try {
+                    if (stop) { return; }
+                    
+                    const v = callback(line, closeHandler);
+                    if (v instanceof Promise) {
+                        reader.pause();
+                        await v;
+                        reader.resume();
+                    }
+                } catch (err: any) {
+                    error = err;
+                    closeHandler();
+                }
             });
+        });
 
-            promise = this.#buildPromise(
-                callback,
-                readerStream,
-                readerInterface
-            );
-            
-            this.#reader = { readerStream, readerInterface, promise };
-            return promise;
-        } catch (err) {
-            readerStream?.destroy();
-            throw err;
-        }
+        this.#reader = { reader, promise };
+        return promise;
     }
 
     close(): Promise<void> {
@@ -113,8 +90,8 @@ export class FileLineReader extends FileLine {
             throw new Error('Not an active reading process to close.');
         }
 
-        const { readerInterface, promise } = this.#reader;
-        readerInterface.close();
+        const { reader, promise } = this.#reader;
+        reader.close();
         return promise;
     }
 }

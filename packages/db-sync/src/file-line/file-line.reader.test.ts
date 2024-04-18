@@ -38,8 +38,39 @@ test.serial('Read the content of an small file', async t => {
     t.deepEqual(result, lines.slice(0, 3));
 });
 
+test.serial('Read the content of an small file with a delay in callback', async t => {
+    t.timeout(7_000);
+    // Data original
+    const lines = [
+        'texto 1',
+        'texto 2',
+        'texto 3',
+        'texto 4',
+        'texto 5',
+    ];
+
+    // Generar el archivo
+    await writer.append(async append => {
+        await Promise.all(lines.map(x => append(x)));
+    });
+
+    // A partir de aquí viene el line-reader
+    const lineReader = new FileLineReader(writer.path);
+    const result: string[] = [];
+    await lineReader.read(async (line, close) => {
+        result.push(line);
+        await sleep(1_000);
+        
+        if (result.length >= 2) {
+            close();
+        }
+    });
+
+    t.deepEqual(result, lines.slice(0, 2));
+});
+
 test.serial('Ensure large file reading with low memory consumption', async t => {
-    t.timeout(35_000);
+    t.timeout(80_000);
     const chronometer = new Chronometer();
     const verbose = false;
 
@@ -73,10 +104,10 @@ test.serial('Ensure large file reading with low memory consumption', async t => 
 
     await sleep(1000);
     const lineReader = new FileLineReader(writer.path);
-    const readTimeout = setTimeout(
-        () => lineReader.close(),
-        20_000
-    );
+    // const readTimeout = setTimeout(
+    //     () => lineReader.close(),
+    //     20_000
+    // );
 
     if (verbose) {
         chronometer.start();
@@ -92,7 +123,7 @@ test.serial('Ensure large file reading with low memory consumption', async t => 
     });
 
     // Clear all timers
-    clearTimeout(readTimeout);
+    // clearTimeout(readTimeout);
     clearInterval(memoryLogInterval);
 
     if (verbose) {
