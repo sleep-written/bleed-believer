@@ -1,3 +1,4 @@
+import { Raw, type FindOptionsWhere } from 'typeorm';
 import { dataSourceSource } from './data-source.source.js';
 import { dataSourceTarget } from './data-source.target.js';
 
@@ -8,6 +9,13 @@ import { UserType } from './entities/user-type.entity.js';
 import { Contract } from './entities/contract.entity.js';
 import { Client } from './entities/client.entity.js';
 import { User } from './entities/user.entity.js';
+
+const contractWhere: FindOptionsWhere<Contract> = {
+    date: Raw(c =>
+            `CAST(strftime('%Y', ${c}) AS INT) >= `
+        +   `CAST(strftime('%Y', DATE('now')) AS INT)`
+    )
+};
 
 const dbSync = new DBSync([
     new EntitySync(UserType, {
@@ -20,10 +28,12 @@ const dbSync = new DBSync([
         }
     }),
     new EntitySync(Client, {
-        chunkSize: 100
+        chunkSize: 100,
+        where: { contracts: contractWhere }
     }),
     new EntitySync(Contract, {
         chunkSize: 100,
+        where: contractWhere,
         relationsToCheck: {
             user: true,
             client: true

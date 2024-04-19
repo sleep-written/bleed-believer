@@ -1,5 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, type Relation } from 'typeorm';
-import type { Contract } from './contract.entity.js';
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, type Relation } from 'typeorm';
+import { Contract } from './contract.entity.js';
 
 @Entity({ name: 'Client' })
 export class Client extends BaseEntity {
@@ -12,5 +12,6 @@ export class Client extends BaseEntity {
     @Column({ type: 'nvarchar' })
     address!: string;
 
+    @OneToMany(_ => Contract, r => r.client)
     contracts?: Relation<Contract[]> | null;
 }
