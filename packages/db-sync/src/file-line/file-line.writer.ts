@@ -1,12 +1,24 @@
 import { createWriteStream, type WriteStream } from 'fs';
 import { FileLine } from './file-line.js';
 
+/**
+ * Extends FileLine to provide functionality for appending lines to a file asynchronously.
+ */
 export class FileLineWriter extends FileLine {
     #stream?: WriteStream;
+
+    /**
+     * Determines whether the FileLineWriter is currently writing to the file.
+     */
     get isWriting(): boolean {
         return !!this.#stream;
     }
 
+    /**
+     * Begins a write operation that allows appending lines to the file through the provided callback.
+     * @param callback A function that receives a function to append lines to the file.
+     * @returns A promise that resolves when all lines are appended and the file is closed.
+     */
     async append(
         callback: (append: (s: string) => Promise<void>) => Promise<void>
     ): Promise<void> {

@@ -1,15 +1,15 @@
 import { Raw, type FindOptionsWhere } from 'typeorm';
+import { DBSync, EntitySync } from '@/index.js';
+
 import { dataSourceSource } from './data-source.source.js';
 import { dataSourceTarget } from './data-source.target.js';
 
-import { DBSync } from '@/db-sync.js';
-
-import { EntitySync } from '../entity-sync/index.js';
 import { UserType } from './entities/user-type.entity.js';
 import { Contract } from './entities/contract.entity.js';
 import { Client } from './entities/client.entity.js';
 import { User } from './entities/user.entity.js';
 
+// A where condition to select only a part of the contracts
 const contractWhere: FindOptionsWhere<Contract> = {
     date: Raw(c =>
             `CAST(strftime('%Y', ${c}) AS INT) >= `
@@ -17,40 +17,59 @@ const contractWhere: FindOptionsWhere<Contract> = {
     )
 };
 
-const dbSync = new DBSync([
-    new EntitySync(UserType, {
-        chunkSize: 100
-    }),
-    new EntitySync(User, {
-        chunkSize: 100,
-        relationsToCheck: {
-            userType: true
+// Create the instance of `DBSync`
+const dbSync = new DBSync(
+    [
+        new EntitySync(UserType, {
+            chunkSize: 100
+        }),
+        new EntitySync(User, {
+            chunkSize: 100,
+            where: {
+                contracts: contractWhere
+            },
+            relationsToCheck: {
+                userType: true
+            }
+        }),
+        new EntitySync(Client, {
+            chunkSize: 100,
+            where: {
+                // Only clients who has contracts
+                contracts: contractWhere
+            }
+        }),
+        new EntitySync(Contract, {
+            chunkSize: 100,
+            // Only a portion of contracts
+            where: contractWhere,
+            relationsToCheck: {
+                user: true,
+                client: true
+            }
+        })
+    ], {
+        // Custom log function
+        verbose(...a): void {
+            console.log('[db-sync] ->', ...a);
         }
-    }),
-    new EntitySync(Client, {
-        chunkSize: 100,
-        where: { contracts: contractWhere }
-    }),
-    new EntitySync(Contract, {
-        chunkSize: 100,
-        where: contractWhere,
-        relationsToCheck: {
-            user: true,
-            client: true
-        }
-    })
-]);
+    }
+);
 
+// Open the connection of both DBs
 await Promise.all([
     dataSourceSource.initialize(),
     dataSourceTarget.initialize(),
 ]);
 
+// Clean the data of target DB, and send the
+// selected data from source DB to target DB
 await dbSync.execute(
     dataSourceSource,
     dataSourceTarget
 );
 
+// Close the connection of both DBs
 await Promise.all([
     dataSourceSource.destroy(),
     dataSourceTarget.destroy(),

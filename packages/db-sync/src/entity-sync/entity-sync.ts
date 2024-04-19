@@ -8,11 +8,38 @@ import { tmpdir } from 'os';
 import { EntityMapper } from '../entity-mapper/index.js';
 import { EntityStorage } from '../entity-storage/entity-storage.js';
 
+/**
+ * Manages the synchronization process for a single entity type, including data extraction, transformation, and loading.
+ */
 export class EntitySync<E extends ObjectLiteral> {
+    /**
+     * The entity class that this synchronizer handles.
+     */
     #entity: EntityClass<E>;
+
+    /**
+     * The options defining the synchronization behavior for this entity.
+     */
     #options: EntitySyncOptions<E>;
+
+    /**
+     * Storage handler for managing the entity's data file.
+     */
     #storage: EntityStorage;
 
+    /**
+     * Gets the name of the entity being synchronized.
+     */
+    get entityName(): string {
+        return this.#entity.name;
+    }
+
+    /**
+     * Constructs a new instance of `EntitySync`.
+     * 
+     * @param entity The entity class to be synchronized.
+     * @param options The options to customize the synchronization process.
+     */
     constructor(
         entity: EntityClass<E>,
         options: EntitySyncOptions<E>
@@ -24,6 +51,11 @@ export class EntitySync<E extends ObjectLiteral> {
         this.#storage = new EntityStorage(path)
     }
 
+    /**
+     * Creates a temporary file for the entity's data, retrieved based on the synchronization options.
+     * 
+     * @param manager The TypeORM EntityManager to handle database operations.
+     */
     async createFile(manager: EntityManager): Promise<void> {
         const entityMapper = new EntityMapper(manager, this.#entity);
         await this.#storage.createFolder();
@@ -84,6 +116,11 @@ export class EntitySync<E extends ObjectLiteral> {
         }
     }
 
+    /**
+     * Inserts data into the target database from a temporary file.
+     * 
+     * @param manager The TypeORM EntityManager to handle database operations.
+     */
     async insertIntoDB(manager: EntityManager): Promise<void> {
         const entityMapper = new EntityMapper(manager, this.#entity);
         await this.#storage.read(this.#options.chunkSize, async lines => {
@@ -92,10 +129,18 @@ export class EntitySync<E extends ObjectLiteral> {
         });
     }
 
+    /**
+     * Clears the data from the target database for this entity.
+     * 
+     * @param manager The TypeORM EntityManager to handle the deletion.
+     */
     async clearDataFromDB(manager: EntityManager): Promise<void> {
         manager.delete(this.#entity, {});
     }
 
+    /**
+     * Deletes the temporary file used during the synchronization process.
+     */
     async clearFile(): Promise<void> {
         return this.#storage.kill();
     }

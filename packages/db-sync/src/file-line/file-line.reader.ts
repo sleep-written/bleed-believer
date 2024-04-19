@@ -2,8 +2,7 @@ import { FileLine } from './file-line.js';
 import LineReader from 'line-by-line';
 
 /**
- * Manages reading lines from a file asynchronously using a `ReadStream` and `Interface` from
- * Node.js's `readline` module.
+ * Extends FileLine to provide functionality for reading lines from a file asynchronously.
  */
 export class FileLineReader extends FileLine {
     #reader?: {
@@ -12,23 +11,16 @@ export class FileLineReader extends FileLine {
     };
 
     /**
-     * Indicates whether the `FileLineReader` instance is reading a file.
-     * @returns {boolean} `true` if the reader is initialized, `false` otherwise.
+     * Determines whether the FileLineReader is currently reading from the file.
      */
     get isReading(): boolean {
         return !!this.#reader;
     }
 
     /**
-     * Starts reading lines from the file asynchronously. Each line read will call the provided callback function.
-     * The reading process can be stopped prematurely by calling the `close` function provided to the callback.
-     * @param {(line: string, close: () => void) => void | Promise<void>} callback - A function to call for each
-     * line read from the file.
-     * The callback receives the line as a string and a `close` function that can be called to stop reading.
-     * @returns {Promise<void>} A promise that resolves when all lines are read or the reader is manually closed,
-     * or rejects if an error occurs.
-     * @throws {Error} If this instance is already initialized (i.e., reading has been started and has not yet
-     * finished or been closed).
+     * Begins asynchronously reading lines from the file, calling the provided callback for each line read.
+     * @param callback A function that receives each line read from the file and a function to close the reader.
+     * @returns A promise that resolves when all lines are read, or the reading is manually stopped.
      */
     read(
         callback: (
@@ -85,6 +77,10 @@ export class FileLineReader extends FileLine {
         return promise;
     }
 
+    /**
+     * Closes the active reader, if one exists.
+     * @returns A promise that resolves when the reader has been closed.
+     */
     close(): Promise<void> {
         if (!this.#reader) {
             throw new Error('Not an active reading process to close.');

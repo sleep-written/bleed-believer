@@ -1,2 +1,2 @@
 export * from './entity-sync/index.js';
-export { DBSync } from './db-sync.js';
+export * from './db-sync/index.js';
