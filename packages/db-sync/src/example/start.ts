@@ -1,11 +1,15 @@
 import { dataSourceSource } from './data-source.source.js';
 import { dataSourceTarget } from './data-source.target.js';
 
+import { DBSync } from '@/db-sync.js';
+
 import { EntitySync } from '../entity-sync/index.js';
 import { UserType } from './entities/user-type.entity.js';
+import { Contract } from './entities/contract.entity.js';
+import { Client } from './entities/client.entity.js';
 import { User } from './entities/user.entity.js';
 
-const entitySyncs = [
+const dbSync = new DBSync([
     new EntitySync(UserType, {
         chunkSize: 100
     }),
@@ -14,25 +18,28 @@ const entitySyncs = [
         relationsToCheck: {
             userType: true
         }
+    }),
+    new EntitySync(Client, {
+        chunkSize: 100
+    }),
+    new EntitySync(Contract, {
+        chunkSize: 100,
+        relationsToCheck: {
+            user: true,
+            client: true
+        }
     })
-];
+]);
 
 await Promise.all([
     dataSourceSource.initialize(),
     dataSourceTarget.initialize(),
 ]);
 
-const sourceManager = dataSourceSource.manager;
-await dataSourceTarget.transaction(async targetManager => {
-    for (const entitySync of entitySyncs.slice().reverse()) {
-        await entitySync.createFile(sourceManager);
-        await entitySync.clearDataFromDB(targetManager);
-    }
-
-    for (const entitySync of entitySyncs) {
-        await entitySync.insertIntoDB(targetManager);
-    }
-});
+await dbSync.execute(
+    dataSourceSource,
+    dataSourceTarget
+);
 
 await Promise.all([
     dataSourceSource.destroy(),
