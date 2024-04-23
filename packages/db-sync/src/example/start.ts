@@ -4,12 +4,14 @@ import { DBSync, EntitySync } from '@/index.js';
 import { dataSourceSource } from './data-source.source.js';
 import { dataSourceTarget } from './data-source.target.js';
 
+import { ContractDetail } from './entities/contract-detail.entity.js';
 import { UserType } from './entities/user-type.entity.js';
 import { Contract } from './entities/contract.entity.js';
+import { Product } from './entities/product.entity.js';
 import { Client } from './entities/client.entity.js';
 import { User } from './entities/user.entity.js';
 
-// A where condition to select only a part of the contracts
+// A where condition to select only a portion of the contracts
 const contractWhere: FindOptionsWhere<Contract> = {
     date: Raw(c =>
             `CAST(strftime('%Y', ${c}) AS INT) >= `
@@ -20,9 +22,12 @@ const contractWhere: FindOptionsWhere<Contract> = {
 // Create the instance of `DBSync`
 const dbSync = new DBSync(
     [
+        // `UserType` hasn't FKs
         new EntitySync(UserType, {
             chunkSize: 100
         }),
+
+        // `User` entity only has a FK with `UserType`
         new EntitySync(User, {
             chunkSize: 100,
             where: {
@@ -32,6 +37,8 @@ const dbSync = new DBSync(
                 userType: true
             }
         }),
+
+        // `Client` hasn't FKs
         new EntitySync(Client, {
             chunkSize: 100,
             where: {
@@ -39,6 +46,8 @@ const dbSync = new DBSync(
                 contracts: contractWhere
             }
         }),
+
+        // `Contract` depends of `User` and `Client`
         new EntitySync(Contract, {
             chunkSize: 100,
             // Only a portion of contracts
@@ -47,13 +56,21 @@ const dbSync = new DBSync(
                 user: true,
                 client: true
             }
+        }),
+
+        // `Product` only have recursive FKs
+        new EntitySync(Product, {
+            chunkSize: 50
+        }),
+
+        // `ContractDetail` depends
+        new EntitySync(ContractDetail, {
+            chunkSize: 100,
+            where: {
+                contract: contractWhere
+            }
         })
-    ], {
-        // Custom log function
-        verbose(...a): void {
-            console.log('[db-sync] ->', ...a);
-        }
-    }
+    ]
 );
 
 // Open the connection of both DBs

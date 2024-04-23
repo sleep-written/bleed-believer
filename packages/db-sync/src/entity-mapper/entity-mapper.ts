@@ -225,7 +225,7 @@ export class EntityMapper<E extends ObjectLiteral> {
 
             // Agregar los ids de las relaciones
             for (const { propertyName, relatedEntity, relatedPK } of this.relationsMetadata) {
-                if (input[propertyName][relatedPK] != null) {
+                if (input[propertyName]?.[relatedPK] != null) {
                     const other = new relatedEntity();
                     other[relatedPK] = input[propertyName][relatedPK];
                     obj[propertyName] = other;

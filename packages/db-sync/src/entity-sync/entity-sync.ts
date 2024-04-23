@@ -123,10 +123,44 @@ export class EntitySync<E extends ObjectLiteral> {
      */
     async insertIntoDB(manager: EntityManager): Promise<void> {
         const entityMapper = new EntityMapper(manager, this.#entity);
+        const recursiveRelations = entityMapper.filterRelationMetadata(x => x.recursive);
+
         await this.#storage.read(this.#options.chunkSize, async lines => {
-            const items = lines.map(x => entityMapper.parse(x));
+            let items = lines.map(x => entityMapper.parse(x));
+            if (recursiveRelations.length > 0) {
+                items = items.map(x => {
+                    recursiveRelations.forEach(({ propertyName }) => {
+                        delete x[propertyName];
+                    });
+
+                    return x;
+                });
+            }
+
             await manager.save(items);
         });
+
+        if (recursiveRelations.length > 0) {
+            await this.#storage.read(this.#options.chunkSize, async lines => {
+                const items = lines
+                    .map(x => entityMapper.parse(x))
+                    .map(x => {
+                        const y = new entityMapper.entity();
+                        y[entityMapper.pkKey] = x[entityMapper.pkKey];
+                        recursiveRelations.forEach(({ propertyName, relatedEntity, relatedPK }) => {
+                            if (x[propertyName]?.[relatedPK] != null) {
+                                const r = new relatedEntity();
+                                r[relatedPK] = x[propertyName][relatedPK];
+                                (y as any)[propertyName] = r;
+                            }
+                        });
+
+                        return y;
+                    });
+
+                await manager.save(items);
+            });
+        }
     }
 
     /**
