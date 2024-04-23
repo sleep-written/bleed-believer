@@ -25,7 +25,7 @@
     "devDependencies": {
         "@types/express": "^4.17.14",
         "@types/node": "^20.8.10",
-        "turbo": "^1.11.1",
+        "turbo": "^1.13.2",
         "typescript": "^5.0.4"
     },
     "dependencies": {
