@@ -145,7 +145,7 @@ export class Contract extends BaseEntity {
 }
 ```
 
-### ContractDetail
+#### ContractDetail
 ```ts
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn, type Relation } from 'typeorm';
 import { Contract } from './contract.entity.js';
