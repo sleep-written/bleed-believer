@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/db-sync",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Migrates data from one database to another dynamically.",
   "type": "module",
   "types": "./dist/index.d.ts",
