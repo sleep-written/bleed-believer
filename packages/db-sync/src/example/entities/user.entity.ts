@@ -4,7 +4,7 @@ import { Contract } from './contract.entity.js';
 
 @Entity({ name: 'User' })
 export class User extends BaseEntity {
-    @PrimaryGeneratedColumn({ type: 'int' })
+    @PrimaryGeneratedColumn({ type: 'int', name: 'ñeee' })
     id!: number;
 
     @Column({ type: 'varchar' })

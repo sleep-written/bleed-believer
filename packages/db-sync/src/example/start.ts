@@ -15,7 +15,8 @@ import { User } from './entities/user.entity.js';
 const contractWhere: FindOptionsWhere<Contract> = {
     date: Raw(c =>
             `CAST(strftime('%Y', ${c}) AS INT) >= `
-        +   `CAST(strftime('%Y', DATE('now')) AS INT)`
+        +   `CAST(strftime('%Y', :currentYear) AS INT)`,
+        { currentYear: 2024 }
     )
 };
 
@@ -70,7 +71,10 @@ const dbSync = new DBSync(
                 contract: contractWhere
             }
         })
-    ]
+    ],
+    {
+        verbose: true
+    }
 );
 
 // Open the connection of both DBs

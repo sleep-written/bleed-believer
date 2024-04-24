@@ -66,15 +66,16 @@ export class EntitySync<E extends ObjectLiteral> {
         const { where, chunkSize, relationsToCheck } = this.#options;
         while (true) {
             // Get a chunk of entities
-            const chunk = await manager.find(
-                entityMapper.entity, {
-                    relations: entityMapper.relations,
-                    select: entityMapper.select,
-                    take: chunkSize,
-                    where,
-                    skip
-                }
-            );
+            const query = entityMapper
+                .getQuery(where)
+                .distinct()
+                .limit(chunkSize)
+                .offset(skip);
+
+            console.log(`${this.#entity.name} query:`);
+            console.log(query.getSql());
+            console.log('');
+            const chunk = await query.getMany();
 
             if (chunk.length > 0) {
                 skip += chunk.length;
