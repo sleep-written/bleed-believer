@@ -1,4 +1,4 @@
-import { Raw, type FindOptionsWhere } from 'typeorm';
+import { In, Like, Raw, type FindOptionsWhere } from 'typeorm';
 import { DBSync, EntitySync } from '@/index.js';
 
 import { dataSourceSource } from './data-source.source.js';
@@ -12,12 +12,27 @@ import { Client } from './entities/client.entity.js';
 import { User } from './entities/user.entity.js';
 
 // A where condition to select only a portion of the contracts
+const userTypeWhere: FindOptionsWhere<UserType> = {
+    id: In([ 1, 2 ])
+};
+
+const productWhere: FindOptionsWhere<Product>[] = [
+    { description: Like('lamb%') },
+    { description: Like('cheese%') },
+];
+
 const contractWhere: FindOptionsWhere<Contract> = {
+    user: {
+        userType: userTypeWhere
+    },
     date: Raw(c =>
             `CAST(strftime('%Y', ${c}) AS INT) >= `
         +   `CAST(strftime('%Y', :currentYear) AS INT)`,
         { currentYear: 2024 }
-    )
+    ),
+    contractDetails: {
+        product: productWhere
+    }
 };
 
 // Create the instance of `DBSync`
@@ -25,13 +40,15 @@ const dbSync = new DBSync(
     [
         // `UserType` hasn't FKs
         new EntitySync(UserType, {
-            chunkSize: 100
+            chunkSize: 100,
+            where: userTypeWhere
         }),
 
         // `User` entity only has a FK with `UserType`
         new EntitySync(User, {
             chunkSize: 100,
             where: {
+                userType: userTypeWhere,
                 contracts: contractWhere
             },
             relationsToCheck: {
@@ -55,7 +72,8 @@ const dbSync = new DBSync(
             where: contractWhere,
             relationsToCheck: {
                 user: true,
-                client: true
+                client: true,
+                contractDetails: true
             }
         }),
 
@@ -68,7 +86,8 @@ const dbSync = new DBSync(
         new EntitySync(ContractDetail, {
             chunkSize: 100,
             where: {
-                contract: contractWhere
+                contract: contractWhere,
+                product: productWhere
             }
         })
     ],

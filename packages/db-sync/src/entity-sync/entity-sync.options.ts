@@ -12,7 +12,7 @@ export interface EntitySyncOptions<E extends ObjectLiteral> {
     /**
      * Optional condition to filter the entities that will be synchronized. Uses TypeORM's `FindOptionsWhere` for defining complex queries.
      */
-    where?: FindOptionsWhere<E>;
+    where?: FindOptionsWhere<E> | FindOptionsWhere<E>[];
 
     /**
      * Optionally specify which relations of the entity need to be checked to ensure data integrity.

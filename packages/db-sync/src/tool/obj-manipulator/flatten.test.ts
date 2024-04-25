@@ -88,3 +88,39 @@ test('Case 06 (an object with an array of objects inside)', t => {
         { keys: ['details', 1, 'cant'], value: 9 },
     ]);
 });
+
+test('Case 07 (A non-parseable element inside of an object)', t => {
+    const mustBeParsed = (o: any) => {
+        if (
+            o != null &&
+            typeof o?.id === 'number' &&
+            typeof o?.name === 'string'
+        ) {
+            return false;
+        } else {
+            return true;
+        }
+    };
+
+    const out = flatten({
+        chemicals: {
+            na: {
+                id: 66,
+                name: 'Sodio'
+            },
+            cl: {
+                id: 88,
+                name: 'Cloro'
+            }
+        },
+        values: [ 5, 6, 7 ]
+    }, mustBeParsed);
+
+    t.deepEqual(out, [
+        { keys: [ 'chemicals', 'na' ], value: { id: 66, name: 'Sodio' } },
+        { keys: [ 'chemicals', 'cl' ], value: { id: 88, name: 'Cloro' } },
+        { keys: [ 'values', 0 ], value: 5 },
+        { keys: [ 'values', 1 ], value: 6 },
+        { keys: [ 'values', 2 ], value: 7 },
+    ]);
+});

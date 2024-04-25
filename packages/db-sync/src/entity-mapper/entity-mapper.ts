@@ -1,8 +1,8 @@
-import type { EntityManager, FindOptionsRelations, FindOptionsSelect, FindOptionsWhere, ObjectLiteral, SelectQueryBuilder } from 'typeorm';
+import type {
+    EntityManager, FindOptionsOrder, FindOptionsRelations, FindOptionsSelect,
+    FindOptionsWhere, ObjectLiteral, SelectQueryBuilder
+} from 'typeorm';
 import type { RelationMetadata, EntityClass } from './interfaces/index.js';
-import { FindOperator } from 'typeorm';
-import { flatten } from '@tool/obj-manipulator/flatten.js';
-import { QueryBuilderHelper } from './query-builder-helper.js';
 
 /**
  * Handles entity mapping operations, such as selection and serialization of entity data.
@@ -246,8 +246,17 @@ export class EntityMapper<E extends ObjectLiteral> {
         }
     }
 
-    getQuery(where?: FindOptionsWhere<E>): SelectQueryBuilder<E> {
-        const queryBuilderHelper = new QueryBuilderHelper(this);
-        return queryBuilderHelper.buildQuery(where);
+    getQuery(where?: FindOptionsWhere<E> | FindOptionsWhere<E>[]): SelectQueryBuilder<E> {
+        const { select, relations, pkKey, entity } = this;
+        return this.#manager
+            .createQueryBuilder(entity, entity.name)
+            .setFindOptions({
+                select,
+                relations,
+                where,
+                order: {
+                    [pkKey]: 'asc'
+                } as FindOptionsOrder<E>
+            });
     }
 }

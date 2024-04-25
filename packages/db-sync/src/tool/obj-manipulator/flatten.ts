@@ -5,20 +5,25 @@ export function flatten(
     mustBeParsed?: (v: any) => boolean
 ): FlatObjectItem[] {
     const out: FlatObjectItem[] = [];
-    if (!mustBeParsed) {
-        mustBeParsed = () => true;
-    }
+    return flattenRecursive(target, out, [], mustBeParsed);
+}
 
+function flattenRecursive(
+    target: Record<string, any> | Record<string, any>[],
+    result: FlatObjectItem[],
+    externalKeys: (string | number | symbol)[],
+    mustBeParsed?: (v: any) => boolean
+): FlatObjectItem[] {
     Object
         .entries(target)
         .forEach(([key, value]) => {
-            const kkk = target instanceof Array
-                ?   parseInt(key)
-                :   key;
+            const parsedKey = target instanceof Array ? parseInt(key) : key;
+            const keys = [ ...externalKeys, parsedKey ];
 
-            if (!mustBeParsed(value)) {
-                out.push({
-                    keys: [kkk],
+            if (mustBeParsed && !mustBeParsed(value)) {
+                // This must not be parsed
+                result.push({
+                    keys,
                     value
                 });
             } else if (value && typeof value === 'object') {
@@ -27,28 +32,27 @@ export function flatten(
                     (Buffer.isBuffer(value))
                 ) {
                     // It's a date or a buffer
-                    out.push({
-                        keys: [kkk],
+                    result.push({
+                        keys,
                         value
                     });
                 } else {
                     // Inner Object
-                    const inner = flatten(value, mustBeParsed);
-                    inner.forEach(o => {
-                        out.push({
-                            keys: [kkk, ...o.keys],
-                            value: o.value
-                        });
-                    });
+                    flattenRecursive(
+                        value,
+                        result,
+                        keys,
+                        mustBeParsed
+                    );
                 }
             } else if (value != null) {
                 // Simple Properties
-                out.push({
-                    keys: [kkk],
+                result.push({
+                    keys,
                     value
                 });
             }
         });
 
-    return out;
+    return result;
 }

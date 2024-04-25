@@ -1,4 +1,4 @@
-import type { EntityClass } from '../entity-mapper/index.js';
+import type { EntityClass, RelationMetadata } from '../entity-mapper/index.js';
 import type { EntitySyncOptions } from './entity-sync.options.js';
 import type { EntityManager, ObjectLiteral } from 'typeorm';
 
@@ -66,16 +66,12 @@ export class EntitySync<E extends ObjectLiteral> {
         const { where, chunkSize, relationsToCheck } = this.#options;
         while (true) {
             // Get a chunk of entities
-            const query = entityMapper
+            const chunk = await entityMapper
                 .getQuery(where)
                 .distinct()
                 .limit(chunkSize)
-                .offset(skip);
-
-            console.log(`${this.#entity.name} query:`);
-            console.log(query.getSql());
-            console.log('');
-            const chunk = await query.getMany();
+                .offset(skip)
+                .getMany();
 
             if (chunk.length > 0) {
                 skip += chunk.length;
@@ -87,13 +83,10 @@ export class EntitySync<E extends ObjectLiteral> {
                         .filter(([ _, v ]) => typeof v === 'boolean' && v)
                         .map(([ k ]) => {
                             // Get metadata
-                            const m = entityMapper.getRelationMetadata(k);
-                            if (!m) {
-                                throw new Error(`Metadata of FK "${k}" not found.`);
-                            } else {
-                                return m;
-                            }
+                            return entityMapper
+                                .getRelationMetadata(k) as RelationMetadata;
                         })
+                        .filter(m => m != null)
                         .forEach(({ propertyName, relatedPK }) => {
                             // Check FK
                             const i = chunk.findIndex(x => (
