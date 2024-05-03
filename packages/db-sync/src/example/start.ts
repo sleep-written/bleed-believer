@@ -1,4 +1,4 @@
-import { In, Like, Raw, type FindOptionsWhere } from 'typeorm';
+import { In, LessThan, Like, Raw, type FindOptionsWhere } from 'typeorm';
 import { DBSync, EntitySync } from '@/index.js';
 
 import { dataSourceSource } from './data-source.source.js';
@@ -10,6 +10,7 @@ import { Contract } from './entities/contract.entity.js';
 import { Product } from './entities/product.entity.js';
 import { Client } from './entities/client.entity.js';
 import { User } from './entities/user.entity.js';
+import { Server } from './entities/server.entity.js';
 
 // A where condition to select only a portion of the contracts
 const userTypeWhere: FindOptionsWhere<UserType> = {
@@ -88,6 +89,13 @@ const dbSync = new DBSync(
             where: {
                 contract: contractWhere,
                 product: productWhere
+            }
+        }),
+
+        new EntitySync(Server, {
+            chunkSize: 100,
+            where: {
+                port: LessThan(1000)
             }
         })
     ],

@@ -1,5 +1,5 @@
 import { FileLineReader, FileLineWriter } from '../file-line/index.js';
-import { access, mkdir, stat } from 'fs/promises';
+import { access, mkdir, stat, open } from 'fs/promises';
 import { dirname } from 'path';
 
 /**
@@ -57,6 +57,11 @@ export class EntityStorage {
 
     exists(): Promise<boolean> {
         return this.#writer.exists();
+    }
+
+    async touch(): Promise<void> {
+        const fileHandle = await open(this.#path, 'a');
+        return fileHandle.close();
     }
 
     /**

@@ -7,6 +7,7 @@ import { ClientSeeder } from './source/client.seeder.js';
 import { ContractSeeder } from './source/contract.seeder.js';
 import { ProductSeeder } from './source/product.seeder.js';
 import { ContractDetailSeeder } from './source/contract-detail.seeder.js';
+import { ServerSeeder } from './source/server.seeder.js';
 
 export const sourceSeeders: { new(m: EntityManager): Seeder }[] = [
     UserTypeSeeder,
@@ -15,4 +16,5 @@ export const sourceSeeders: { new(m: EntityManager): Seeder }[] = [
     ContractSeeder,
     ProductSeeder,
     ContractDetailSeeder,
+    ServerSeeder,
 ];

@@ -1,9 +1,10 @@
-import type { EntityClass, RelationMetadata } from '../entity-mapper/index.js';
 import type { EntitySyncOptions } from './entity-sync.options.js';
 import type { EntityManager, ObjectLiteral } from 'typeorm';
+import type { EntityClass, RelationMetadata } from '../entity-mapper/index.js';
 
 import { join } from 'path';
 import { tmpdir } from 'os';
+import { randomUUID } from 'crypto';
 
 import { EntityMapper } from '../entity-mapper/index.js';
 import { EntityStorage } from '../entity-storage/entity-storage.js';
@@ -47,8 +48,9 @@ export class EntitySync<E extends ObjectLiteral> {
         this.#entity = entity;
         this.#options = options;
 
-        const path = join(tmpdir(), 'db-sync', `${entity.name}.666`);
-        this.#storage = new EntityStorage(path)
+        const uuid = randomUUID();
+        const path = join(tmpdir(), 'db-sync', `${entity.name}.${uuid}.666`);
+        this.#storage = new EntityStorage(path);
     }
 
     /**
@@ -108,6 +110,10 @@ export class EntitySync<E extends ObjectLiteral> {
                 break;
             }
         }
+
+        if (!await this.#storage.exists()) {
+            await this.#storage.touch();
+        }
     }
 
     /**
@@ -120,7 +126,10 @@ export class EntitySync<E extends ObjectLiteral> {
         const recursiveRelations = entityMapper.filterRelationMetadata(x => x.recursive);
 
         await this.#storage.read(this.#options.chunkSize, async lines => {
-            let items = lines.map(x => entityMapper.parse(x));
+            let items = lines
+                .filter(x => x.length > 0)
+                .map(x => entityMapper.parse(x));
+
             if (recursiveRelations.length > 0) {
                 items = items.map(x => {
                     recursiveRelations.forEach(({ propertyName }) => {
