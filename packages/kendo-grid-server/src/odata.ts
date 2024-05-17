@@ -56,6 +56,10 @@ export class OData<T extends ObjectLiteral> {
         let selectQuery = this.#query;
 
         sort?.forEach(({ field, dir }) => {
+            if (!field.includes('.')) {
+                field = `${selectQuery.alias}.${field}`;
+            }
+
             selectQuery = selectQuery.addOrderBy(
                 field,
                 dir?.toUpperCase() as any
