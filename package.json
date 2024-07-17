@@ -23,6 +23,7 @@
         "prepare": "npm run clean && npm run build"
     },
     "devDependencies": {
+        "@turbo/codemod": "^2.0.7",
         "@types/express": "^4.17.14",
         "@types/node": "^20.8.10",
         "turbo": "^1.13.3",

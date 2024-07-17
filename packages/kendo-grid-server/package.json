@@ -42,7 +42,7 @@
     "@progress/kendo-data-query": "^1.0.0"
   },
   "peerDependencies": {
-    "typeorm": "^0.3.0"
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "sqlite3": "^5.0.0"
