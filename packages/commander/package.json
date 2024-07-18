@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/commander",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "description": "Create CLI with routing using classes and decorators.",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -41,6 +41,6 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "@bleed-believer/meta": "^0.11.1"
+    "@bleed-believer/meta": "^0.11.2"
   }
 }
