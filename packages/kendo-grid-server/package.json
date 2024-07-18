@@ -15,8 +15,10 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist",
+    "build:dev": "tsc --project ./tsconfig.build.json",
     "build": "tsc --project ./tsconfig.build.json --sourceMap false",
     "watch": "tsc --project ./tsconfig.build.json --watch",
+    "check": "tsc --project ./tsconfig.build.json --noEmit",
     "test": "ava"
   },
   "repository": {
@@ -42,7 +44,7 @@
     "@progress/kendo-data-query": "^1.0.0"
   },
   "peerDependencies": {
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.0"
   },
   "devDependencies": {
     "sqlite3": "^5.0.0"

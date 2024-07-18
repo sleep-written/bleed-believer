@@ -17,6 +17,7 @@
     "packages/*"
   ],
   "scripts": {
+    "build:dev": "turbo build:dev",
     "build": "turbo build",
     "watch": "turbo watch",
     "clean": "turbo clean",
@@ -26,7 +27,7 @@
     "@turbo/codemod": "^2.0.7",
     "@types/express": "^4.17.14",
     "@types/node": "^20.8.10",
-    "turbo": "^1.13.3",
+    "turbo": "^2.0.7",
     "typescript": "^5.0.4"
   },
   "dependencies": {

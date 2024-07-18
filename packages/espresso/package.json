@@ -15,6 +15,7 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist",
+    "build:dev": "tsc --project ./tsconfig.build.json",
     "build": "tsc --project ./tsconfig.build.json --sourceMap false",
     "watch": "tsc --project ./tsconfig.build.json --watch",
     "test": "ava"

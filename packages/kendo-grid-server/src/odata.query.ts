@@ -15,7 +15,7 @@ import { FilterBuilder } from './filter-builder/index.js';
  * @typeParam T - The entity type that this OData instance will manage, extending TypeORM's
  * ObjectLiteral, which allows for any object shape that can be managed by TypeORM.
  */
-export class OData<T extends ObjectLiteral> {
+export class ODataQuery<T extends ObjectLiteral> {
     #query: SelectQueryBuilder<T>;
     #parsedQs: ParsedQs;
 
@@ -41,46 +41,6 @@ export class OData<T extends ObjectLiteral> {
             request.url,
             filterColumnParsers
         ).parse();
-    }
-
-    /**
-     * Retrieves many entities based on the parsed query string parameters, applying
-     * sorting, filtering, pagination, and then executing the query to return a grid view
-     * format that includes both the data and total count of records matching the query.
-     * 
-     * @returns A Promise resolving to a GridView object containing the queried data and
-     * total record count.
-     */
-    async getMany(): Promise<GridView<T>> {
-        const { take, skip, sort, filter } = this.#parsedQs;
-        let selectQuery = this.#query;
-
-        sort?.forEach(({ field, dir }) => {
-            if (!field.includes('.')) {
-                field = `${selectQuery.alias}.${field}`;
-            }
-
-            selectQuery = selectQuery.addOrderBy(
-                field,
-                dir?.toUpperCase() as any
-            );
-        });
-
-        if (filter) {
-            selectQuery = new FilterBuilder(filter).append(selectQuery);
-        }
-
-        if (take) {
-            selectQuery = selectQuery.take(take);
-        }
-
-        if (skip) {
-            selectQuery = selectQuery.skip(skip);
-        }
-
-        const data = await selectQuery.getMany();
-        const total = await selectQuery.getCount();
-        return { data, total };
     }
 
     /**

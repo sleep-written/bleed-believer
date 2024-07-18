@@ -140,7 +140,7 @@ export class QuerystringParser {
                     return o;
                 })
         );
-        
+
         const take = parseInt(raw.$top);
         if (!isNaN(take)) {
             out.take = take;

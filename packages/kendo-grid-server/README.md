@@ -52,11 +52,10 @@ export class Dummy extends BaseEntity {
 }
 ```
 
-### Endpoint
+### Endpoint with `ODataQuery`
 Leverage `@bleed-believer/kendo-grid-server` to handle query parameters for filtering, sorting, and pagination directly in your Express route:
-
 ```ts
-import { OData } from '@bleed-believer/kendo-grid-server';
+import { ODataQuery } from '@bleed-believer/kendo-grid-server';
 import { Dummy } from '@entities/dummy.entity.js';
 import express from 'express';
 
@@ -67,7 +66,7 @@ app.get('/dummy', async (req, res) => {
         .createQueryBuilder('dummy')
         .innerJoinAndSelect('dummy.category', 'category');
 
-    const odata = new OData(query, req, {
+    const odata = new ODataQuery(query, req, {
         date: v => v != null ? new Date(v) : v
     });
     
@@ -79,3 +78,39 @@ app.get('/dummy', async (req, res) => {
 app.listen(8080, () => {
     console.log('Server is ready and listening on port 8080');
 });
+```
+
+### Endpoint with `ODataEntity`
+Here's an example demonstrating how to use the `ODataEntity` class for handling query parameters:
+```ts
+import { ODataEntity } from '@bleed-believer/kendo-grid-server';
+import { DataSource } from 'typeorm';
+import express from 'express';
+
+import { Dummy } from '@entities/dummy.entity.js';
+
+const app = express();
+const dataSource = new DataSource({
+    type: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    username: 'user',
+    password: 'password',
+    database: 'test',
+    entities: [Dummy],
+    synchronize: true,
+});
+
+dataSource.initialize().then(() => {
+    app.get('/dummy', async (req, res) => {
+        const odataEntity = new ODataEntity(Dummy, dataSource, req);
+        const result = await odataEntity.getMany({});
+        res.contentType('json');
+        res.end(JSON.stringify(result));
+    });
+
+    app.listen(8080, () => {
+        console.log('Server is ready and listening on port 8080');
+    });
+});
+```
