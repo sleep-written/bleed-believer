@@ -43,10 +43,10 @@
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
-  "dependencies": {
-    "@bleed-believer/meta": "^0.11.1"
-  },
   "peerDependencies": {
     "express": "^4.18.1"
+  },
+  "dependencies": {
+    "@bleed-believer/meta": "^0.11.1"
   }
 }
