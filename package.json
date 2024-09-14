@@ -1,36 +1,37 @@
 {
-    "name": "bleed-believer",
-    "version": "0.2.0",
-    "private": true,
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/sleep-written/bleed-believer.git"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/sleep-written/bleed-believer/issues"
-    },
-    "homepage": "https://github.com/sleep-written/bleed-believer#readme",
-    "workspaces": [
-        "packages/*"
-    ],
-    "scripts": {
-        "build": "turbo build",
-        "watch": "turbo watch",
-        "clean": "turbo clean",
-        "prepare": "npm run clean && npm run build"
-    },
-    "dependencies": {
-        "@bleed-believer/path-alias": "^1.0.0",
-        "@types/node": "^22.5.5",
-        "ava": "^6.0.1",
-        "lerna": "^8.0.0",
-        "turbo": "^2.1.2"
-    },
-    "devDependencies": {
-        "@types/express": "^4.17.21",
-        "typescript": "^5.6.2"
-    }
+  "name": "bleed-believer",
+  "version": "0.2.0",
+  "private": true,
+  "packageManager": "npm@10.8.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sleep-written/bleed-believer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sleep-written/bleed-believer/issues"
+  },
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "watch": "turbo watch",
+    "clean": "turbo clean",
+    "prepare": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "@bleed-believer/path-alias": "^1.0.0",
+    "@types/node": "^22.5.5",
+    "ava": "^6.0.1",
+    "lerna": "^8.0.0",
+    "turbo": "^2.1.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "typescript": "^5.6.2"
+  }
 }
