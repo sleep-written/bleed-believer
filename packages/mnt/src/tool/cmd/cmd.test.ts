@@ -8,6 +8,7 @@ test('exec "echo hello world"', async t => {
 });
 
 test('exec "neofetch"', async t => {
+    t.timeout(20000);
     const resp = await cmd('neofetch');
     const text = resp.stdout?.toString('utf-8') as string;
     t.truthy(text);

@@ -6,7 +6,7 @@ export function createDataSource(database: string): DataSource {
         database,
         synchronize: true,
         entities: [
-            './src/dummy-db/entities/*.entity.ts'
+            './dist/dummy-db/entities/*.entity.js'
         ]
     });
 }
