@@ -181,7 +181,34 @@ To install these, run the following command:
 npm i --save-dev @swc/core @swc/cli ava
 ```
 
-### Step 2: Create `ava.config.mjs` in the project root
+### Step 2: TypeScript configuration
+
+Before configuring `swc`, ensure your TypeScript project is properly set up with the following `tsconfig.json`. The `verbatimModuleSyntax` option is required for `swc` to handle the module syntax correctly.
+
+Add this to your `tsconfig.json`:
+
+```json5
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "Node16",
+        "moduleResolution": "Node16",
+        "verbatimModuleSyntax": true,
+        
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "baseUrl": "./src",
+        "paths": {
+            "@alias-a/*": ["./folder-a/*"],
+            "@alias-b/*": ["./folder-b/*"]
+        }
+    }
+}
+```
+
+The `"verbatimModuleSyntax": true` option ensures that `swc` can correctly interpret and transpile your ES modules without modifying import/export statements.
+
+### Step 3: Create `ava.config.mjs` in the project root
 
 This configuration tells `ava` to run tests from the transpiled output (`dist` folder). Add the following to a file named `ava.config.mjs`:
 
@@ -194,7 +221,7 @@ export default {
 };
 ```
 
-### Step 3: Create `.test.swcrc` in the project root
+### Step 4: Create `.test.swcrc` in the project root
 
 This configuration file ensures `swc` properly transpiles the TypeScript code, including decorators, dynamic imports, and strict ES6 modules. Add the following to a file named `.test.swcrc`:
 
@@ -222,7 +249,7 @@ This configuration file ensures `swc` properly transpiles the TypeScript code, i
 }
 ```
 
-### Step 4: Run the tests
+### Step 5: Run the tests
 
 To transpile your project and execute the tests, use the following commands:
 
