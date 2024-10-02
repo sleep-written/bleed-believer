@@ -6,7 +6,7 @@ import { getArgvData } from './get-argv-data.js';
 import { Command } from '../command/index.js';
 
 export const tail = new class {
-    private _value!: any;
+    _value!: any;
     get(): any {
         return this._value;
     }

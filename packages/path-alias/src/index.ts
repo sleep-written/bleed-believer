@@ -1,4 +1,5 @@
-import { register } from 'node:module';
-export { pathResolve } from './path-resolve.js';
+import { register } from "node:module";
+import { pathToFileURL } from "node:url";
 
-register('./loader/index.js', import.meta.url);
+const path = import.meta.resolve('./esm.js');
+register(path, pathToFileURL("./"));

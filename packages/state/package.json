@@ -18,11 +18,10 @@
     }
   },
   "scripts": {
+    "test": "npm run clean && swc ./src -d ./dist --strip-leading-paths --config-file .test.swcrc && ava",
+    "build": "npm run clean && swc ./src -d ./dist --strip-leading-paths & tsc",
     "clean": "rm -rf ./dist",
-    "build:dev": "tsc --project ./tsconfig.build.json",
-    "build": "tsc --project ./tsconfig.build.json --sourceMap false",
-    "watch": "tsc --project ./tsconfig.build.json --watch",
-    "test": "ava"
+    "check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",

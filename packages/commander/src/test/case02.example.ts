@@ -5,7 +5,7 @@ import { CommandRouting } from '../command-routing/index.js';
 import { Command } from '../command/index.js';
 
 export const mem = new class {
-    private _value: string[] = [];
+    _value: string[] = [];
 
     get(): string[] {
         return this._value;

@@ -17,23 +17,20 @@
     "packages/*"
   ],
   "scripts": {
-    "build:dev": "turbo build:dev",
     "build": "turbo build",
-    "watch": "turbo watch",
     "clean": "turbo clean",
     "prepare": "npm run clean && npm run build"
   },
-  "devDependencies": {
-    "@turbo/codemod": "^2.0.7",
+  "dependencies": {
+    "@swc/cli": "^0.4.1-nightly.20240914",
+    "@swc/core": "^1.7.28",
+    "@turbo/codemod": "^2.1.3",
     "@types/express": "^4.17.14",
     "@types/node": "^20.8.10",
-    "turbo": "^2.0.7",
-    "typescript": "^5.0.4"
-  },
-  "dependencies": {
-    "@bleed-believer/path-alias": "^1.0.0",
-    "ava": "^6.0.1",
-    "lerna": "^8.0.0"
+    "ava": "^6.1.3",
+    "lerna": "^8.1.8",
+    "turbo": "^2.1.3",
+    "typescript": "^5.6.2"
   },
   "packageManager": "npm@10.8.1"
 }
