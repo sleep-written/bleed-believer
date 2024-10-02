@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/espresso",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "description": "Create endpoints for express.js using classes and decorators.",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "@bleed-believer/meta": "^0.11.2"
+    "@bleed-believer/meta": "^0.11.3"
   },
   "peerDependencies": {
     "express": "^4.18.1"
