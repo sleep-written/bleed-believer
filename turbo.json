@@ -27,9 +27,6 @@
       ],
       "cache": false
     },
-    "test": {
-      "cache": false
-    },
     "start": {
       "cache": false
     }
