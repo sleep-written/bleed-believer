@@ -15,7 +15,6 @@ interface CompiledPath {
 
 export class PathAlias {
     #cwd: string;
-    #entryPoint: string;
     #entryPointInsideSrc: boolean;
 
     #isFileExists: (path: string) => Promise<boolean>;
@@ -48,8 +47,9 @@ export class PathAlias {
         this.#outDir = path.resolve(this.#cwd, compilerOptions.outDir ?? '.');
         this.#rootDir = path.resolve(this.#cwd, compilerOptions.rootDir ?? '.');
         this.#baseUrl = path.resolve(this.#cwd, compilerOptions.baseUrl ?? '.');
-        this.#entryPoint = options?.entryPoint ?? process.argv[1];
-        this.#entryPointInsideSrc = this.isInsideSrc(this.#entryPoint);
+
+        const entryPoint = options?.entryPoint ?? process.argv[1];
+        this.#entryPointInsideSrc = this.isInsideSrc(entryPoint);
 
         // Precompile regex patterns for path mappings
         if (this.#paths) {

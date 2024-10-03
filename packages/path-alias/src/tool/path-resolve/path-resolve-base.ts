@@ -1,49 +1,64 @@
-import type { TsConfigResult } from 'get-tsconfig';
+import type { TsConfigJson } from 'get-tsconfig';
+import { getTsconfig } from 'get-tsconfig';
+
+import { isModuleInstalled } from '../is-module-installed/index.js';
+import { isFileExists } from '../is-file-exists/index.js';
+import { PathAlias } from '../path-alias/index.js';
 import { resolve } from 'path';
 
-import { PathAlias } from '../path-alias/index.js';
-
 export class PathResolveBase {
-    #isTsNode: () => boolean;
+    #isTsNode: boolean;
     #pathAlias: PathAlias;
 
-    constructor(
-        inject: {
-            process: { cwd(): string; },
-            isTsNode: () => boolean,
-            entryPoint?: string,
-            getTsconfig: (s?: string) => TsConfigResult | null,
+    constructor(inject: Partial<{
+        cwd: string;
+        tsconfig: TsConfigJson;
+        isTsNode: boolean;
+    }>) {
+        const tsconfig = inject.tsconfig ?? getTsconfig()?.config;
+        if (!tsconfig) {
+            throw new Error('"tsconfig.json" not found.');
         }
-    ) {
-        const cwd = inject.process.cwd();
-        const entryPoint = inject.entryPoint;
-        const tsconfigResult = inject.getTsconfig(cwd);
-        if (!tsconfigResult) {
-            throw new Error('"tsconfig.json" file not found.');
-        }
-        
-        this.#isTsNode = inject.isTsNode;
-        this.#pathAlias = new PathAlias(tsconfigResult.config, { cwd, entryPoint });
+
+        const cwd = inject.cwd ?? process.cwd();
+        this.#isTsNode = !!inject.isTsNode;
+        this.#pathAlias = new PathAlias(tsconfig, {
+            cwd,
+            isFileExists,
+            isModuleInstalled
+        });
     }
 
-    resolve(path: string) {
-        const { outDir, rootDir } = this.#pathAlias;
-        const resolvedPath = this.#pathAlias.resolvePath(path)[0] ?? path;
-        const isTsNode = this.#isTsNode();
-        if (resolvedPath != path) {
-            if (isTsNode) {
-                const rootDirPath = this.#pathAlias.convertExtToTs(resolvedPath);
-                return this.#pathAlias.convertExtToTs(rootDirPath);
+    resolve(path: string, multi: true): string[];
+    resolve(path: string, multi?: false): string;
+    resolve(path: string, multi?: boolean): string | string[] {
+        let resolvedPaths = this.#pathAlias.resolvePath(path);
+        if (!multi) {
+            resolvedPaths = resolvedPaths.slice(0, 1);
+        }
+
+        const data = resolvedPaths.map(resolvedPath => {
+            if (resolvedPath !== path) {
+                if (this.#isTsNode) {
+                    const tsPath = this.#pathAlias.convertExtToTs(resolvedPath);
+                    return tsPath.replace(this.#pathAlias.outDir, this.#pathAlias.rootDir);
+                } else {
+                    const jsPath = this.#pathAlias.convertExtToJs(resolvedPath);
+                    return jsPath.replace(this.#pathAlias.rootDir, this.#pathAlias.outDir);
+                }
+            } else if (this.#isTsNode) {
+                const tsPath = this.#pathAlias.convertExtToTs(path);
+                return resolve(this.#pathAlias.rootDir, tsPath);
             } else {
-                const outDirPath = resolvedPath.replace(rootDir, outDir);
-                return this.#pathAlias.convertExtToJs(outDirPath);
+                const jsPath = this.#pathAlias.convertExtToJs(path);
+                return resolve(this.#pathAlias.outDir, jsPath);
             }
-        } else if (isTsNode) {
-            const tsPath = this.#pathAlias.convertExtToTs(resolvedPath);
-            return resolve(rootDir, tsPath);
+        });
+
+        if (!multi) {
+            return data?.at(0) ?? path;
         } else {
-            const jsPath = this.#pathAlias.convertExtToJs(resolvedPath);
-            return resolve(outDir, jsPath);
+            return data;
         }
     }
 }

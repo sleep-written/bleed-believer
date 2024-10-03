@@ -1,13 +1,19 @@
 # @bleed-believer/path-alias
 
-This library allows you to execute code with predefined path aliases, helping you avoid deeply nested relative paths like this:
+**Note:** The latest stable version is [v1.1.3](https://www.npmjs.com/package/@bleed-believer/path-alias/v/1.1.3). This documentation refers to an alpha version currently available for testing.
+
+## Introduction
+
+`@bleed-believer/path-alias` simplifies your import statements by allowing you to use predefined path aliases in your TypeScript or JavaScript projects. Instead of writing long relative paths, you can use concise and descriptive aliases.
+
+**Without Path Aliases:**
 
 ```ts
 import { Jajaja } from '../../../../../../../jajaja.js';
 import { Gegege } from '../../../../../gegege.js';
 ```
 
-Instead, you can use cleaner, more maintainable paths like this:
+**With `@bleed-believer/path-alias`:**
 
 ```ts
 import { Jajaja } from '@alias-a/jajaja.js';
@@ -16,214 +22,185 @@ import { Gegege } from '@alias-b/gegege.js';
 
 ## Features
 
-- Internally, this library leverages `ts-node` to execute TypeScript source files directly.
-- If you're running already transpiled code, the library skips `ts-node`, allowing for faster execution by running the plain JavaScript files directly.
-
-## Disclaimer
-
-- Due to recent changes, likely in TypeScript or the `ava` testing library, it is no longer possible to use `ava` with this library and the `--import` flag. Instead, transpile your project (including your unit tests) with `swc` (which resolves path aliases) and run the tests without using the `--import` flag.
-- This library is designed to work with projects in ESM format using Node.js v20 or higher.
-- Monorepo support has not been tested in this version.
-
-### Node.js Version Compatibility
-
-If you're using an earlier version of Node.js, you can use the following options:
-
-- [@bleed-believer/path-alias v0.15.2](https://www.npmjs.com/package/@bleed-believer/path-alias/v/0.15.2) (compatible with Node.js v18).
-- [ts-path-mapping](https://www.npmjs.com/package/ts-path-mapping) (deprecated).
+- **Simplified Import Paths:** Use custom aliases to make your code cleaner and easier to maintain.
+- **TypeScript and JavaScript Support:** Execute TypeScript source files or transpiled JavaScript files seamlessly.
+- **Automatic `ts-node` Handling:** Runs `ts-node` internally for TypeScript files; skips it for JavaScript for faster execution.
+- **Utilities Included:** Helpful functions like `isTsNode()` and `pathResolve()` for advanced use cases.
+- **ESM Compatibility:** Designed for projects using ECMAScript modules (ESM) with Node.js v20 or higher.
 
 ## Installation
 
-This library includes `ts-node` as a dependency. To install, run the following command:
+Install the library using npm:
 
 ```bash
-npm i --save @bleed-believer/path-alias
+npm install @bleed-believer/path-alias
 ```
 
-## Usage
+> **Note:** `ts-node` is included as a dependency.
 
-Consider the following project structure:
+## Quick Start
 
-```bash
-# Your current working directory
+### Project Structure
+
+Assuming a project with the following structure:
+
+```
 project-folder
-│   # The project dependencies
-├── node_modules
-│
-│   # The transpiled files
-├── dist
-│   │   # The file where the app starts
+├── node_modules/
+├── dist/
 │   ├── index.js
-│   │   
-│   ├── folder-a
-│   │   ├── ...
-│   │   └── ...
-│   ├── folder-b
-│   │   ├── ...
-│   │   └── ...
-│   └── ...
-│
-│   # The source code
-├── src
-│   │   # The file where the app starts
+│   ├── folder-a/
+│   └── folder-b/
+├── src/
 │   ├── index.ts
-│   │   
-│   ├── folder-a
-│   │   ├── ...
-│   │   └── ...
-│   ├── folder-b
-│   │   ├── ...
-│   │   └── ...
-│   └── ...
-│
-│   # The project configuration files
+│   ├── folder-a/
+│   └── folder-b/
 ├── package.json
-├── package-lock.json
 └── tsconfig.json
 ```
 
-And the following example TypeScript configuration:
+### TypeScript Configuration
+
+Your `tsconfig.json` should include the following settings:
 
 ```json5
 {
-    "compilerOptions": {
-        "target": "ES2022",
-        "module": "Node16",
-        "moduleResolution": "Node16",
-        
-        "outDir": "./dist",
-        "rootDir": "./src",
-        "baseUrl": "./src",
-        "paths": {
-            "@alias-a/*": ["./folder-a/*"],
-            "@alias-b/*": ["./folder-b/*"]
-        }
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "@alias-a/*": ["./folder-a/*"],
+      "@alias-b/*": ["./folder-b/*"],
+      "@alias-c/*": ["./folder-c/*", "./folder-c-legacy/*"]
     }
+  }
 }
 ```
 
-Note that the `"outDir"`, `"rootDir"`, `"baseUrl"`, and `"paths"` properties are optional. This library can even read TypeScript configurations that extend other files. For more details, refer to [get-tsconfig](https://www.npmjs.com/package/get-tsconfig).
+> **Note:** The `"paths"` property is essential for defining your custom aliases. The example paths provided are necessary to explain certain scenarios and should remain as shown.
 
-### Execution Options
+### Running Your Code
 
-You can execute the code with the following options:
+You can execute your code with resolved path aliases using various methods:
 
-- Run the source code (`*.ts`) using the integrated CLI:
-    ```bash
-    npx bb-path-alias ./src/index.ts
-    ```
+- **Run TypeScript Source Files:**
 
-- Run the transpiled code (`*.js`) using the integrated CLI:
-    ```bash
-    npx bb-path-alias ./dist/index.js
-    ```
+  ```bash
+  npx bb-path-alias ./src/index.ts
+  ```
 
-- Run the source code (`*.ts`) using the `--import` flag:
-    ```bash
-    node --import @bleed-believer/path-alias ./src/index.ts
-    ```
+- **Run Transpiled JavaScript Files:**
 
-- Run the transpiled code (`*.js`) using the `--import` flag:
-    ```bash
-    node --import @bleed-believer/path-alias ./dist/index.js
-    ```
+  ```bash
+  npx bb-path-alias ./dist/index.js
+  ```
+
+- **Using Node.js `--import` Flag with TypeScript:**
+
+  ```bash
+  node --import @bleed-believer/path-alias ./src/index.ts
+  ```
+
+- **Using Node.js `--import` Flag with JavaScript:**
+
+  ```bash
+  node --import @bleed-believer/path-alias ./dist/index.js
+  ```
 
 ## Utilities
 
-The following utilities are available and can be imported from `@bleed-believer/path-alias/utils`:
+The library provides utility functions to enhance your development experience.
 
 ### `isTsNode()`
 
-Returns a boolean indicating whether the custom hooks of `ts-node` are being used. It stores a flag in the system's temporary files that indicates if the current process is using `ts-node`.
+Checks if the current process is running with `ts-node`.
 
-Example usage:
+**Usage:**
 
 ```ts
 import { isTsNode } from '@bleed-believer/path-alias/utils';
 
 if (isTsNode()) {
-    console.log('Running with ts-node');
+  console.log('Running with ts-node');
 } else {
-    console.log('Running with compiled JavaScript');
+  console.log('Running with compiled JavaScript');
 }
 ```
 
-### `pathResolve('path/to/dir')`
+### `pathResolve(path: string, multi?: boolean): string | string[]`
 
-Resolves the given path based on whether `ts-node` is in use. If `ts-node` is being used, the path will be resolved relative to the `"rootDir"` as specified in the TypeScript configuration. Otherwise, it will resolve the path relative to the `"outDir"`.
+Resolves a given path based on your `tsconfig.json` settings.
 
-Thanks to how `isTsNode()` works, you no longer need to define the `RESOLVE_SRC` environment variable as required in previous versions.
+- **Parameters:**
+  - `path: string` - The path to resolve.
+  - `multi?: boolean` - If `true`, returns all possible resolved paths as an array. Defaults to `false`.
 
-Example usage:
+**Features:**
+
+- Automatically detects if `ts-node` is in use.
+- Resolves paths relative to `"rootDir"` when running with `ts-node`, or `"outDir"` otherwise.
+- Eliminates the need for environment variables like `RESOLVE_SRC`.
+
+**Usage:**
 
 ```ts
 import { pathResolve } from '@bleed-believer/path-alias/utils';
 
+// Get a single resolved path
 const resolvedPath = pathResolve('folder/file.js');
 console.log(`Resolved path: ${resolvedPath}`);
+
+// Get all possible resolved paths
+const resolvedPaths = pathResolve('folder/file.js', true);
+console.log('Resolved paths:', resolvedPaths);
 ```
 
-## Running Unit Tests with `ava`
+## Advanced Usage
 
-At the moment, it is not possible to run unit tests with `ava` using the `--import` flag alongside this library. As an alternative, you can set up your project to use `swc` for transpilation and run the tests without the `--import` flag. Follow the steps below:
+### Running Unit Tests with `ava`
 
-### Step 1: Install the necessary dependencies
+Due to recent updates in TypeScript or the `ava` testing library, using `ava` with the `--import` flag alongside this library is not currently possible.
 
-You'll need to install the following packages:
+#### Workaround: Using `swc` for Transpilation
 
-- [@swc/core](https://www.npmjs.com/package/@swc/core)
-- [@swc/cli](https://www.npmjs.com/package/@swc/cli)
-- [ava](https://www.npmjs.com/package/ava)
+Transpile your project (including tests) with `swc`, which resolves path aliases, and run tests without the `--import` flag.
 
-To install these, run the following command:
+##### Step 1: Install Dependencies
 
 ```bash
-npm i --save-dev @swc/core @swc/cli ava
+npm install --save-dev @swc/core @swc/cli ava
 ```
 
-### Step 2: TypeScript configuration
+##### Step 2: Update `tsconfig.json`
 
-Before configuring `swc`, ensure your TypeScript project is properly set up with the following `tsconfig.json`. The `verbatimModuleSyntax` option is required for `swc` to handle the module syntax correctly.
-
-Add this to your `tsconfig.json`:
+Include `"verbatimModuleSyntax": true` to ensure `swc` handles module syntax correctly.
 
 ```json5
 {
-    "compilerOptions": {
-        "target": "ES2022",
-        "module": "Node16",
-        "moduleResolution": "Node16",
-        "verbatimModuleSyntax": true,
-        
-        "outDir": "./dist",
-        "rootDir": "./src",
-        "baseUrl": "./src",
-        "paths": {
-            "@alias-a/*": ["./folder-a/*"],
-            "@alias-b/*": ["./folder-b/*"]
-        }
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "verbatimModuleSyntax": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "@alias-a/*": ["./folder-a/*"],
+      "@alias-b/*": ["./folder-b/*"],
+      "@alias-c/*": ["./folder-c/*", "./folder-c-legacy/*"]
     }
+  }
 }
 ```
 
-The `"verbatimModuleSyntax": true` option ensures that `swc` can correctly interpret and transpile your ES modules without modifying import/export statements.
+##### Step 3: Create `.test.swcrc`
 
-### Step 3: Create `ava.config.mjs` in the project root
-
-This configuration tells `ava` to run tests from the transpiled output (`dist` folder). Add the following to a file named `ava.config.mjs`:
-
-```js
-export default {
-    files: [
-        './dist/**/*.test.js',
-        './dist/**/*.test.mjs',
-    ]
-};
-```
-
-### Step 4: Create `.test.swcrc` in the project root
-
-This configuration file ensures `swc` properly transpiles the TypeScript code, including decorators, dynamic imports, and strict ES6 modules. Add the following to a file named `.test.swcrc`:
+Add a `.test.swcrc` file in your project root:
 
 ```json
 {
@@ -243,22 +220,59 @@ This configuration file ensures `swc` properly transpiles the TypeScript code, i
     "transform": {
       "decoratorMetadata": true
     },
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "@alias-a/*": ["./folder-a/*"],
+      "@alias-b/*": ["./folder-b/*"],
+      "@alias-c/*": ["./folder-c/*", "./folder-c-legacy/*"]
+    }
   },
   "sourceMaps": true
 }
 ```
 
-### Step 5: Run the tests
+> **Important:** Ensure the `"baseUrl"` and `"paths"` match those in your `tsconfig.json`.
 
-To transpile your project and execute the tests, use the following commands:
+##### Step 4: Configure `ava`
+
+Create an `ava.config.mjs` file:
+
+```js
+export default {
+  files: [
+    './dist/**/*.test.js',
+    './dist/**/*.test.mjs',
+  ]
+};
+```
+
+##### Step 5: Run Tests
+
+Transpile your code and run the tests:
 
 ```bash
-# Transpile the project using swc:
-npx swc ./src -d ./dist --strip-leading-paths --config-file .test.swcrc
+# Transpile the project
+npx swc ./src -d ./dist --config-file .test.swcrc
 
-# Run the tests:
+# Run tests
 npx ava
 ```
 
-This setup ensures that your project is transpiled with `swc`, resolving path aliases correctly, and allows you to run unit tests with `ava` without the `--import` flag.
+## Node.js Version Compatibility
+
+If you're using an older version of Node.js (e.g., Node.js v18), consider the following alternatives:
+
+- [@bleed-believer/path-alias v0.15.2](https://www.npmjs.com/package/@bleed-believer/path-alias/v/0.15.2)
+- [ts-path-mapping](https://www.npmjs.com/package/ts-path-mapping) (deprecated)
+
+## Notes and Limitations
+
+- **ESM Format Required:** The library is designed for projects using ECMAScript modules with Node.js v20 or higher.
+- **Monorepo Support:** Monorepo setups have not been tested with this version.
+- **Disclaimer:** Due to recent changes, it's currently not possible to use `ava` with this library and the `--import` flag. Use the `swc` workaround as described above.
+
+## Conclusion
+
+`@bleed-believer/path-alias` streamlines your import statements by enabling path aliases, making your codebase cleaner and easier to navigate. Whether you're running TypeScript source files or compiled JavaScript, the library handles path resolution seamlessly.
+
+For any issues or contributions, feel free to visit the [GitHub repository](https://github.com/bleed-believer/path-alias).

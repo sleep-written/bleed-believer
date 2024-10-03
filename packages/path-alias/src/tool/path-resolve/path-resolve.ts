@@ -1,9 +1,19 @@
 import { getTsconfig } from 'get-tsconfig';
 
-import { isTsNode } from './is-ts-node.js';
 import { PathResolveBase } from './path-resolve-base.js';
+import { isTsNode } from './is-ts-node.js';
 
-const pathResolveBase = new PathResolveBase({ process, isTsNode, getTsconfig });
-export function pathResolve(path: string) {
-    return pathResolveBase.resolve(path);
+let resolver: PathResolveBase | undefined;
+export function pathResolve(path: string, multi: true): string[];
+export function pathResolve(path: string, multi?: false): string;
+export function pathResolve(path: string, multi?: boolean): string | string[] {
+    if (!resolver) {
+        resolver = new PathResolveBase({
+            cwd: process.cwd(),
+            isTsNode: isTsNode(),
+            tsconfig: getTsconfig()?.config
+        });
+    }
+
+    return resolver.resolve(path, multi as any) as any;
 }
