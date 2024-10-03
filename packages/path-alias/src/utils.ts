@@ -1,1 +1,1 @@
-export { isTsNode, pathResolve } from './ts-node.flags.js';
+export { isTsNode, pathResolve } from './tool/path-resolve/index.js';

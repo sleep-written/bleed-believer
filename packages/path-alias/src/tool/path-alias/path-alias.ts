@@ -22,9 +22,17 @@ export class PathAlias {
     #isModuleInstalled: (moduleName: string) => boolean;
 
     #paths?: Record<string, string[]>;
-    #outDir: string;
-    #rootDir: string;
     #baseUrl: string;
+    
+    #outDir: string;
+    get outDir(): string {
+        return this.#outDir;
+    }
+
+    #rootDir: string;
+    get rootDir(): string {
+        return this.#rootDir;
+    }
 
     // Precompiled regex patterns for path mappings
     private readonly compiledPaths: CompiledPath[] = [];
@@ -64,7 +72,7 @@ export class PathAlias {
      * @param specifier The module specifier to convert.
      * @returns The converted module specifier.
      */
-    private convertExtToTs(specifier: string): string {
+    convertExtToTs(specifier: string): string {
         return specifier.replace(/(?<=\.m?)j(?=s(x?)$)/gi, 't');
     }
 
@@ -73,7 +81,7 @@ export class PathAlias {
      * @param specifier The module specifier to convert.
      * @returns The converted module specifier.
      */
-    private convertExtToJs(specifier: string): string {
+    convertExtToJs(specifier: string): string {
         return specifier.replace(/(?<=\.m?)t(?=s(x?)$)/gi, 'j');
     }
 
@@ -94,12 +102,37 @@ export class PathAlias {
         return resolvedPath.startsWith(normalizedRootDir);
     }
 
+    resolvePath(pathOrSpecifier: string): string[] {
+        for (const { regex, mappedPaths } of this.compiledPaths) {
+            const match = regex.exec(pathOrSpecifier);
+            if (match && mappedPaths.length > 0) {
+                const capturedGroups = match.slice(1); // Exclude the full match
+                const paths: string[] = [];
+
+                for (const mappedPath of mappedPaths) {
+                    let replacedPath = mappedPath;
+                    capturedGroups.forEach(group => {
+                        replacedPath = replacedPath.replace('*', group ?? '');
+                    });
+
+                    // Resolve the path relative to baseUrl and cwd
+                    const resolvedPath = path.resolve(this.#baseUrl, replacedPath);
+                    paths.push(resolvedPath);
+                }
+
+                return paths;
+            }
+        }
+
+        return [pathOrSpecifier];
+    }
+
     /**
      * Resolve a module specifier to its corresponding file path based on path aliases.
      * @param specifier The module specifier to resolve.
      * @returns The resolved file path or the original specifier with converted extension.
      */
-    async resolve(specifier: string, context?: { parentURL?: string; }): Promise<string> {
+    async resolveSpecifier(specifier: string, context?: { parentURL?: string; }): Promise<string> {
         if (!path.isAbsolute(specifier) && typeof context?.parentURL === 'string') {
             const parentPath = fileURLToPath(context.parentURL);
             if (this.isInsideSrc(parentPath)) {
@@ -112,40 +145,28 @@ export class PathAlias {
             }
         }
 
-        for (const { regex, mappedPaths } of this.compiledPaths) {
-            const match = regex.exec(specifier);
-            if (match) {
-                const capturedGroups = match.slice(1); // Exclude the full match
-
-                for (const mappedPath of mappedPaths) {
-                    let replacedPath = mappedPath;
-                    capturedGroups.forEach(group => {
-                        replacedPath = replacedPath.replace('*', group ?? '');
-                    });
-
-                    // Resolve the path relative to baseUrl and cwd
-                    const fullPath = path.resolve(this.#baseUrl, replacedPath);
-
-                    // Adjust the path based on whether the entry point is inside src
-                    let resolvedPath = fullPath;
-                    if (this.#entryPointInsideSrc) {
-                        // Replace .js with .ts
-                        resolvedPath = this.convertExtToTs(resolvedPath);
-                    } else {
-                        // Replace the root path with the out path
-                        resolvedPath = fullPath.replace(this.#rootDir, this.#outDir);
-                    }
-
-                    // Check if the file exists
-                    if (await this.#isFileExists(resolvedPath)) {
-                        return resolvedPath;
-                    }
-
-                    // Check if the file exists (in *.js version)
-                    resolvedPath = this.convertExtToJs(resolvedPath);
-                    if (await this.#isFileExists(resolvedPath)) {
-                        return resolvedPath;
-                    }
+        const fullPaths = this.resolvePath(specifier);
+        for (const fullPath of fullPaths) {
+            if (specifier != fullPath) {
+                // Adjust the path based on whether the entry point is inside src
+                let resolvedPath = fullPath;
+                if (this.#entryPointInsideSrc) {
+                    // Replace .js with .ts
+                    resolvedPath = this.convertExtToTs(resolvedPath);
+                } else {
+                    // Replace the root path with the out path
+                    resolvedPath = fullPath.replace(this.#rootDir, this.#outDir);
+                }
+    
+                // Check if the file exists
+                if (await this.#isFileExists(resolvedPath)) {
+                    return resolvedPath;
+                }
+    
+                // Check if the file exists (in *.js version)
+                resolvedPath = this.convertExtToJs(resolvedPath);
+                if (await this.#isFileExists(resolvedPath)) {
+                    return resolvedPath;
                 }
             }
         }

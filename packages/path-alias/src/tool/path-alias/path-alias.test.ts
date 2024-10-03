@@ -75,48 +75,48 @@ test('Check if path alias works', async t => {
 
     // Test resolving an entity path
     t.is(
-        await pathAlias.resolve('@entities/user.entity.js'),
+        await pathAlias.resolveSpecifier('@entities/user.entity.js'),
         '/path/to/project/src/entities/user.entity.ts'
     );
 
     // Test resolving a tool path that exists in the primary mapping
     t.is(
-        await pathAlias.resolve('@tool/break/index.js'),
+        await pathAlias.resolveSpecifier('@tool/break/index.js'),
         '/path/to/project/src/tool/break/index.ts'
     );
 
     // Test resolving a tool path that exists in the secondary mapping
     t.is(
-        await pathAlias.resolve('@tool/parse/index.js'),
+        await pathAlias.resolveSpecifier('@tool/parse/index.js'),
         '/path/to/project/src/tool-legacy/parse/index.ts'
     );
 
     // Test resolving a direct file alias
     t.is(
-        await pathAlias.resolve('@file'),
+        await pathAlias.resolveSpecifier('@file'),
         '/path/to/project/src/file.ts'
     );
 
     // Test resolving an alias without a corresponding path mapping
     t.is(
-        await pathAlias.resolve('@tool'),
+        await pathAlias.resolveSpecifier('@tool'),
         '@tool'
     );
 
     // Test resolving external modules (should return as is)
     t.is(
-        await pathAlias.resolve('discord.js'),
+        await pathAlias.resolveSpecifier('discord.js'),
         'discord.js'
     );
 
     t.is(
-        await pathAlias.resolve('tslog'),
+        await pathAlias.resolveSpecifier('tslog'),
         'tslog'
     );
 
     // Test resolving an alias with special characters (should return as is)
     t.is(
-        await pathAlias.resolve('@ñeeee/file.js'),
+        await pathAlias.resolveSpecifier('@ñeeee/file.js'),
         '@ñeeee/file.js'
     );
 });
@@ -137,7 +137,7 @@ test('Resolve without paths configured', async t => {
 
     // Should return the specifier as is since no paths are configured
     t.is(
-        await pathAlias.resolve('@entities/user.entity.js'),
+        await pathAlias.resolveSpecifier('@entities/user.entity.js'),
         '@entities/user.entity.js'
     );
 });
@@ -161,7 +161,7 @@ test('Resolve with multiple wildcard matches', async t => {
 
     // Test resolving a path with multiple wildcards
     t.is(
-        await pathAlias.resolve('@module/foo/sub/bar.js'),
+        await pathAlias.resolveSpecifier('@module/foo/sub/bar.js'),
         '/path/to/project/src/modules/foo/sub-modules/bar.ts'
     );
 });

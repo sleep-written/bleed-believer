@@ -5,11 +5,10 @@ import { fileURLToPath as originalFileURLToPath } from 'url';
 import { getTsconfig as originalGetTsconfig } from 'get-tsconfig';
 import * as tsNode from 'ts-node/esm';
 
-import { markAsTsNode } from './ts-node.flags.js';
+import { markAsTsNode } from './tool/path-resolve/index.js';
 import { isFileUrl } from './tool/is-file-url/index.js';
 import { PathAlias } from './tool/path-alias/index.js';
 import { logger } from './logger.js';
-import { isAbsolute } from 'path';
 
 /**
  * Interface to define the dependencies that can be injected into CustomHooks.
@@ -117,7 +116,7 @@ export class CustomHooks {
             
             // Resolve path alias
             let isTsNode = false;
-            specifier = await this.#pathAlias?.resolve(specifier, context);
+            specifier = await this.#pathAlias?.resolveSpecifier(specifier, context);
             if (this.#pathAlias.isInsideSrc(specifier)) {
                 isTsNode = true;
                 markAsTsNode();
