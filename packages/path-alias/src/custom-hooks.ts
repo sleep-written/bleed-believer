@@ -1,135 +1,66 @@
-import type { LoadFnOutput, LoadHookContext, ResolveFnOutput, ResolveHookContext } from 'module';
-import type { NextLoad, NextResolver } from 'ts-node/esm';
+import type { LoadHook, ResolveHook } from 'module';
+import { transform } from '@swc/core';
 
-import { fileURLToPath as originalFileURLToPath } from 'url';
-import { getTsconfig as originalGetTsconfig } from 'get-tsconfig';
-import * as tsNode from 'ts-node/esm';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-import { markAsTsNode } from './tool/path-resolve/index.js';
-import { isFileUrl } from './tool/is-file-url/index.js';
-import { PathAlias } from './tool/path-alias/index.js';
-import { logger } from './logger.js';
+import { isPackageInstalled } from '@tool/is-package-installed/index.js';
+import { isFileExists } from '@tool/is-file-exists/index.js';
+import { ExtParser } from '@tool/ext-parser/index.js';
+import { TsConfig } from '@tool/ts-config/index.js';
+import { TsFlag } from '@tool/ts-flag/index.js';
 
-/**
- * Interface to define the dependencies that can be injected into CustomHooks.
- * This allows for easier mocking and testing.
- */
-interface CustomHooksDependencies {
-    getTsconfig?: typeof originalGetTsconfig;
-    fileURLToPath?: typeof originalFileURLToPath;
-    PathAliasClass?: typeof PathAlias;
+const tsConfig = TsConfig.load();
+const tsFlag = new TsFlag(process.pid.toString());
+export const load: LoadHook = async (url, context, defaultLoad) => {
+    if (new ExtParser(url).isTs()) {
+        tsFlag.markAsParsingSourceCode();
+        context.format = 'module';
 
-    cwd?: () => string;
-    tsNodeLoadFn?: typeof tsNode.load;
-    tsNodeResolveFn?: typeof tsNode.resolve;
+        const result = await defaultLoad(url, context);
+        const rawTxt = (result.source as Buffer).toString('utf-8');
+        const swccnf = tsConfig.toSwcConfig();
+        const source = await transform(rawTxt, swccnf);
+
+        return {
+            format: 'module',
+            source: source.code
+        };
+    } else {
+        return defaultLoad(url, context);
+    }
 }
 
-/**
- * CustomHooks class integrates with ts-node's ESM loader hooks.
- * It utilizes PathAlias to resolve module paths based on tsconfig paths.
- */
-export class CustomHooks {
-    #cwd: () => string;
-    #pathAlias!: PathAlias;
-    #getTsconfig: typeof originalGetTsconfig;
-    #tsNodeLoadFn: typeof tsNode.load;
-    #fileURLToPath: typeof originalFileURLToPath;
-    #PathAliasClass: typeof PathAlias;
-    #tsNodeResolveFn: typeof tsNode.resolve;
-
-    /**
-     * Constructor allows injecting dependencies for easier testing.
-     * If no dependencies are provided, it defaults to the actual implementations.
-     * 
-     * @param dependencies - An object containing optional dependencies to override defaults.
-     */
-    constructor(dependencies: CustomHooksDependencies = {}) {
-        this.#cwd = dependencies.cwd ?? (() => process.cwd());
-        this.#getTsconfig = dependencies.getTsconfig ?? originalGetTsconfig;
-        this.#tsNodeLoadFn = dependencies.tsNodeLoadFn ?? tsNode.load;
-        this.#fileURLToPath = dependencies.fileURLToPath ?? originalFileURLToPath;
-        this.#PathAliasClass = dependencies.PathAliasClass ?? PathAlias;
-        this.#tsNodeResolveFn = dependencies.tsNodeResolveFn ?? tsNode.resolve;
-    }
-
-    /**
-     * Initialize PathAlias if it hasn't been initialized yet.
-     * This ensures that PathAlias is only initialized once.
-     */
-    private async initializePathAlias(url: string): Promise<PathAlias> {
-        const cwd = this.#cwd();
-        const entryPoint = this.#fileURLToPath(url);
-
-        const tsconfigResult = this.#getTsconfig(cwd);
-        const tsconfig = tsconfigResult?.config;
-
-        if (!tsconfig) {
-            throw new Error(`Unable to load tsconfig.json from directory: ${cwd}`);
-        }
-
-        return new this.#PathAliasClass(tsconfig, { cwd, entryPoint });
-    }
-
-    /**
-     * Load hook implementation that delegates to ts-node's original load function.
-     * 
-     * @param url - The URL of the module to load.
-     * @param context - The context of the load operation.
-     * @param nextLoad - The next load hook in the chain.
-     * @returns The result of the load operation.
-     */
-    load(
-        url: string,
-        context: LoadHookContext,
-        nextLoad: NextLoad
-    ): LoadFnOutput | Promise<LoadFnOutput> {
-        if (this.#pathAlias && this.#pathAlias.isInsideSrc(url)) {
-            return this.#tsNodeLoadFn(url, context, nextLoad);
+export const resolve: ResolveHook = async (specifier, context, defaultResolve) => {
+    const specifierParser = new ExtParser(specifier);
+    if (
+        !specifierParser.isFileUrl() &&
+        !path.isAbsolute(specifier) &&
+        !isPackageInstalled(specifier)
+    ) {
+        if (tsFlag.parsingSourceCode) {
+            const basePath = context.parentURL
+                ?   path.resolve(fileURLToPath(context.parentURL), '..')
+                :   tsConfig.path;
+    
+            const fullPath = path.join(basePath, specifier);
+            if (!await isFileExists(fullPath)) {
+                specifier = specifierParser.toTs();
+            }
         } else {
-            return nextLoad(url, context);
-        }
-    }
-
-    /**
-     * Resolve hook implementation that uses PathAlias to resolve module paths based on tsconfig paths.
-     * If PathAlias is not yet initialized and the specifier is a file URL, it initializes PathAlias.
-     * 
-     * @param specifier - The module specifier to resolve.
-     * @param context - The context of the resolve operation.
-     * @param nextResolve - The next resolve hook in the chain.
-     * @returns The result of the resolve operation.
-     */
-    async resolve(
-        specifier: string,
-        context: ResolveHookContext,
-        nextResolve: NextResolver
-    ): Promise<ResolveFnOutput> {
-        try {
-            // If specifier is a file URL, initialize PathAlias if not already done
-            if (!this.#pathAlias) {
-                if (isFileUrl(specifier)) {
-                    this.#pathAlias = await this.initializePathAlias(specifier);
+            const outDir = path.resolve(tsConfig.outDir);
+            const rootDir = path.resolve(tsConfig.rootDir);
+            const fullPaths = tsConfig.resolveAll(specifier);
+            for (const fullPath of fullPaths) {
+                const fullPathJs = new ExtParser(fullPath).toJs();
+                const fullOutPath = fullPathJs.replace(rootDir, outDir);
+                if (await isFileExists(fullOutPath)) {
+                    specifier = fullOutPath;
+                    break;
                 }
-
-                return nextResolve(specifier, context);
             }
-            
-            // Resolve path alias
-            let isTsNode = false;
-            specifier = await this.#pathAlias?.resolveSpecifier(specifier, context);
-            if (this.#pathAlias.isInsideSrc(specifier)) {
-                isTsNode = true;
-                markAsTsNode();
-            }
-
-            if (isTsNode) {
-                return this.#tsNodeResolveFn(specifier, context, nextResolve);
-            } else {
-                return nextResolve(specifier, context);
-            }
-        } catch (err: any) {
-            logger.error(err?.message);
-            return nextResolve(specifier, context);
         }
     }
+
+    return defaultResolve(specifier, context);
 }

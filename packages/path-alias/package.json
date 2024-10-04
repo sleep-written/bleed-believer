@@ -65,6 +65,7 @@
     "typecript": "^0.0.1-security"
   },
   "dependencies": {
+    "@swc/core": "^1.7.26",
     "get-tsconfig": "^4.8.1",
     "ts-node": "^10.9.2",
     "tslog": "^4.9.3"

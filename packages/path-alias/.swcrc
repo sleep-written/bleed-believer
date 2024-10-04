@@ -9,13 +9,16 @@
     "target": "es2022",
     "parser": {
       "syntax": "typescript",
-      "decorators": true,
-      "dynamicImport": true
+      "decorators": true
     },
     "transform": {
       "decoratorMetadata": true
     },
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "@tool/*": [ "./tool/*" ],
+      "@/*": [ "./*" ]
+    }
   },
   "sourceMaps": false,
   "exclude": [
