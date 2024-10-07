@@ -8,5 +8,5 @@ export const logger = new Logger({
 });
 
 export function separator(): void {
-    console.log(''.padEnd(65, '-'));
+    console.log(''.padEnd(75, '-'));
 }

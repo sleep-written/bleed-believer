@@ -1,6 +1,6 @@
 import type { Options as SwcOptions } from '@swc/core';
 import type { TsConfig } from './ts-config.js';
-import { join } from 'path';
+import { join, resolve } from 'path';
 
 export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
     const { path, config } = tsConfigBase;
@@ -25,7 +25,7 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
             decoratorMetadata: emitDecoratorMetadata
         },
         preserveAllComments: !removeComments,
-        baseUrl: join(path, baseUrl ?? '.'),
+        baseUrl: resolve(path, '..', baseUrl ?? '.'),
         paths
     };
     

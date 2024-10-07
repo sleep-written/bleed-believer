@@ -1,7 +1,8 @@
 import type { LoadHook, ResolveHook } from 'module';
-import { transform, type Output } from '@swc/core';
+import type { Options, Output } from '@swc/core';
 
 import { fileURLToPath } from 'url';
+import { transform } from '@swc/core';
 import path from 'path';
 
 import { isPackageInstalled } from '@tool/is-package-installed/index.js';
@@ -11,6 +12,8 @@ import { TsConfig } from '@tool/ts-config/index.js';
 import { TsFlag } from '@tool/ts-flag/index.js';
 
 const tsConfig = TsConfig.load();
+let swcConfig: Options;
+
 const tsCache = new Map<string, Output>();
 const tsFlag = new TsFlag(process.pid.toString());
 export const load: LoadHook = async (url, context, defaultLoad) => {
@@ -19,19 +22,27 @@ export const load: LoadHook = async (url, context, defaultLoad) => {
         context.format = 'module';
         const cache = tsCache.get(url);
         if (!cache) {
+            if (!swcConfig) {
+                swcConfig = tsConfig.toSwcConfig();
+                swcConfig.sourceMaps = 'inline';
+            }
+
+            swcConfig.sourceFileName = fileURLToPath(url);
             const result = await defaultLoad(url, context);
             const rawTxt = (result.source as Buffer).toString('utf-8');
-            const swccnf = tsConfig.toSwcConfig();
-            const source = await transform(rawTxt, swccnf);
-    
+            const source = await transform(rawTxt, swcConfig);
+
             return {
                 format: 'module',
-                source: source.code
+                source: source.code,
+                shortCircuit: true
             };
         } else {
             return {
                 format: 'module',
-                source: cache.code
+                source: cache.code,
+                sourceMap: cache.map,
+                shortCircuit: true
             };
         }
     } else {
