@@ -1,5 +1,5 @@
 import type { LoadHook, ResolveHook } from 'module';
-import { transform } from '@swc/core';
+import { transform, type Output } from '@swc/core';
 
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -11,26 +11,35 @@ import { TsConfig } from '@tool/ts-config/index.js';
 import { TsFlag } from '@tool/ts-flag/index.js';
 
 const tsConfig = TsConfig.load();
+const tsCache = new Map<string, Output>();
 const tsFlag = new TsFlag(process.pid.toString());
 export const load: LoadHook = async (url, context, defaultLoad) => {
     if (new ExtParser(url).isTs()) {
         tsFlag.markAsParsingSourceCode();
         context.format = 'module';
-
-        const result = await defaultLoad(url, context);
-        const rawTxt = (result.source as Buffer).toString('utf-8');
-        const swccnf = tsConfig.toSwcConfig();
-        const source = await transform(rawTxt, swccnf);
-
-        return {
-            format: 'module',
-            source: source.code
-        };
+        const cache = tsCache.get(url);
+        if (!cache) {
+            const result = await defaultLoad(url, context);
+            const rawTxt = (result.source as Buffer).toString('utf-8');
+            const swccnf = tsConfig.toSwcConfig();
+            const source = await transform(rawTxt, swccnf);
+    
+            return {
+                format: 'module',
+                source: source.code
+            };
+        } else {
+            return {
+                format: 'module',
+                source: cache.code
+            };
+        }
     } else {
         return defaultLoad(url, context);
     }
 }
 
+const aliasCache = new Map<string, string>();
 export const resolve: ResolveHook = async (specifier, context, defaultResolve) => {
     const specifierParser = new ExtParser(specifier);
     if (
@@ -38,26 +47,45 @@ export const resolve: ResolveHook = async (specifier, context, defaultResolve) =
         !path.isAbsolute(specifier) &&
         !isPackageInstalled(specifier)
     ) {
-        if (tsFlag.parsingSourceCode) {
-            const basePath = context.parentURL
-                ?   path.resolve(fileURLToPath(context.parentURL), '..')
-                :   tsConfig.path;
+        // Building the path where the file is located
+        const basePath = context.parentURL
+            ?   path.resolve(fileURLToPath(context.parentURL), '..')
+            :   tsConfig.path;
+
+        if (!tsFlag.isParsingSourceCode) {
+            // Is inside the outDir
+            const fullPathJs = path.join(basePath, specifierParser.toJs());
+            if (await isFileExists(fullPathJs)) {
+                // The path relative to parent exists
+                specifier = specifierParser.toJs();
+
+            } else if (!aliasCache.has(specifier)) {
+                // Find alias full paths
+                const outDir = path.resolve(tsConfig.outDir);
+                const rootDir = path.resolve(tsConfig.rootDir);
+                const fullPaths = tsConfig.resolveAll(specifier);
+
+                for (const fullPath of fullPaths) {
+                    // check if the full resolved path exists
+                    const fullPathJs = new ExtParser(fullPath).toJs();
+                    const fullOutPath = fullPathJs.replace(rootDir, outDir);
+                    if (await isFileExists(fullOutPath)) {
+                        aliasCache.set(specifier, fullOutPath);
+                        specifier = fullOutPath;
+                        break;
+                    }
+                }
+                
+            } else {
+                // Get alias from cache
+                specifier = aliasCache.get(specifier)!;
     
-            const fullPath = path.join(basePath, specifier);
-            if (!await isFileExists(fullPath)) {
-                specifier = specifierParser.toTs();
             }
         } else {
-            const outDir = path.resolve(tsConfig.outDir);
-            const rootDir = path.resolve(tsConfig.rootDir);
-            const fullPaths = tsConfig.resolveAll(specifier);
-            for (const fullPath of fullPaths) {
-                const fullPathJs = new ExtParser(fullPath).toJs();
-                const fullOutPath = fullPathJs.replace(rootDir, outDir);
-                if (await isFileExists(fullOutPath)) {
-                    specifier = fullOutPath;
-                    break;
-                }
+            // Is inside the rootDir
+            const fullPathTs = path.join(basePath, specifierParser.toTs());
+            if (await isFileExists(fullPathTs)) {
+                specifier = specifierParser.toTs();
             }
         }
     }

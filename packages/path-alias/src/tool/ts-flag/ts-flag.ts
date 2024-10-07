@@ -1,17 +1,20 @@
-import { mkdirSync, writeFileSync } from 'fs';
+import { mkdirSync, rmSync, writeFileSync } from 'fs';
 import { dirname, resolve } from 'path';
 import { tmpdir } from 'os';
 
 import { isFileExistsSync } from '@tool/is-file-exists/index.js';
 
 export class TsFlag {
-    #parsingSourceCode!: boolean;
-    get parsingSourceCode(): boolean {
-        if (typeof this.#parsingSourceCode != 'boolean') {
-            this.#parsingSourceCode = isFileExistsSync(this.#path);
+    #isParsingSourceCode!: boolean;
+    get isParsingSourceCode(): boolean {
+        if (typeof this.#isParsingSourceCode != 'boolean') {
+            this.#isParsingSourceCode = isFileExistsSync(this.#path);
+            if (this.#isParsingSourceCode) {
+                rmSync(this.#path, { force: true });
+            }
         }
 
-        return this.#parsingSourceCode;
+        return this.#isParsingSourceCode;
     }
 
     #path: string;
@@ -27,8 +30,8 @@ export class TsFlag {
     }
 
     markAsParsingSourceCode(): void {
-        if (!this.#parsingSourceCode) {
-            this.#parsingSourceCode = true;
+        if (!this.#isParsingSourceCode) {
+            this.#isParsingSourceCode = true;
             const dir = dirname(this.#path);
             mkdirSync(dir, { recursive: true });
 

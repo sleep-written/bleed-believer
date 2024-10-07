@@ -9,7 +9,7 @@ test.after(async () => {
 
 test.serial('ts-node = false', t => {
     const tsNodeFlag = new TsFlag('test/joder-chaval');
-    const isTsNode = tsNodeFlag.parsingSourceCode;
+    const isTsNode = tsNodeFlag.isParsingSourceCode;
     t.false(isTsNode);
 });
 
@@ -17,12 +17,12 @@ test.serial('mark as ts-node', t => {
     const tsNodeFlag = new TsFlag('test/joder-chaval');
     tsNodeFlag.markAsParsingSourceCode();
 
-    const isTsNode = tsNodeFlag.parsingSourceCode;
+    const isTsNode = tsNodeFlag.isParsingSourceCode;
     t.true(isTsNode);
 });
 
 test.serial('ts-node = true', t => {
     const tsNodeFlag = new TsFlag('test/joder-chaval');
-    const isTsNode = tsNodeFlag.parsingSourceCode;
+    const isTsNode = tsNodeFlag.isParsingSourceCode;
     t.true(isTsNode);
 });
