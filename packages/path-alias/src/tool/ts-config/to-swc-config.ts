@@ -1,6 +1,6 @@
 import type { Options as SwcOptions } from '@swc/core';
 import type { TsConfig } from './ts-config.js';
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 
 export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
     const { path, config } = tsConfigBase;
@@ -8,11 +8,15 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
     const {
         emitDecoratorMetadata, experimentalDecorators,
         removeComments, module, target, baseUrl,
-        sourceMap, sourceRoot, paths, jsx
+        sourceMap, sourceRoot, paths, jsx,
+        inlineSources
     } = config.compilerOptions ?? {};
 
-    options.sourceMaps = sourceMap;
     options.sourceRoot = sourceRoot;
+    options.sourceMaps = sourceMap && inlineSources
+        ?   'inline'
+        :   sourceMap;
+
     options.exclude = config.exclude;
     options.jsc = {
         target: target?.toLowerCase() as any ?? 'es2022',

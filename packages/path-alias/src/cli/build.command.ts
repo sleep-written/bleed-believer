@@ -1,9 +1,10 @@
-import type { Executable } from '@bleed-believer/commander';
+import type { ArgvData, Executable } from '@bleed-believer/commander';
 
-import { mkdir, readdir, writeFile } from 'fs/promises';
-import { dirname, join, resolve } from 'path';
+import { basename, dirname, isAbsolute, join, resolve } from 'path';
+import { Command, getArgvData } from '@bleed-believer/commander';
+import { mkdir, writeFile } from 'fs/promises';
 import { transformFile } from '@swc/core';
-import { Command } from '@bleed-believer/commander';
+import fastGlob from 'fast-glob';
 
 import { logger, separator } from '@/logger.js';
 import { ExtParser } from '@tool/ext-parser/index.js';
@@ -11,38 +12,81 @@ import { TsConfig } from '@tool/ts-config/index.js';
 
 @Command({
     name: 'Build project',
-    path: 'build'
+    path: 'build ...'
 })
 export class BuildCommand implements Executable {
+    #mkDirCache = new Set<string>();
+
+    @getArgvData()
+    declare argvData: ArgvData;
+
+    get tsConfigPath(): string {
+        if (this.argvData.items.length > 0) {
+            const path = join(...this.argvData.items);
+            if (!isAbsolute(path)) {
+                return join(process.cwd(), path);
+            } else {
+                return path;
+            }
+        } else {
+            return join(process.cwd(), 'tsconfig.json');
+        }
+    }
+
+    async #mkDir(filepath: string): Promise<void> {
+        const dir = dirname(filepath);
+        if (!this.#mkDirCache.has(dir)) {
+            await mkdir(dir, { recursive: true });
+            this.#mkDirCache.add(dir);
+        }
+    }
+
     async start(): Promise<void> {        
         logger.info('Begin build process...  ⤵');
         separator();
 
-        const workingPath = process.cwd();
-        const tsConfig = TsConfig.load();
+        const tsConfigPath = this.tsConfigPath;
+        const tsConfig = TsConfig.load(
+            dirname(tsConfigPath),
+            basename(tsConfigPath)
+        );
+
         const rootDir = resolve(tsConfig.path, '..', tsConfig.rootDir);
         const outDir = resolve(tsConfig.path, '..', tsConfig.outDir);
-        const files = await readdir(rootDir, {
-            recursive: true,
-            withFileTypes: true,
+        const cwd = resolve(tsConfig.path, '..');
+
+        const files = await fastGlob([
+            join(rootDir, '**/*.{ts,mts}'),
+            ...(tsConfig?.config?.include ?? [])
+        ], {
+            dot: true,
+            cwd: tsConfig.path,
+            ignore: tsConfig?.config?.exclude,
+            absolute: true,
+            globstar: true,
+            onlyFiles: true,
+            objectMode: true,
         });
 
         const swcConfig = tsConfig.toSwcConfig();
-        for (const dirent of files) {
-            const rootPath = join(dirent.parentPath, dirent.name);
+        for (const file of files) {
+            const rootPath = file.path;
             const outPath = new ExtParser(rootPath).toJs().replace(rootDir, outDir);
 
-            await mkdir(dirname(outPath), { recursive: true });
-            if (dirent.isFile()) {
-                logger.info(`Building "${rootPath.replace(workingPath, '')}"...`)
-
-                const { code, map } = await transformFile(rootPath, swcConfig);
-                await writeFile(outPath, code, 'utf-8');
-
-                if (map) {
-                    await writeFile(`${outPath}.map`, map, 'utf-8');
-                }
+            await this.#mkDir(outPath);
+            if (swcConfig.sourceMaps) {
+                swcConfig.sourceFileName = rootPath;
             }
+
+            logger.info(`Building "${rootPath.replace(cwd, '')}"...`)
+            let { code, map } = await transformFile(rootPath, swcConfig);
+
+            if (map && swcConfig.sourceMaps) {
+                code = `${code}\n\n//# sourceMappingURL=${basename(outPath)}.map`;
+                await writeFile(`${outPath}.map`, map, 'utf-8');
+            }
+
+            await writeFile(outPath, code, 'utf-8');
         }
 
         separator();
