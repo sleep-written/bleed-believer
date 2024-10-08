@@ -1,6 +1,6 @@
 import type { Options as SwcOptions } from '@swc/core';
 import type { TsConfig } from './ts-config.js';
-import { resolve } from 'path';
+import { dirname, resolve } from 'path';
 
 export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
     const { path, config } = tsConfigBase;
@@ -12,6 +12,7 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
         inlineSources
     } = config.compilerOptions ?? {};
 
+    options.cwd = dirname(path);
     options.sourceRoot = sourceRoot;
     options.sourceMaps = sourceMap && inlineSources
         ?   'inline'
@@ -29,7 +30,7 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
             decoratorMetadata: emitDecoratorMetadata
         },
         preserveAllComments: !removeComments,
-        baseUrl: resolve(path, '..', baseUrl ?? '.'),
+        baseUrl: resolve(dirname(path), (baseUrl ?? '.')),
         paths
     };
     

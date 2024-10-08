@@ -25,9 +25,12 @@ export const load: LoadHook = async (url, context, defaultLoad) => {
             if (!swcConfig) {
                 swcConfig = tsConfig.toSwcConfig();
                 swcConfig.sourceMaps = 'inline';
+                delete swcConfig?.jsc?.baseUrl;
+                delete swcConfig?.jsc?.paths;
             }
 
             swcConfig.sourceFileName = fileURLToPath(url);
+            swcConfig.filename = fileURLToPath(url);
             const result = await defaultLoad(url, context);
             const rawTxt = (result.source as Buffer).toString('utf-8');
             const source = await transform(rawTxt, swcConfig);
@@ -41,7 +44,6 @@ export const load: LoadHook = async (url, context, defaultLoad) => {
             return {
                 format: 'module',
                 source: cache.code,
-                sourceMap: cache.map,
                 shortCircuit: true
             };
         }
@@ -51,53 +53,50 @@ export const load: LoadHook = async (url, context, defaultLoad) => {
 }
 
 const aliasCache = new Map<string, string>();
+const rootDir = path.resolve(tsConfig.path, '..', tsConfig.rootDir);
+const outDir = path.resolve(tsConfig.path, '..', tsConfig.outDir);
 export const resolve: ResolveHook = async (specifier, context, defaultResolve) => {
     const specifierParser = new ExtParser(specifier);
     if (
+        typeof context.parentURL === 'string' &&
         !specifierParser.isFileUrl() &&
         !path.isAbsolute(specifier) &&
         !isPackageInstalled(specifier)
     ) {
-        // Building the path where the file is located
-        const basePath = context.parentURL
-            ?   path.resolve(fileURLToPath(context.parentURL), '..')
-            :   tsConfig.path;
+        const resolvedPath = path.dirname(fileURLToPath(context.parentURL));
+        const fullFirstPath = tsFlag.isParsingSourceCode
+            ?   path.resolve(resolvedPath, specifierParser.toTs())
+            :   path.resolve(resolvedPath, specifierParser.toJs());
 
-        if (!tsFlag.isParsingSourceCode) {
-            // Is inside the outDir
-            const fullPathJs = path.join(basePath, specifierParser.toJs());
-            if (await isFileExists(fullPathJs)) {
-                // The path relative to parent exists
-                specifier = specifierParser.toJs();
+        if (await isFileExists(fullFirstPath)) {
+            specifier = fullFirstPath;
+        } else if (!aliasCache.has(specifier)) {
+            const fullPaths = tsConfig.resolveAll(specifier);
 
-            } else if (!aliasCache.has(specifier)) {
-                // Find alias full paths
-                const outDir = path.resolve(tsConfig.outDir);
-                const rootDir = path.resolve(tsConfig.rootDir);
-                const fullPaths = tsConfig.resolveAll(specifier);
-
-                for (const fullPath of fullPaths) {
-                    // check if the full resolved path exists
-                    const fullPathJs = new ExtParser(fullPath).toJs();
-                    const fullOutPath = fullPathJs.replace(rootDir, outDir);
-                    if (await isFileExists(fullOutPath)) {
-                        aliasCache.set(specifier, fullOutPath);
-                        specifier = fullOutPath;
+            // Check if the full resolved path exists
+            for (const fullPath of fullPaths) {
+                if (tsFlag.isParsingSourceCode) {
+                    const fullPathSpecifier = new ExtParser(fullPath).toTs();
+                    if (await isFileExists(fullPathSpecifier)) {
+                        aliasCache.set(specifier, fullPathSpecifier);
+                        specifier = fullPathSpecifier;
+                        break;
+                    }
+                } else {
+                    const fullOutPath = fullPath.replace(rootDir, outDir);
+                    const fullPathSpecifier = new ExtParser(fullOutPath).toJs();
+                    if (await isFileExists(fullPathSpecifier)) {
+                        aliasCache.set(specifier, fullPathSpecifier);
+                        specifier = fullPathSpecifier;
                         break;
                     }
                 }
-                
-            } else {
-                // Get alias from cache
-                specifier = aliasCache.get(specifier)!;
-    
             }
+            
         } else {
-            // Is inside the rootDir
-            const fullPathTs = path.join(basePath, specifierParser.toTs());
-            if (await isFileExists(fullPathTs)) {
-                specifier = specifierParser.toTs();
-            }
+            // Get alias from cache
+            specifier = aliasCache.get(specifier)!;
+
         }
     }
 
