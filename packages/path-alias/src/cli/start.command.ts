@@ -33,7 +33,7 @@ export class StartCommand implements Executable {
                 const version = parseInt(
                     process.version.match(/(?<=^v)[0-9]+/gi) as any ?? '0'
                 );
-        
+
                 let argv: string[];
                 if (version >= 20) {
                     argv = [
@@ -44,7 +44,7 @@ export class StartCommand implements Executable {
                 } else {
                     throw new Error('Node version not supported');
                 }
-                
+
                 const proc = spawn('node', argv, { stdio: 'inherit' });
                 proc.on('close', ___ => { resolve(); });
                 proc.on('error', err => { reject(err); });
