@@ -1,5 +1,5 @@
 import type { LoadHook, ResolveHook } from 'module';
-import type { Options, Output } from '@swc/core';
+import type { Options } from '@swc/core';
 
 import { fileURLToPath } from 'url';
 import { transform } from '@swc/core';
@@ -14,36 +14,43 @@ import { TsFlag } from '@tool/ts-flag/index.js';
 const tsConfig = TsConfig.load();
 let swcConfig: Options;
 
-const tsCache = new Map<string, Output>();
+const tsCache = new Map<string, string>();
 const tsFlag = new TsFlag(process.pid.toString());
 export const load: LoadHook = async (url, context, defaultLoad) => {
     if (new ExtParser(url).isTs()) {
         tsFlag.markAsParsingSourceCode();
         context.format = 'module';
-        const cache = tsCache.get(url);
+        let cache = tsCache.get(url);
         if (!cache) {
             if (!swcConfig) {
                 swcConfig = tsConfig.toSwcConfig();
                 swcConfig.sourceMaps = 'inline';
-                delete swcConfig?.jsc?.baseUrl;
-                delete swcConfig?.jsc?.paths;
+                swcConfig.outputPath = path.resolve(
+                    tsConfig.cwd,
+                    tsConfig.outDir
+                );
             }
 
             swcConfig.sourceFileName = fileURLToPath(url);
-            swcConfig.filename = fileURLToPath(url);
-            const result = await defaultLoad(url, context);
-            const rawTxt = (result.source as Buffer).toString('utf-8');
-            const source = await transform(rawTxt, swcConfig);
+            swcConfig.filename = swcConfig.sourceFileName;
+            swcConfig.caller = { name: path.basename(swcConfig.filename) };
+
+            const original = await defaultLoad(url, context);
+            const rawText = (original.source as Buffer).toString('utf-8');
+            const result = await transform(rawText, swcConfig);
+
+            console.log('url:', url);
+            tsCache.set(url, result.code);
 
             return {
+                source: result.code,
                 format: 'module',
-                source: source.code,
                 shortCircuit: true
             };
         } else {
             return {
                 format: 'module',
-                source: cache.code,
+                source: cache,
                 shortCircuit: true
             };
         }
@@ -53,9 +60,10 @@ export const load: LoadHook = async (url, context, defaultLoad) => {
 }
 
 const aliasCache = new Map<string, string>();
-const rootDir = path.resolve(tsConfig.path, '..', tsConfig.rootDir);
-const outDir = path.resolve(tsConfig.path, '..', tsConfig.outDir);
+const rootDir = path.resolve(tsConfig.cwd, tsConfig.rootDir);
+const outDir = path.resolve(tsConfig.cwd, tsConfig.outDir);
 export const resolve: ResolveHook = async (specifier, context, defaultResolve) => {
+    console.log('specifier:', specifier);
     const specifierParser = new ExtParser(specifier);
     if (
         typeof context.parentURL === 'string' &&

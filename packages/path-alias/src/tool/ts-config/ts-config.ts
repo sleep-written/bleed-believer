@@ -9,6 +9,11 @@ import { ExtParser } from '../ext-parser/index.js';
 import { logger } from '../../logger.js';
 
 export class TsConfig {
+    #cwd: string;
+    get cwd(): string {
+        return this.#cwd;
+    }
+
     #path: string;
     get path(): string {
         return this.#path;
@@ -54,6 +59,7 @@ export class TsConfig {
     constructor(result: TsConfigResult) {
         this.#config = result.config;
         this.#path = result.path;
+        this.#cwd = dirname(result.path);
 
         if (!this.#config.compilerOptions?.verbatimModuleSyntax) {
             logger.warn(
