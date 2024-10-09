@@ -1,4 +1,4 @@
-import type { LoadHook, ResolveHook } from 'module';
+import type { LoadHook, ResolveHook, SourceMapPayload } from 'module';
 import type { Options } from '@swc/core';
 
 import { fileURLToPath } from 'url';
@@ -10,8 +10,11 @@ import { isFileExists } from '@tool/is-file-exists/index.js';
 import { ExtParser } from '@tool/ext-parser/index.js';
 import { TsConfig } from '@tool/ts-config/index.js';
 import { TsFlag } from '@tool/ts-flag/index.js';
+import { readFile } from 'fs/promises';
 
 const tsConfig = TsConfig.load();
+const rootDir = path.resolve(tsConfig.cwd, tsConfig.rootDir);
+const outDir = path.resolve(tsConfig.cwd, tsConfig.outDir);
 let swcConfig: Options;
 
 const tsCache = new Map<string, string>();
@@ -24,14 +27,13 @@ export const load: LoadHook = async (url, context, defaultLoad) => {
         if (!cache) {
             if (!swcConfig) {
                 swcConfig = tsConfig.toSwcConfig();
-                swcConfig.sourceMaps = 'inline';
-                swcConfig.outputPath = path.resolve(
-                    tsConfig.cwd,
-                    tsConfig.outDir
-                );
+                swcConfig.inlineSourcesContent = true;
+                swcConfig.outputPath = path.resolve(tsConfig.cwd, tsConfig.outDir);
+                swcConfig.sourceMaps = true;
+                swcConfig.sourceRoot = '/';
             }
 
-            swcConfig.sourceFileName = fileURLToPath(url);
+            swcConfig.sourceFileName = path.relative(tsConfig.cwd, fileURLToPath(url));
             swcConfig.filename = swcConfig.sourceFileName;
             swcConfig.caller = { name: path.basename(swcConfig.filename) };
 
@@ -39,12 +41,20 @@ export const load: LoadHook = async (url, context, defaultLoad) => {
             const rawText = (original.source as Buffer).toString('utf-8');
             const result = await transform(rawText, swcConfig);
 
-            console.log('url:', url);
-            tsCache.set(url, result.code);
+            let source = result.code;
+            if (result.map) {
+                const sourceMapJSON = JSON.parse(result.map) as SourceMapPayload;
+                delete (sourceMapJSON as any).sourcesContent;
 
+                const sourceMapText = JSON.stringify(sourceMapJSON);
+                source += `\n//# sourceMappingURL=data:application/json;base64,`;
+                source += Buffer.from(sourceMapText, 'utf-8').toString('base64');
+            }
+
+            tsCache.set(url, source);
             return {
-                source: result.code,
                 format: 'module',
+                source,
                 shortCircuit: true
             };
         } else {
@@ -60,10 +70,7 @@ export const load: LoadHook = async (url, context, defaultLoad) => {
 }
 
 const aliasCache = new Map<string, string>();
-const rootDir = path.resolve(tsConfig.cwd, tsConfig.rootDir);
-const outDir = path.resolve(tsConfig.cwd, tsConfig.outDir);
 export const resolve: ResolveHook = async (specifier, context, defaultResolve) => {
-    console.log('specifier:', specifier);
     const specifierParser = new ExtParser(specifier);
     if (
         typeof context.parentURL === 'string' &&
