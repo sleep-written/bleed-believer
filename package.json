@@ -24,7 +24,6 @@
   "dependencies": {
     "@swc/cli": "^0.4.1-nightly.20240914",
     "@swc/core": "^1.7.26",
-    "@turbo/codemod": "^1.7.0",
     "@types/express": "^5.0.0",
     "@types/node": "^22.7.4",
     "ava": "^6.1.3",
