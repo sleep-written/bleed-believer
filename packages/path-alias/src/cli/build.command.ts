@@ -1,6 +1,6 @@
 import type { ArgvData, Executable } from '@bleed-believer/commander';
 
-import { basename, dirname, isAbsolute, join, resolve } from 'path';
+import { basename, dirname, isAbsolute, join, relative, resolve,  } from 'path';
 import { Command, getArgvData } from '@bleed-believer/commander';
 import { mkdir, writeFile } from 'fs/promises';
 import { transformFile } from '@swc/core';
@@ -12,7 +12,12 @@ import { TsConfig } from '@tool/ts-config/index.js';
 
 @Command({
     name: 'Build project',
-    path: 'build ...'
+    path: 'build ...',
+    info: 
+            `Transpile your project with swc. By default, searchs a `
+        +   `"tsconfig.json" in your current working directory. Also `
+        +   `you can provide a custom typescript configuration file `
+        +   `location if you need it.`
 })
 export class BuildCommand implements Executable {
     #mkDirCache = new Set<string>();
@@ -51,9 +56,8 @@ export class BuildCommand implements Executable {
             basename(tsConfigPath)
         );
 
-        const rootDir = resolve(tsConfig.path, '..', tsConfig.rootDir);
-        const outDir = resolve(tsConfig.path, '..', tsConfig.outDir);
-        const cwd = resolve(tsConfig.path, '..');
+        const rootDir = resolve(tsConfig.cwd, tsConfig.rootDir);
+        const outDir = resolve(tsConfig.cwd, tsConfig.outDir);
 
         const files = await fastGlob([
             join(rootDir, '**/*.{ts,mts}'),
@@ -74,12 +78,14 @@ export class BuildCommand implements Executable {
             const outPath = new ExtParser(rootPath).toJs().replace(rootDir, outDir);
 
             await this.#mkDir(outPath);
-            if (swcConfig.sourceMaps) {
-                swcConfig.sourceFileName = rootPath;
+            const localSwcConfig = structuredClone(swcConfig);
+            if (localSwcConfig.sourceMaps) {
+                localSwcConfig.sourceFileName
+                localSwcConfig.sourceFileName = relative(dirname(outPath), rootPath);
             }
 
-            logger.info(`Building "${rootPath.replace(cwd, '')}"...`)
-            let { code, map } = await transformFile(rootPath, swcConfig);
+            logger.info(`Building "${rootPath.replace(tsConfig.cwd, '')}"...`)
+            let { code, map } = await transformFile(rootPath, localSwcConfig);
 
             if (map && swcConfig.sourceMaps) {
                 code = `${code}\n\n//# sourceMappingURL=${basename(outPath)}.map`;

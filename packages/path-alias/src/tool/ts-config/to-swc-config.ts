@@ -9,12 +9,12 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
         emitDecoratorMetadata, experimentalDecorators,
         removeComments, module, target, baseUrl,
         sourceMap, sourceRoot, paths, jsx,
-        inlineSources
+        inlineSourceMap
     } = config.compilerOptions ?? {};
 
     options.cwd = dirname(path);
     options.sourceRoot = sourceRoot;
-    options.sourceMaps = inlineSources
+    options.sourceMaps = inlineSourceMap
         ?   'inline'
         :   sourceMap;
 
