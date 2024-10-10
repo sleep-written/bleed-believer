@@ -1,5 +1,5 @@
 import type { LoadHook, ResolveHook } from 'module';
-import type { Options, Output } from '@swc/core';
+import type { Options } from '@swc/core';
 
 import { fileURLToPath } from 'url';
 import { transform } from '@swc/core';
@@ -12,38 +12,43 @@ import { TsConfig } from '@tool/ts-config/index.js';
 import { TsFlag } from '@tool/ts-flag/index.js';
 
 const tsConfig = TsConfig.load();
+const rootDir = path.resolve(tsConfig.cwd, tsConfig.rootDir);
+const outDir = path.resolve(tsConfig.cwd, tsConfig.outDir);
 let swcConfig: Options;
 
-const tsCache = new Map<string, Output>();
+const tsCache = new Map<string, string>();
 const tsFlag = new TsFlag(process.pid.toString());
 export const load: LoadHook = async (url, context, defaultLoad) => {
     if (new ExtParser(url).isTs()) {
         tsFlag.markAsParsingSourceCode();
         context.format = 'module';
-        const cache = tsCache.get(url);
+        let cache = tsCache.get(url);
         if (!cache) {
             if (!swcConfig) {
                 swcConfig = tsConfig.toSwcConfig();
+                swcConfig.inlineSourcesContent = true;
+                swcConfig.outputPath = path.resolve(tsConfig.cwd, tsConfig.outDir);
                 swcConfig.sourceMaps = 'inline';
-                delete swcConfig?.jsc?.baseUrl;
-                delete swcConfig?.jsc?.paths;
             }
 
-            swcConfig.sourceFileName = fileURLToPath(url);
-            swcConfig.filename = fileURLToPath(url);
-            const result = await defaultLoad(url, context);
-            const rawTxt = (result.source as Buffer).toString('utf-8');
-            const source = await transform(rawTxt, swcConfig);
+            const localSwcConfig = structuredClone(swcConfig);
+            localSwcConfig.sourceFileName = fileURLToPath(url);
+            localSwcConfig.filename = localSwcConfig.sourceFileName;
 
+            const original = await defaultLoad(url, context);
+            const rawText = (original.source as Buffer).toString('utf-8');
+            const result = await transform(rawText, localSwcConfig);
+
+            tsCache.set(url, result.code);
             return {
                 format: 'module',
-                source: source.code,
+                source: result.code,
                 shortCircuit: true
             };
         } else {
             return {
                 format: 'module',
-                source: cache.code,
+                source: cache,
                 shortCircuit: true
             };
         }
@@ -53,8 +58,6 @@ export const load: LoadHook = async (url, context, defaultLoad) => {
 }
 
 const aliasCache = new Map<string, string>();
-const rootDir = path.resolve(tsConfig.path, '..', tsConfig.rootDir);
-const outDir = path.resolve(tsConfig.path, '..', tsConfig.outDir);
 export const resolve: ResolveHook = async (specifier, context, defaultResolve) => {
     const specifierParser = new ExtParser(specifier);
     if (

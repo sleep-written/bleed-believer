@@ -66,6 +66,7 @@
   },
   "dependencies": {
     "@bleed-believer/commander": "^0.11.3",
+    "@swc-node/sourcemap-support": "^0.5.1",
     "@swc/core": "^1.7.26",
     "fast-glob": "^3.3.2",
     "get-tsconfig": "^4.8.1",

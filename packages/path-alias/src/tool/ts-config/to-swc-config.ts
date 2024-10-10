@@ -14,7 +14,7 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
 
     options.cwd = dirname(path);
     options.sourceRoot = sourceRoot;
-    options.sourceMaps = sourceMap && inlineSources
+    options.sourceMaps = inlineSources
         ?   'inline'
         :   sourceMap;
 
