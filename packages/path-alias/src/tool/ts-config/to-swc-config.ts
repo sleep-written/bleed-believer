@@ -18,7 +18,9 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
         ?   'inline'
         :   sourceMap;
 
-    options.exclude = config.exclude;
+    options.exclude = config.exclude
+        ?.map(x => !x.startsWith('./') ? `./${x}` : x);
+
     options.jsc = {
         target: target?.toLowerCase() as any ?? 'es2022',
         parser: {

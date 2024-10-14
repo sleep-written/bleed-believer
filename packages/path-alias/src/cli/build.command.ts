@@ -69,10 +69,12 @@ export class BuildCommand implements Executable {
             absolute: true,
             globstar: true,
             onlyFiles: true,
-            objectMode: true,
+            objectMode: true
         });
 
         const swcConfig = tsConfig.toSwcConfig();
+        delete swcConfig.exclude;
+
         for (const file of files) {
             const rootPath = file.path;
             const outPath = new ExtParser(rootPath).toJs().replace(rootDir, outDir);
@@ -82,6 +84,10 @@ export class BuildCommand implements Executable {
             if (localSwcConfig.sourceMaps) {
                 localSwcConfig.sourceFileName
                 localSwcConfig.sourceFileName = relative(dirname(outPath), rootPath);
+            }
+
+            if (rootPath.endsWith('other/filter-distinct.ts')) {
+                debugger;
             }
 
             logger.info(`Building "${rootPath.replace(tsConfig.cwd, '')}"...`)

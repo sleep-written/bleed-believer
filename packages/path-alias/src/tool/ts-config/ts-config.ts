@@ -1,7 +1,7 @@
 import type { TsConfigJson, TsConfigResult } from 'get-tsconfig';
 import type { Options as SwcOptions } from '@swc/core';
 
-import { basename, resolve, dirname } from 'path';
+import { basename, resolve, dirname, normalize } from 'path';
 import { getTsconfig } from 'get-tsconfig';
 
 import { toSWCConfig } from './to-swc-config.js';
@@ -52,6 +52,11 @@ export class TsConfig {
         if (!result) {
             throw new Error(`"${filename}" not found at "${searchPath}".`);
         } else {
+            const outDir = normalize(result.config.compilerOptions?.outDir ?? '.');
+            if (result.config?.exclude) {
+                result.config.exclude = result.config.exclude.filter(x => outDir !== normalize(x));
+            }
+
             return new TsConfig(result);
         }
     }
