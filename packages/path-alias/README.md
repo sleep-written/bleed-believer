@@ -11,19 +11,19 @@ A comprehensive library designed to streamline the execution of TypeScript code 
 By using `@bleed-believer/path-alias`, you can replace cumbersome relative imports, such as:
 
 ```ts
-import { Client } from '../../../../entities/client.js';
-import { CSVGenerator } from '../../../tool/csv-generator.js';
 import { UserController } from '../../../../controllers/user/user-controller.js';
+import { CSVGenerator } from '../../../tool/csv-generator.js';
 import { AuthService } from '../../../services/auth/auth-service.js';
+import { Client } from '../../../../entities/client.js';
 ```
 
 ...with cleaner and more intuitive path aliases, like:
 
 ```ts
-import { Client } from '@entities/client.js';
-import { CSVGenerator } from '@tool/csv-generator.js';
 import { UserController } from '@controllers/user/user-controller.js';
+import { CSVGenerator } from '@tool/csv-generator.js';
 import { AuthService } from '@services/auth/auth-service.js';
+import { Client } from '@entities/client.js';
 ```
 
 ## Disclaimer
@@ -112,6 +112,69 @@ npx bb-path-alias build ./tsconfig.build.json
 This functionality makes it easy to switch between direct execution and manual transpilation, allowing you to resolve path aliases seamlessly in both workflows.
 
 ## Utils
+
+The following utility functions enhance the functionality of `@bleed-believer/path-alias` by providing additional support for handling TypeScript source files and resolving paths dynamically based on the code's context.
+
+### `isSourceCode(url: string)`
+
+This function determines whether the provided URL corresponds to a TypeScript source file.
+
+- **Parameters**:
+  - `url` (string): The URL or file path to check.
+
+- **Returns**: `true` if the URL corresponds to a TypeScript file, `false` otherwise.
+
+- **Usage**: This function is especially useful for conditional logic based on the file type (TypeScript vs. JavaScript). For example, if certain operations should only be performed on TypeScript files, this function helps enforce that condition.
+
+- **Example**:
+  ```ts
+  // Checking if a file is TypeScript
+  const isTs = isSourceCode('/path/to/file.ts');
+  console.log(isTs); // Output: true
+
+  // Checking if a file is JavaScript
+  const isTs = isSourceCode('/path/to/file.js');
+  console.log(isTs); // Output: false
+  ```
+  This example demonstrates how to use `isSourceCode` to check the file type based on its extension.
+
+### `pathResolve(input: string, options?: { url?: string; multi?: boolean })`
+
+This function resolves the absolute path(s) of the specified input, adapting based on whether the code is running in TypeScript or JavaScript mode, and the provided options.
+
+- **Parameters**:
+  - `input` (string): The relative path or alias to resolve.
+  - `options` (object, optional):
+    - `url` (string, optional): The URL or file path of the calling module. This is used to determine if the calling code is TypeScript or JavaScript, based on the file extension. If not provided, the function assumes the calling code is TypeScript.
+    - `multi` (boolean, optional): If set to `true`, returns an array of resolved paths. Defaults to `false`.
+
+- **Returns**:
+  - When `multi` is `false` or not provided, it returns a single string path.
+  - When `multi` is `true`, it returns an array of string paths.
+
+- **Functionality**:
+  - The function uses the `tsconfig.json` configuration to resolve paths and aliases.
+  - If the calling code is determined to be JavaScript (e.g., if `options.url` has a `.js` extension), the resolved paths will point to the compiled JavaScript files in the `outDir` directory.
+  - If the calling code is TypeScript (e.g., if `options.url` has a `.ts` extension or if `url` is not provided), the resolved paths will point to the source TypeScript files in the `rootDir` directory.
+
+- **Example**:
+  ```ts
+  // In a TypeScript file, resolving a single path
+  const singlePath = pathResolve('@tool/example.ts', { url: __filename });
+  console.log(singlePath); 
+  // Output: /absolute/path/to/src/tool/example.ts
+
+  // In a JavaScript file, resolving a single path
+  const singlePath = pathResolve('@tool/example.ts', { url: __filename });
+  console.log(singlePath); 
+  // Output: /absolute/path/to/dist/tool/example.js
+
+  // Resolving multiple paths in TypeScript
+  const multiplePaths = pathResolve('@greetings/*.ts', { multi: true, url: __filename });
+  console.log(multiplePaths);
+  // Output: ['/absolute/path/to/src/greetings/hello.ts', '/absolute/path/to/src/greetings/welcome.ts', ...]
+  ```
+  This example shows how to use `pathResolve` to obtain the correct file paths based on the execution context and provided options.
 The following utility functions enhance the functionality of `@bleed-believer/path-alias` by providing additional support for handling TypeScript source files and resolving paths dynamically based on whether the code is running in TypeScript or JavaScript.
 
 ### `isSourceCode()`

@@ -17,7 +17,7 @@ const outDir = path.resolve(tsConfig.cwd, tsConfig.outDir);
 let swcConfig: Options;
 
 const tsCache = new Map<string, string>();
-const tsFlag = new TsFlag(process.pid.toString());
+const tsFlag = new TsFlag();
 export const load: LoadHook = async (url, context, defaultLoad) => {
     if (new ExtParser(url).isTs()) {
         tsFlag.markAsParsingSourceCode();
