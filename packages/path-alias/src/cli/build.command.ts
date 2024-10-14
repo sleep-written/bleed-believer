@@ -86,10 +86,6 @@ export class BuildCommand implements Executable {
                 localSwcConfig.sourceFileName = relative(dirname(outPath), rootPath);
             }
 
-            if (rootPath.endsWith('other/filter-distinct.ts')) {
-                debugger;
-            }
-
             logger.info(`Building "${rootPath.replace(tsConfig.cwd, '')}"...`)
             let { code, map } = await transformFile(rootPath, localSwcConfig);
 
