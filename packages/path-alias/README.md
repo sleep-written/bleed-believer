@@ -160,67 +160,33 @@ This function resolves the absolute path(s) of the specified input, adapting bas
 - **Example**:
   ```ts
   // In a TypeScript file, resolving a single path
-  const singlePath = pathResolve('@tool/example.ts', { url: __filename });
+  const singlePath = pathResolve(
+    '@tool/example.ts',
+    { url: import.meta.url }
+  );
+
   console.log(singlePath); 
   // Output: /absolute/path/to/src/tool/example.ts
 
   // In a JavaScript file, resolving a single path
-  const singlePath = pathResolve('@tool/example.ts', { url: __filename });
+  const singlePath = pathResolve(
+    '@tool/example.ts',
+    { url: import.meta.url }
+  );
+  
   console.log(singlePath); 
   // Output: /absolute/path/to/dist/tool/example.js
 
   // Resolving multiple paths in TypeScript
-  const multiplePaths = pathResolve('@greetings/*.ts', { multi: true, url: __filename });
+  const multiplePaths = pathResolve('@greetings/*.ts', {
+    multi: true,
+    url: import.meta.url
+  });
+
   console.log(multiplePaths);
   // Output: ['/absolute/path/to/src/greetings/hello.ts', '/absolute/path/to/src/greetings/welcome.ts', ...]
   ```
   This example shows how to use `pathResolve` to obtain the correct file paths based on the execution context and provided options.
-The following utility functions enhance the functionality of `@bleed-believer/path-alias` by providing additional support for handling TypeScript source files and resolving paths dynamically based on whether the code is running in TypeScript or JavaScript.
-
-### `isSourceCode()`
-This function determines whether the current execution environment is parsing TypeScript source code.
-
-- **Usage**: This function is especially useful for conditional logic based on the code type (source TypeScript vs. transpiled JavaScript). For example, if certain operations should only be performed on TypeScript files, this function helps enforce that condition.
-
-- **Example**:
-  ```ts
-  if (isSourceCode()) {
-    console.log("Running in TypeScript mode.");
-  } else {
-    console.log("Running in JavaScript mode.");
-  }
-  ```
-  This example checks the environment and logs a message accordingly. This is helpful when you need to execute certain logic only in TypeScript mode.
-
-### `pathResolve(input: string, multi?: boolean)`
-This function returns the absolute path of a given input file, dynamically adapting based on the code type (TypeScript or JavaScript).
-
-- **Parameters**:
-  - `input` (string): The relative path or alias to resolve.
-  - `multi` (boolean, optional): If set to `true`, it returns an array of paths instead of a single path. Defaults to `false`.
-
-- **Returns**: 
-  - When `multi` is `false` or not provided, it returns a single string path.
-  - When `multi` is `true`, it returns an array of string paths.
-
-- **Example**:
-  ```ts
-  // Resolving a single path
-  const singlePath = pathResolve('@tool/example.ts');
-  console.log(singlePath); 
-  // Output: /absolute/path/to/src/tool/example.ts (or /absolute/path/to/dist/tool/example.js in JavaScript mode)
-
-  // Resolving multiple paths
-  const multiplePaths = pathResolve('@greetings/*.ts', true);
-  console.log(multiplePaths);
-  // Output: ['/absolute/path/to/src/greetings/hello.ts', '/absolute/path/to/src/greetings/welcome.ts', ...]
-  ```
-
-- **Functionality**:
-  - If the code is running as TypeScript, the function returns paths relative to `rootDir`.
-  - If the code is running as JavaScript, it maps paths to the transpiled output in `outDir`.
-
-These utility functions provide a powerful way to dynamically resolve paths and handle file extensions in projects that involve both TypeScript source files and their corresponding JavaScript outputs.
 
 ## Unit Testing
 The library is compatible with AVA (and likely with most testing libraries that support the `--import` flag). To use AVA with `@bleed-believer/path-alias`, simply create a `ava.config.mjs` file at the root of your project with the following configuration:
