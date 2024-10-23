@@ -85,13 +85,12 @@ export class BuildCommand implements Executable {
         delete swcConfig.exclude;
 
         for (const file of files) {
-            const rootPath = file.path;
+            const rootPath = resolve(file.path);
             const outPath = new ExtParser(rootPath).toJs().replace(rootDir, outDir);
 
             await this.#mkDir(outPath);
             const localSwcConfig = structuredClone(swcConfig);
             if (localSwcConfig.sourceMaps) {
-                localSwcConfig.sourceFileName
                 localSwcConfig.sourceFileName = relative(dirname(outPath), rootPath);
             }
 
