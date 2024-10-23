@@ -4,9 +4,11 @@ import type { Options as SwcOptions } from '@swc/core';
 import { basename, resolve, dirname } from 'path';
 import { getTsconfig } from 'get-tsconfig';
 
+import { normalizeTsConfig } from './normalize-ts-config.js';
 import { toSWCConfig } from './to-swc-config.js';
+
 import { ExtParser } from '../ext-parser/index.js';
-import { logger } from '../../logger.js';
+import { logger } from '@/logger.js';
 
 export class TsConfig {
     #cwd: string;
@@ -58,15 +60,15 @@ export class TsConfig {
     }
 
     constructor(result: TsConfigResult) {
-        this.#config = result.config;
-        this.#path = result.path;
-        this.#cwd = dirname(result.path);
+        this.#config = normalizeTsConfig(result.config);
+        this.#path = resolve(result.path);
+        this.#cwd = dirname(this.#path);
 
         if (!this.#config.compilerOptions?.verbatimModuleSyntax) {
             logger.warn(
-                `In "${basename(this.#path)}", the option ` +
-                    `"compilerOptions.verbatimModuleSyntax"` +
-                    ` must be true to work properly.`
+                    `In "${basename(this.#path)}", the option `
+                +   `"compilerOptions.verbatimModuleSyntax"`
+                +   ` must be true to work properly.`
             );
         }
 
@@ -75,7 +77,6 @@ export class TsConfig {
         const paths = compilerOptions.paths ?? {};
 
         this.#pathRegexMap = [];
-
         for (const pattern in paths) {
             const regex = this.#patternToRegex(pattern);
             const targetPaths = paths[pattern];

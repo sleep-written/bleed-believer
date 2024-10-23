@@ -37,23 +37,33 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
     };
     
     switch (module) {
-        case 'ES2022':
-        case 'Node16':
-        case 'NodeNext': {
+        case 'umd':
+        case 'none':
+        case 'system':
+        case 'commonjs': {
+            options.isModule = false;
+            break;
+        }
+
+        case 'nodenext': {
             options.isModule = true;
             options.module = {
                 strict: true,
                 strictMode: true,
-                type: module == 'NodeNext'
-                    ?   'nodenext'
-                    :   'es6',
+                type: 'nodenext',
                 resolveFully: true
             } as any;
             break;
         }
 
         default: {
-            throw new Error(`tsconfig module "${module}" isn't supported.`);
+            options.isModule = true;
+            options.module = {
+                strict: true,
+                strictMode: true,
+                type: 'es6',
+                resolveFully: true
+            } as any;
         }
     }
 

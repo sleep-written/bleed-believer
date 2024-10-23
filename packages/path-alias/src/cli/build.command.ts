@@ -59,8 +59,13 @@ export class BuildCommand implements Executable {
         const rootDir = resolve(tsConfig.cwd, tsConfig.rootDir);
         const outDir = resolve(tsConfig.cwd, tsConfig.outDir);
 
+        let globPattern = join(rootDir, '**/*.{ts,mts}');
+        if (process.platform === 'win32') {
+            globPattern = globPattern.replaceAll('\\', '/');
+        }
+
         const files = await fastGlob([
-            join(rootDir, '**/*.{ts,mts}'),
+            globPattern,
             ...(tsConfig?.config?.include ?? [])
         ], {
             dot: true,
@@ -71,6 +76,10 @@ export class BuildCommand implements Executable {
             onlyFiles: true,
             objectMode: true
         });
+
+        if (files.length === 0) {
+            throw new Error('None files detected to transpile to js.');
+        }
 
         const swcConfig = tsConfig.toSwcConfig();
         delete swcConfig.exclude;
