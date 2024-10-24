@@ -1,8 +1,8 @@
 import type { Argv, ArgvData, Executable } from '@bleed-believer/commander';
 
 import { Command, GetArgv, getArgvData } from '@bleed-believer/commander';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { logger, separator } from '@/logger.js';
-import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 import { join } from 'path';
 
@@ -26,10 +26,10 @@ export class StartCommand implements Executable {
         separator();
 
         // Getting the loader path
-        const loaderPath = join(
-            fileURLToPath(import.meta.url),
-            '../..', 'index.js'
-        );
+        let loaderPath = join(fileURLToPath(import.meta.url), '../../index.js');
+        if (process.platform === 'win32') {
+            loaderPath = pathToFileURL(loaderPath).href;
+        }
         
         // Execute the program as a child process
         await new Promise<void>((resolve, reject) => {

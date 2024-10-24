@@ -1,7 +1,7 @@
 import type { LoadHook, ResolveHook } from 'module';
 import type { Options } from '@swc/core';
 
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { transform } from '@swc/core';
 import path from 'path';
 
@@ -19,6 +19,10 @@ let swcConfig: Options;
 const tsCache = new Map<string, string>();
 const tsFlag = new TsFlag();
 export const load: LoadHook = async (url, context, defaultLoad) => {
+    if (process.platform === 'win32' && path.isAbsolute(url)) {
+        url = pathToFileURL(url).href;
+    }
+
     if (new ExtParser(url).isTs()) {
         tsFlag.markAsParsingSourceCode();
         context.format = 'module';
@@ -59,6 +63,16 @@ export const load: LoadHook = async (url, context, defaultLoad) => {
 
 const aliasCache = new Map<string, string>();
 export const resolve: ResolveHook = async (specifier, context, defaultResolve) => {
+    if (process.platform === 'win32') {
+        if (path.isAbsolute(specifier)) {
+            specifier = pathToFileURL(specifier).href;
+        }
+        
+        if (context.parentURL && path.isAbsolute(context.parentURL)) {
+            context.parentURL = pathToFileURL(context.parentURL).href;
+        }
+    }
+
     const specifierParser = new ExtParser(specifier);
     if (
         typeof context.parentURL === 'string' &&
