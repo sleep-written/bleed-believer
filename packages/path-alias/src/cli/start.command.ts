@@ -43,8 +43,10 @@ export class StartCommand implements Executable {
                     argv = [
                         `--import`,
                         loaderPath,
-                        ...this.argvData.items
+                        ...process.argv.slice(3)
                     ];
+
+
                 } else {
                     throw new Error('Node version not supported');
                 }
