@@ -1,13 +1,15 @@
 import type { LoadFnOutput, LoadHookContext, ResolveFnOutput, ResolveHookContext } from 'module';
 import type { Options as SwcOptions } from '@swc/core';
 
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { isBuiltin } from 'module';
 import { transform } from '@swc/core';
 import { resolve } from 'path';
 import { access } from 'fs/promises';
 
-import { TsConfig } from './tool/ts-config/index.js';
+import { isPackageInstalled } from '@tool/is-package-installed/index.js';
+import { ExtParser } from '@tool/ext-parser/ext-parser.js';
+import { TsConfig } from '@tool/ts-config/index.js';
 
 type DefaultLoad = (
     url: string,
@@ -20,9 +22,13 @@ type DefaultResolve = (
 ) => ResolveFnOutput | Promise<ResolveFnOutput>;
 
 export class HookManager {
+    #resolveCache = new Map<string, string>();
     #loadCache = new Map<string, LoadFnOutput>();
     #tsConfig = TsConfig.load();
     #swcrc?: SwcOptions;
+
+    #rootDir = resolve(this.#tsConfig.cwd, this.#tsConfig.rootDir);
+    #outDir = resolve(this.#tsConfig.cwd, this.#tsConfig.outDir);
 
     async #fileExist(path: string): Promise<boolean> {
         try {
@@ -42,31 +48,49 @@ export class HookManager {
         }
     }
 
-    #toTs(input: string): string {
-        return input.replace(/(?<=\.(m|c)?)j(?=(sx?)$)/gi, 't');
-    }
-
-    #toJs(input: string): string {
-        return input.replace(/(?<=\.(m|c)?)t(?=(sx?)$)/gi, 'j');
-    }
-
     async resolve(
         specifier: string,
         context: ResolveHookContext,
         defaultResolve: DefaultResolve
     ): Promise<ResolveFnOutput> {
         if (typeof context.parentURL === 'string') {
-            const pathTs = resolve(
-                fileURLToPath(context.parentURL),
-                '..', this.#toTs(specifier)
-            );
+            const cache = this.#resolveCache.get(specifier);
+            if (typeof cache === 'string') {
+                // Get the value stored in cache
+                specifier = cache;
 
-            if (await this.#fileExist(pathTs)) {
-                specifier = this.#toTs(specifier);
+            } else if (isPackageInstalled(specifier)) {
+                // Store the module specifier in cache
+                this.#resolveCache.set(specifier, specifier);
+
             } else {
-                const pathJs = this.#toJs(pathTs);
-                if (await this.#fileExist(pathJs)) {
-                    specifier = this.#toJs(specifier);
+                const path = resolve(fileURLToPath(context.parentURL), '..', specifier);
+                if (!await this.#fileExist(path)) {
+                    // Recalculate using outDir and rootDir
+                    const tsPath = new ExtParser(path).toTs().replace(this.#outDir, this.#rootDir);
+                    const jsPath = new ExtParser(path).toJs().replace(this.#rootDir, this.#outDir);
+                    if (await this.#fileExist(tsPath)) {
+                        specifier = new ExtParser(specifier).toTs();
+    
+                    } else if (await this.#fileExist(jsPath)) {
+                        specifier = new ExtParser(specifier).toJs();
+    
+                    } else if (jsPath.startsWith(this.#outDir)) {
+                        // Resolve using tsconfig path alias
+                        const promisePaths = this.#tsConfig
+                            .resolveAll(specifier, true)
+                            .map(async x => [ x, await this.#fileExist(x) ] as const);
+        
+                        const resolvedPath = (await Promise.all(promisePaths))
+                            ?.find(([ _, exist ]) => exist)
+                            ?.[0];
+        
+                        if (typeof resolvedPath === 'string') {
+                            const href = pathToFileURL(resolvedPath).href;
+                            this.#resolveCache.set(specifier, href);
+                            specifier = href;
+                        }
+                    }
                 }
             }
         }

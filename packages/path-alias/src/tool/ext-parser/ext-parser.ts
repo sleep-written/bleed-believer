@@ -23,10 +23,10 @@ export class ExtParser {
     }
 
     toTs() {
-        return this.#input.replace(/(?<=\.m?)j(?=sx?$)/gi, 't');
+        return this.#input.replace(/(?<=\.m?)j(?=(sx?)$)/gi, 't');
     }
 
     toJs() {
-        return this.#input.replace(/(?<=\.m?)t(?=sx?$)/gi, 'j');
+        return this.#input.replace(/(?<=\.m?)t(?=(sx?)$)/gi, 'j');
     }
 }

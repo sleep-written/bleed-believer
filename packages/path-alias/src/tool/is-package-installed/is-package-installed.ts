@@ -1,5 +1,5 @@
 import { resolve, dirname } from 'path';
-import { builtinModules } from 'module';
+import { builtinModules, isBuiltin } from 'module';
 import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
 
@@ -22,6 +22,10 @@ const cache = new Map<string, boolean>();
  * 5. Finally, it checks the `dependencies` and `devDependencies` in the project's `package.json` to verify if the package is installed.
  */
 export function isPackageInstalled(packageName: string, projectRoot?: string): boolean {
+  if (isBuiltin(packageName)) {
+    return true;
+  }
+
   const cacheKey = `${packageName}|${projectRoot || 'default'}`;
   if (cache.has(cacheKey)) {
     return cache.get(cacheKey)!;

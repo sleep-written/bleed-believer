@@ -7,9 +7,10 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
     const options: SwcOptions = {};
     const {
         emitDecoratorMetadata, experimentalDecorators,
-        removeComments, module, target, baseUrl,
-        sourceMap, sourceRoot, paths, jsx,
-        inlineSourceMap
+        removeComments, module, target,
+        sourceMap, sourceRoot, jsx,
+        inlineSourceMap,
+        baseUrl, paths
     } = config.compilerOptions ?? {};
 
     options.cwd = dirname(path);

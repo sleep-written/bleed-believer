@@ -101,13 +101,13 @@ export class TsConfig {
         return toSWCConfig(this);
     }
 
-    resolveAll(moduleName: string): string[] {
+    resolveAll(moduleName: string, dist?: boolean): string[] {
         const compilerOptions = this.#config.compilerOptions ?? {};
         const baseUrl = compilerOptions.baseUrl ?? '.';
-        const tsconfigDir = dirname(this.#path);
+        const rootDir = resolve(this.cwd, this.rootDir);
+        const outDir = resolve(this.cwd, this.outDir);
 
         const results: string[] = [];
-
         for (const { regex, targetPaths } of this.#pathRegexMap) {
             const match = regex.exec(moduleName);
             if (match) {
@@ -122,19 +122,19 @@ export class TsConfig {
                     );
 
                     // Resolver la ruta relativa a baseUrl
-                    const fullPath = resolve(tsconfigDir, baseUrl, substitutedPath);
+                    let fullPath = resolve(this.cwd, baseUrl, substitutedPath);
+                    if (!dist && fullPath.startsWith(rootDir)) {
+                        fullPath = fullPath
+                            .replace(/(?<=\.m?)j(?=(sx?)$)/gi, 't');
 
-                    // Ajustar las extensiones
-                    let finalPath = fullPath;
+                    } else if (dist && fullPath.startsWith(rootDir)) {
+                        fullPath = fullPath
+                            .replace(rootDir, outDir)
+                            .replace(/(?<=\.m?)t(?=(sx?)$)/gi, 'j');
 
-                    const finalPathParser = new ExtParser(finalPath);
-                    if (finalPathParser.isJs()) {
-                        finalPath = finalPathParser.toTs();
-                    } else if (!finalPathParser.isTs()) {
-                        finalPath = finalPath + '.ts';
                     }
-
-                    results.push(finalPath);
+                    
+                    results.push(fullPath);
                 }
             }
         }
