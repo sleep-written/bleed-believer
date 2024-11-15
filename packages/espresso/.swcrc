@@ -14,8 +14,7 @@
     },
     "transform": {
       "decoratorMetadata": true
-    },
-    "baseUrl": "./src"
+    }
   },
   "sourceMaps": false,
   "exclude": [

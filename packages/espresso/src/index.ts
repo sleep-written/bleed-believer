@@ -38,3 +38,4 @@ export type {
 } from './controller-routing/index.js';
 
 export { Espresso } from './espresso.js';
+export { EndpointError } from './endpoint.error.js';

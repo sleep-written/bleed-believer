@@ -1,78 +1,87 @@
 # Routing Injection
 
-Finally, to attach your routes into an `express.js` instance, you must create a new `Espresso` instance. Using the example described [here](/docs/espresso/getting-started.md#folder-structure), the `index.ts` file looks like this:
+To set up your routes using `Espresso`, you'll need to create an `Espresso` instance and use it to register your route classes. Using the example described [here](/docs/espresso/getting-started.md#folder-structure), your `index.ts` file might look like this:
 
 ```ts
-import express from 'express';
 import { Espresso } from '@bleed-believer/espresso';
-import { ApiRouting } from './api.routing';
+import { APIRouting } from './api.routing';
 
-// Create your express.js instance
-const app = express();
+// Create a new Espresso instance with optional configuration
+const espresso = new Espresso({ lowercase: false, verbose: false });
 
-// Create a new Espresso instance
-// (the 2nd argument is optional)
-const espresso = new Espresso(app, {
-    lowercase: false,
-    verbose: false
-});
+// Use your root "ControllerRouting" class to register all routes
+espresso.use(APIRouting);
 
-// Inject your root "ControllerRouting" class
-espresso.inject(ApiRouting);
-
-// Start your api rest
-app.listen(8080, () => console.log('Ready!'));
+// Start your API server on port 8080
+await espresso.listen(8080);
+console.log('Server is ready!');
 ```
 
-The order of injection is the following:
-1. The __nested__ routes:
-    1. The __nested__ routes:
-        1. The __nested__ routes:
-            1. `[...]`
-        1. The __controllers__ of the current class.
-    1. The __controllers__ of the current class.
-1. The __controllers__ of the current class.
+When using `Espresso`, you register your routing classes using the `.use()` method before starting the server with `.listen()`. This approach injects all routes defined in your controllers into the server's routing system.
+
+## Order of Injection
+
+`Espresso` processes routes in a hierarchical order, ensuring that more deeply nested routes are registered first. The general order of route injection is as follows:
+
+1. **Nested routes**:
+    1. **Further nested routes** (if any):
+        1. The **controllers** associated with deeply nested routes.
+    1. The **controllers** of the current nested route level.
+1. The **controllers** of the root level routes.
+
+This hierarchical approach ensures that routes are organized and injected into the server in an orderly manner, which helps maintain clarity and predictability in how requests are handled.
 
 <br />
 
 ## Options
 
-As you can see, when you create the `Espresso` instance, you can pass an object with some options about how to inject the routes into the `express.js` instance:
-- __lowercase__ (`boolean`, optional):
-    > If this options is `true`, all endpoints will be injected in lowercase.  Use this option if do you want to use the default controller names in lowercase without to set explicitly in all controllers.
-    > 
-    > ### Disclaimer:
-    > If your `Controller` class has a name with multiples words (for example `BleedBelieverController`), the path of that class in lowercase mode will be `"bleed-believer"` (using `"-"` as word separator).
+When creating a new `Espresso` instance, you can pass an optional configuration object to control how routes are injected:
 
-<br />
+- **lowercase** (`boolean`, optional):
+  If set to `true`, all controller names and endpoints will be converted to lowercase. This is useful if you want consistent lowercase URLs without having to define them explicitly in each controller.
+  > **Note**: If your `Controller` class name consists of multiple words (for example, `BleedBelieverController`), the path will be converted to `"bleed-believer"` using `"-"` as a separator when `lowercase` is `true`.
 
-- __verbose__ (`boolean`, optional):
-    > If this option is `true`, all injection process will be written in the terminal. This is useful if you need to see how this library parses every route before to inject into the target instance.
+- **verbose** (`boolean`, optional):
+  If set to `true`, all route injection processes will be logged to the terminal. This can be helpful for debugging and for verifying how the library processes and registers each route.
 
-<br />
-
-## Error handling
-
-If you want to catch errors throwed by an endpoint, you can bind a callback for that purpose. For example:
+Example:
 
 ```ts
-import express from 'express';
+const espresso = new Espresso({
+  lowercase: true,
+  verbose: true
+});
+```
+
+With these options, `Espresso` will log details about each route as it’s registered and convert all routes to lowercase paths.
+
+<br />
+
+## Error Handling
+
+To handle errors thrown by your endpoints, you can use the `onError` method to register a custom error listener. For example:
+
+```ts
 import { Espresso } from '@bleed-believer/espresso';
-import { ApiRouting } from './api.routing';
+import { APIRouting } from './api.routing';
 
-const app = express();
-const espresso = new Espresso(app);
-espresso.inject(ApiRouting);
+const espresso = new Espresso();
+espresso.use(APIRouting);
 
-// Send a JSON with the error message
-espresso.onError((e, req, res) => {
-    res.json({
-        code:       e?.code ?? 500,
-        message:    e.message
+// Register a custom error handler
+espresso.onError((err, res) => {
+  res
+    .status(err.status)
+    .json({
+        code: err.status,
+        title: err.title,
+        details: err.message
     });
 });
 
-app.listen(8080, () => {
-    console.log('Ready!');
-});
+// Start your API server on port 8080
+await espresso.listen(8080);
+console.log('Server is ready!');
 ```
+
+In this example, if an endpoint throws an error, `Espresso` will pass that error to your custom error handler. The handler then responds with a JSON object containing the error code, title and message. If you do not define a custom error handler, `Espresso` will send a default HTML error response containing the error message.
