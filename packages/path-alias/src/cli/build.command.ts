@@ -64,13 +64,29 @@ export class BuildCommand implements Executable {
             globPattern = globPattern.replaceAll('\\', '/');
         }
 
+        const include = tsConfig?.config?.include?.map(x => {
+            let out = join(tsConfig.cwd, x);
+            if (process.platform === 'win32') {
+                out = out.replaceAll('\\', '/');
+            }
+            return out;
+        });
+
+        const ignore = tsConfig?.config?.exclude?.map(x => {
+            let out = join(tsConfig.cwd, x);
+            if (process.platform === 'win32') {
+                out = out.replaceAll('\\', '/');
+            }
+            return out;
+        });
+
         const files = await fastGlob([
             globPattern,
-            ...(tsConfig?.config?.include ?? [])
+            ...(include ?? [])
         ], {
             dot: true,
             cwd: tsConfig.path,
-            ignore: tsConfig?.config?.exclude,
+            ignore,
             absolute: true,
             globstar: true,
             onlyFiles: true,
