@@ -40,6 +40,10 @@ export class NodeLauncher {
                     process.version.match(/(?<=^v)[0-9]+/gi) as any ?? '0'
                 );
 
+                const env: NodeJS.ProcessEnv = {
+                    ... process.env,
+                    'BLEED_BELIEVER_PATH_ALIAS_ARGS': JSON.stringify(this.argv.flags)
+                };
                 let argv: string[] = [];
                 if (version >= 20) {
                     if (this.#watch) {
@@ -48,15 +52,26 @@ export class NodeLauncher {
 
                     argv.push(
                         `--import`,
-                        loaderPath,
-                        ...process.argv.slice(3)
+                        loaderPath
                     );
-
+                    
+                    for (let i = 3; i < process.argv.length; i++) {
+                        const arg = process.argv[i];
+                        
+                        if (arg.startsWith('--bb-')) {
+                            // Skip over this flag --bb-* argument and its values so the Node process
+                            // never receives them.
+                            i += this.argv.flags[arg].length;
+                            continue;
+                        }
+                        
+                        argv.push(arg);
+                    }
                 } else {
                     throw new Error('Node version not supported');
                 }
 
-                const proc = spawn('node', argv, { stdio: 'inherit' });
+                const proc = spawn('node', argv, { stdio: 'inherit', env });
                 proc.on('close', ___ => { resolve(); });
                 proc.on('error', err => { reject(err); });
             } catch (err) {

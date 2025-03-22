@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "Node16",
+        "moduleResolution": "Node16",
+
+        "esModuleInterop": true,
+        "verbatimModuleSyntax": true,
+
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "sourceMap": true,
+
+        "strict": true,
+        "baseUrl": "./src",
+        "paths": {
+            "@tool/*": ["./tool-alt-path/*"]
+        }
+    },
+    "exclude": [
+        "./dist",
+        "./node_modules/**"
+    ]
+}
