@@ -24,11 +24,18 @@ type DefaultResolve = (
 export class HookManager {
     #resolveCache = new Map<string, string>();
     #loadCache = new Map<string, LoadFnOutput>();
-    #tsConfig = TsConfig.load();
+    #tsConfig: TsConfig;
     #swcrc?: SwcOptions;
 
-    #rootDir = resolve(this.#tsConfig.cwd, this.#tsConfig.rootDir);
-    #outDir = resolve(this.#tsConfig.cwd, this.#tsConfig.outDir);
+    #rootDir: string;
+    #outDir: string;
+
+    constructor(tsConfig: TsConfig = TsConfig.load()) {
+        this.#tsConfig = tsConfig;
+
+        this.#rootDir = resolve(this.#tsConfig.cwd, this.#tsConfig.rootDir);
+        this.#outDir = resolve(this.#tsConfig.cwd, this.#tsConfig.outDir);
+    }
 
     async #fileExist(path: string): Promise<boolean> {
         try {

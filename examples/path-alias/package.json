@@ -5,6 +5,7 @@
         "build": "clear && rm -rf ./dist && tsc",
         "build:swc": "clear && rm -rf ./dist && swc ./src -d ./dist",
         "start": "./start.sh ./src/index.ts",
+        "start:other": "bb-path-alias start --bb-tsconfig-path ./tsconfig.alt.json ./src/index.ts",
         "start:dist": "npm run build && ./start.sh ./dist/index.js",
         "start:swc": "npm run build:swc && node ./dist/index.js",
         "test": "ava"
