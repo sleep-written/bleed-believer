@@ -1,19 +1,34 @@
 #! /usr/bin/env node
-import { Commander, CommandNotFoundError } from '@bleed-believer/commander';
-import { CLIRouting } from './cli/routing.js';
-import { logger } from './logger.js';
+import { NodeLauncher } from '@tool/node-launcher/index.js';
+import { logger } from '@/logger.js';
+import { Argv } from '@tool/argv/index.js';
 
 try {
-    const commander = new Commander(CLIRouting, { lowercase: true });
-    await commander.execute();
-} catch (err: any) {
-    if (err instanceof CommandNotFoundError) {
-        logger.error(
-                `Command not found. Please use "help" command `
-            +   `to see the available commands.`
-        );
+    const argv = new Argv();
+    switch (argv.command) {
+        case 'start':
+        case 'watch': {
+            const launcher = new NodeLauncher(
+                argv.targetPath,
+                argv.targetArgs
+            );
 
-    } else {
-        logger.error(err?.message ?? 'Error not identifier');
+            await launcher.initialize(argv.command === 'watch');
+            break;
+        }
+
+        case 'build': {
+            throw new Error('Comando todavía no implementado.');
+
+        }
+
+        default: {
+            throw new Error('Comando no válido.');
+
+        }
     }
+
+} catch (err: any) {
+    logger.error(err?.message ?? 'Error not identified.');
+
 }

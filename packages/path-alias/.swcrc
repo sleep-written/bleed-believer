@@ -22,7 +22,7 @@
   },
   "sourceMaps": false,
   "exclude": [
-    "./**/*.test.ts",
-    "./**/*.example.ts"
+    ".test.ts",
+    ".test-resource.ts"
   ]
 }

@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "Node16",
+        "esModuleInterop": true,
+        "moduleResolution": "Node16",
+        
+        "strict": true,
+        "skipLibCheck": true,
+        "verbatimModuleSyntax": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "sourceMap": true
+    }
+}

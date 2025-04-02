@@ -12,5 +12,11 @@
             "@tool/*": [ "./tool/*" ],
             "@/*": [ "./*" ]
         }
-    }
+    },
+    "exclude": [
+        "./dist",
+        "./example",
+        "./src/**/*.test.ts",
+        "./src/**/*.test-resource.ts"
+    ]
 }
