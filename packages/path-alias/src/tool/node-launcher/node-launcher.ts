@@ -1,32 +1,52 @@
+import type { SpawnFunction, ProcessInstance, NodeLauncherInjection } from './interfaces/index.js';
+
 import { fileURLToPath, pathToFileURL } from 'url';
+import { isAbsolute, join, resolve } from 'path';
 import { spawn } from 'child_process';
-import { join } from 'path';
-import { logger, separator } from '@/logger.js';
 
 export class NodeLauncher {
-    #loaderPath: string;
+    static #loaderPath = process.platform === 'win32'
+        ?   pathToFileURL(join(fileURLToPath(import.meta.url), '../../../index.js')).href
+        :   join(fileURLToPath(import.meta.url), '../../../index.js');
+
+    static get loaderPath() {
+        return NodeLauncher.#loaderPath;
+    }
+
     #targetPath: string;
+    get targetPath(): string {
+        return this.#targetPath;
+    }
+
     #targetArgs: string[];
+    get targetArgs(): string[] {
+        return this.#targetArgs.slice();
+    }
 
-    constructor(targetPath: string, targetArgs: string[]) {
-        this.#loaderPath = join(fileURLToPath(import.meta.url), '../../../index.js');
-        if (process.platform === 'win32') {
-            this.#loaderPath = pathToFileURL(this.#loaderPath).href;
-        }
+    #process: ProcessInstance;
+    #spawn: SpawnFunction;
 
-        this.#targetPath = targetPath;
+    constructor(
+        targetPath: string,
+        targetArgs: string[],
+        inject?: Partial<NodeLauncherInjection>
+    ) {
+        this.#process = inject?.process ?? process;
+        this.#spawn = inject?.spawn ?? spawn;
+
+        this.#targetPath = !isAbsolute(targetPath)
+            ?   resolve(this.#process.cwd(), targetPath)
+            :   targetPath;
+
         this.#targetArgs = targetArgs;
     }
 
     initialize(watch?: boolean): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             try {
-                logger.info('Starting...⤵');
-                separator();
-
                 const args = [
                     '--import',
-                    this.#loaderPath,
+                    NodeLauncher.loaderPath,
                     this.#targetPath,
                     ...this.#targetArgs
                 ];
@@ -35,23 +55,14 @@ export class NodeLauncher {
                     args.unshift('--watch');
                 }
 
-                const proc = spawn('node', args, { stdio: 'inherit' });
+                const proc = this.#spawn('node', args, { stdio: 'inherit' });
                 proc.on('close', ___ => { resolve(); });
                 proc.on('error', err => { reject(err); });
 
-            } catch(err) {
+            } catch (err) {
                 reject(err);
 
             }
-        })
-            .then(() => {
-                separator();
-                logger.info('Completed! ⤴');
-            })
-            .catch(e => {
-                separator();
-                logger.info('Crashed!!! ⤴');    
-                return e;
-            });
+        });
     }
 }

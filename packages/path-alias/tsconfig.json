@@ -17,6 +17,6 @@
         "./dist",
         "./example",
         "./src/**/*.test.ts",
-        "./src/**/*.test-resource.ts"
+        "./src/**/*.fake.ts"
     ]
 }

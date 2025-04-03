@@ -1,20 +1,34 @@
 #! /usr/bin/env node
 import { NodeLauncher } from '@tool/node-launcher/index.js';
-import { logger } from '@/logger.js';
-import { Argv } from '@tool/argv/index.js';
+import { logger, separator } from '@/logger.js';
 
 try {
-    const argv = new Argv();
-    switch (argv.command) {
+    const command = process.argv[2]
+        ?.trim()
+        ?.toLowerCase();
+
+    switch (command) {
         case 'start':
         case 'watch': {
-            const launcher = new NodeLauncher(
-                argv.targetPath,
-                argv.targetArgs
-            );
+            try {
+                logger.info('Starting...⤵');
+                separator();
 
-            await launcher.initialize(argv.command === 'watch');
-            break;
+                const launcher = new NodeLauncher(process.argv[3], process.argv.slice(4));
+                await launcher.initialize(command === 'watch');
+                
+                separator();
+                logger.info('Completed! ⤴');
+
+            } catch (err) {
+                separator();
+                logger.info('Crashed!!! ⤴');
+                throw err;
+
+            } finally {
+                break;
+
+            }
         }
 
         case 'build': {
@@ -23,7 +37,7 @@ try {
         }
 
         default: {
-            throw new Error('Comando no válido.');
+            throw new Error(`El comando "${command}" no es válido.`);
 
         }
     }

@@ -23,6 +23,6 @@
   "sourceMaps": false,
   "exclude": [
     ".test.ts",
-    ".test-resource.ts"
+    ".fake.ts"
   ]
 }
