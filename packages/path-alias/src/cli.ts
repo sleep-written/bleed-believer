@@ -1,6 +1,7 @@
 #! /usr/bin/env node
-import { NodeLauncher } from '@tool/node-launcher/index.js';
 import { logger, separator } from '@/logger.js';
+import { SwcTranspiler } from '@tool/swc-transpiler/index.js';
+import { NodeLauncher } from '@tool/node-launcher/index.js';
 
 try {
     const command = process.argv[2]
@@ -32,8 +33,13 @@ try {
         }
 
         case 'build': {
-            throw new Error('Comando todavía no implementado.');
+            // throw new Error('Comando todavía no implementado.');
+            const transpiler = new SwcTranspiler({
+                tsConfigPath: process.argv[3]
+            });
 
+            await transpiler.build();
+            break;
         }
 
         default: {

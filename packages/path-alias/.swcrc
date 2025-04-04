@@ -22,7 +22,8 @@
   },
   "sourceMaps": false,
   "exclude": [
-    ".test.ts",
-    ".fake.ts"
+    ".fake.ts",
+    ".mock.ts",
+    ".test.ts"
   ]
 }

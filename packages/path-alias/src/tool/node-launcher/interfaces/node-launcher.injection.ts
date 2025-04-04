@@ -1,7 +1,7 @@
-import type { ProcessInstance } from './process-instance.js';
+import type { NodeJsProcessInstance } from './node-js-process.instance.js';
 import type { SpawnFunction } from './spawn.function.js';
 
 export interface NodeLauncherInjection {
-    process: ProcessInstance;
+    process: NodeJsProcessInstance;
     spawn: SpawnFunction;
 }

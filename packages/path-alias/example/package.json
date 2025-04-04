@@ -1,5 +1,10 @@
 {
     "type": "module",
+    "scripts": {
+        "clean": "rm -rf ./dist",
+        "build": "npm run clean && node ../dist/cli.js build",
+        "start": "node ../dist/cli.js start ./src/index.ts"
+    },
     "devDependencies": {
         "typescript": "^5.8.2"
     }

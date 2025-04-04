@@ -1,10 +1,17 @@
 import type { Options as SwcOptions } from '@swc/core';
-import type { TsConfig } from './ts-config.js';
 import { dirname, resolve } from 'path';
+import { TsConfig } from './ts-config.js';
+import micromatch from 'micromatch';
+
+const cache = new Map<TsConfig, SwcOptions>();
 
 export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
-    const { path, config } = tsConfigBase;
+    if (cache.has(tsConfigBase)) {
+        return cache.get(tsConfigBase)!;
+    }
+    
     const options: SwcOptions = {};
+    const { path, config } = tsConfigBase;
     const {
         emitDecoratorMetadata, experimentalDecorators,
         removeComments, module, target,
@@ -20,7 +27,11 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
         :   sourceMap;
 
     options.exclude = config.exclude
-        ?.map(x => !x.startsWith('./') ? `./${x}` : x);
+        // ?.map(x => !x.startsWith('./') ? `./${x}` : x);
+        ?.map(x => micromatch
+            .makeRe(x)
+            .source
+        );
 
     options.jsc = {
         target: target?.toLowerCase() as any ?? 'es2022',
@@ -68,5 +79,6 @@ export function toSWCConfig(tsConfigBase: TsConfig): SwcOptions {
         }
     }
 
+    cache.set(tsConfigBase, options);
     return options;
 }

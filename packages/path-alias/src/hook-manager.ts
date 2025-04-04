@@ -122,6 +122,7 @@ export class HookManager {
                 const localSwcConfig = structuredClone(this.#swcrc);
                 localSwcConfig.sourceFileName = path;
                 localSwcConfig.filename = localSwcConfig.sourceFileName;
+                delete localSwcConfig.exclude;
 
                 const original = await defaultLoad(url, { ...context, format: 'module' });
                 const rawText = (original.source as Buffer).toString('utf-8');

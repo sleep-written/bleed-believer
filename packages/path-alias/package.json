@@ -59,6 +59,10 @@
     "@swc/core": "^1.11.16"
   },
   "devDependencies": {
+    "@types/micromatch": "^4.0.9",
     "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "micromatch": "^4.0.8"
   }
 }

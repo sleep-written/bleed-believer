@@ -16,7 +16,8 @@
     "exclude": [
         "./dist",
         "./example",
-        "./src/**/*.test.ts",
-        "./src/**/*.fake.ts"
+        "./src/**/*.fake.ts",
+        "./src/**/*.mock.ts",
+        "./src/**/*.test.ts"
     ]
 }
