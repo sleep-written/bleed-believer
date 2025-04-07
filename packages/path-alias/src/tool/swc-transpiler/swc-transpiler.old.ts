@@ -1,18 +1,14 @@
 import type { NodeJsProcessInstance, SwcTranspilerInjection } from './interfaces/index.js';
 
-import { tsConfigFinder } from './ts-config-finder.js';
-import { ExtParser } from '@tool/ext-parser/index.js';
+import { tsConfigFinder } from '../get-ts-config/index.js';
+import { SourceCodeFile } from './source-code-file.js';
 import { TsConfig } from '@tool/ts-config/index.js';
 
-import { writeFile, mkdir } from 'fs/promises';
-import { transformFile } from '@swc/core';
 import fastGlob from 'fast-glob';
 import path from 'path';
-import { SourceCodeFile } from './source-code-file.js';
 
 export class SwcTranspiler {
     #process: NodeJsProcessInstance;
-    #mkDirCache = new Set<string>();
     #tsConfig: TsConfig;
 
     constructor(injection?: Partial<SwcTranspilerInjection>) {
@@ -30,18 +26,8 @@ export class SwcTranspiler {
         }
     }
 
-    async #mkDir(filepath: string): Promise<void> {
-        const dir = path.dirname(filepath);
-        if (!this.#mkDirCache.has(dir)) {
-            await mkdir(dir, { recursive: true });
-            this.#mkDirCache.add(dir);
-        }
-    }
-
     async build() {
         const rootDir = path.resolve(this.#tsConfig.cwd, this.#tsConfig.rootDir);
-        const outDir = path.resolve(this.#tsConfig.cwd, this.#tsConfig.outDir);
-
         let globPattern = path.join(rootDir, '**/*.{ts,mts}');
         if (process.platform === 'win32') {
             globPattern = globPattern.replaceAll('\\', '/');

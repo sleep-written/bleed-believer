@@ -1,13 +1,12 @@
 import type { TsConfigJson, TsConfigResult } from 'get-tsconfig';
 import type { Options as SwcOptions } from '@swc/core';
 
-import { basename, resolve, dirname } from 'path';
-import { getTsconfig } from 'get-tsconfig';
+import { basename, resolve, dirname, normalize, join } from 'path';
 
 import { normalizeTsConfig } from './normalize-ts-config.js';
 import { toSWCConfig } from './to-swc-config.js';
 
-import { ExtParser } from '../ext-parser/index.js';
+import { tsConfigFinder } from '@tool/get-ts-config/index.js';
 import { logger } from '@/logger.js';
 
 export class TsConfig {
@@ -39,7 +38,10 @@ export class TsConfig {
     }
 
     // Nuevo diccionario para almacenar los patrones precompilados
-    #pathRegexMap: { regex: RegExp; targetPaths: string[] }[];
+    #pathRegexMap: {
+        regex: RegExp;
+        targetPaths: string[];
+    }[];
 
     static load(searchPath?: string, filename?: string): TsConfig {
         if (!searchPath) {
@@ -50,13 +52,10 @@ export class TsConfig {
             filename = 'tsconfig.json';
         }
 
-        const result = getTsconfig(searchPath, filename);
-        if (!result) {
-            throw new Error(`"${filename}" not found at "${searchPath}".`);
-        } else {
-            result.config?.exclude?.pop();
-            return new TsConfig(result);
-        }
+        const fullPath = normalize(join(searchPath, filename));
+        const result = tsConfigFinder(fullPath);
+        result.config?.exclude?.pop();
+        return new TsConfig(result);
     }
 
     constructor(result: TsConfigResult) {
