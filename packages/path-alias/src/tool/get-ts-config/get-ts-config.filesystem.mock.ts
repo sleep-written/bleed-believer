@@ -21,7 +21,15 @@ export function getTsConfigFilesystemMock(options: {
             cwd: () => options.cwd
         },
         statSync(path) {
-            if (files.includes(path) || (options.target && path === options.target.path)) {
+            if (
+                symlinks.some(x => x.startsWith(path)) ||
+                symlinks.some(x => path.startsWith(x))
+            ) {
+                return {
+                    isFile:         () => false,
+                    isDirectory:    () => false
+                };
+            } else if (files.includes(path) || (options.target && path === options.target.path)) {
                 return {
                     isFile:         () => true,
                     isDirectory:    () => false
@@ -30,11 +38,6 @@ export function getTsConfigFilesystemMock(options: {
                 return {
                     isFile:         () => false,
                     isDirectory:    () => true
-                };
-            } else if (symlinks.some(x => x.startsWith(path))) {
-                return {
-                    isFile:         () => false,
-                    isDirectory:    () => false
                 };
             } else {
                 throw new Error(`Location doesn't exists`);
