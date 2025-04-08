@@ -1,2 +1,2 @@
-export { SwcTranspiler } from './swc-transpiler.old.js';
-export type * from './interfaces/index.js';
+export { SWCTranspiler } from './swc-transpiler.js';
+export * from './interfaces/index.js';

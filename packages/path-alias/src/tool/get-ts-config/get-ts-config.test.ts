@@ -1,7 +1,6 @@
 import test from 'ava';
 
 import { getTsConfigFilesystemMock } from './get-ts-config.filesystem.mock.js';
-import { getTsConfigFetchMock } from './get-ts-config.fetch.mock.js';
 import { getTsConfig } from './get-ts-config.js';
 
 import {
@@ -13,7 +12,7 @@ import {
     InvalidStatsTypeError,
 } from './errors/index.js';
 
-test('get: null (default); cwd: "/tralalero/tralala"; target: "/tralalero/tralala/tsconfig.json"; → file found', async t => {
+test('get: null (default); cwd: "/tralalero/tralala"; target: "/tralalero/tralala/tsconfig.json"; → file found', t => {
     // Given
     const injection = getTsConfigFilesystemMock({
         cwd: '/tralalero/tralala',
@@ -30,7 +29,7 @@ test('get: null (default); cwd: "/tralalero/tralala"; target: "/tralalero/tralal
     });
 
     // When
-    const result = await getTsConfig(null, injection);
+    const result = getTsConfig(null, injection);
 
     // Then
     t.is(result.path, '/tralalero/tralala/tsconfig.json');
@@ -38,7 +37,7 @@ test('get: null (default); cwd: "/tralalero/tralala"; target: "/tralalero/tralal
     t.is(result.config?.compilerOptions?.module, 'Node16');
 });
 
-test('get: null (default); cwd: "/tralalero/tralala"; target: "/tralalero/tsconfig.json"; → file found', async t => {
+test('get: null (default); cwd: "/tralalero/tralala"; target: "/tralalero/tsconfig.json"; → file found', t => {
     // Given
     const injection = getTsConfigFilesystemMock({
         cwd: '/tralalero/tralala',
@@ -55,7 +54,7 @@ test('get: null (default); cwd: "/tralalero/tralala"; target: "/tralalero/tsconf
     });
 
     // When
-    const result = await getTsConfig(null, injection);
+    const result = getTsConfig(null, injection);
 
     // Then
     t.is(result.path, '/tralalero/tsconfig.json');
@@ -63,14 +62,14 @@ test('get: null (default); cwd: "/tralalero/tralala"; target: "/tralalero/tsconf
     t.is(result.config?.compilerOptions?.module, 'Node16');
 });
 
-test('get: null (default); cwd: "/tralalero/tralala"; target: null; → file not found', async t => {
+test('get: null (default); cwd: "/tralalero/tralala"; target: null; → file not found', t => {
     // Given
     const injection = getTsConfigFilesystemMock({
         cwd: '/tralalero/tralala',
         folders: [ '/tralalero/tralala' ],
     });
 
-    await t.throwsAsync(
+    t.throws(
         // When
         () => getTsConfig(null, injection),
 
@@ -79,7 +78,7 @@ test('get: null (default); cwd: "/tralalero/tralala"; target: null; → file not
     );
 });
 
-test('get: null (default); cwd: "/tralalero/tralala"; target: /tralalero/tralala/tsconfig.json; → invalid file', async t => {
+test('get: null (default); cwd: "/tralalero/tralala"; target: /tralalero/tralala/tsconfig.json; → invalid file', t => {
     // Given
     const injection = getTsConfigFilesystemMock({
         cwd: '/tralalero/tralala',
@@ -87,7 +86,7 @@ test('get: null (default); cwd: "/tralalero/tralala"; target: /tralalero/tralala
         folders: [ '/tralalero/tralala' ],
     });
 
-    await t.throwsAsync(
+    t.throws(
         // When
         () => getTsConfig(null, injection),
 
@@ -96,7 +95,7 @@ test('get: null (default); cwd: "/tralalero/tralala"; target: /tralalero/tralala
     );
 });
 
-test('get: "tsconfig.base.json"; cwd: "/tralalero/tralala"; target: "/tralalero/tralala/tsconfig.base.json"; → file found', async t => {
+test('get: "tsconfig.base.json"; cwd: "/tralalero/tralala"; target: "/tralalero/tralala/tsconfig.base.json"; → file found', t => {
     // Given
     const injection = getTsConfigFilesystemMock({
         cwd: '/tralalero/tralala',
@@ -113,7 +112,7 @@ test('get: "tsconfig.base.json"; cwd: "/tralalero/tralala"; target: "/tralalero/
     });
 
     // When
-    const result = await getTsConfig('tsconfig.base.json', injection);
+    const result = getTsConfig('tsconfig.base.json', injection);
 
     // Then
     t.is(result.path, '/tralalero/tralala/tsconfig.base.json');
@@ -121,7 +120,7 @@ test('get: "tsconfig.base.json"; cwd: "/tralalero/tralala"; target: "/tralalero/
     t.is(result.config?.compilerOptions?.module, 'Node16');
 });
 
-test('get: "/tralalero/tralala/tsconfig.base.json"; cwd: "/tralalero/tralala"; target: "/tralalero/tralala/tsconfig.base.json"; → file found', async t => {
+test('get: "/tralalero/tralala/tsconfig.base.json"; cwd: "/tralalero/tralala"; target: "/tralalero/tralala/tsconfig.base.json"; → file found', t => {
     // Given
     const injection = getTsConfigFilesystemMock({
         cwd: '/tralalero/tralala',
@@ -138,7 +137,7 @@ test('get: "/tralalero/tralala/tsconfig.base.json"; cwd: "/tralalero/tralala"; t
     });
 
     // When
-    const result = await getTsConfig('/bombardino/cocodrilo/tsconfig.base.json', injection);
+    const result = getTsConfig('/bombardino/cocodrilo/tsconfig.base.json', injection);
 
     // Then
     t.is(result.path, '/bombardino/cocodrilo/tsconfig.base.json');
@@ -146,7 +145,7 @@ test('get: "/tralalero/tralala/tsconfig.base.json"; cwd: "/tralalero/tralala"; t
     t.is(result.config?.compilerOptions?.module, 'Node16');
 });
 
-test('get: "/@perreo/ijoeputa/tsconfig.json"; cwd: "/tralalero/tralala"; target: null; → unsupported stats (symlink)', async t => {
+test('get: "/@perreo/ijoeputa/tsconfig.json"; cwd: "/tralalero/tralala"; target: null; → unsupported stats (symlink)', t => {
     // Given
     const injection = getTsConfigFilesystemMock({
         cwd: '/tralalero/tralala',
@@ -154,7 +153,7 @@ test('get: "/@perreo/ijoeputa/tsconfig.json"; cwd: "/tralalero/tralala"; target:
         symlinks: [ '/@perreo/ijoeputa' ]
     });
 
-    await t.throwsAsync(
+    t.throws(
         // When
         () => getTsConfig('/@perreo/ijoeputa/tsconfig.json', injection),
 
@@ -163,77 +162,18 @@ test('get: "/@perreo/ijoeputa/tsconfig.json"; cwd: "/tralalero/tralala"; target:
     );
 });
 
-test('get: tsconfig.base.json; cwd: "/tralalero/tralala"; target: null; → file not found', async t => {
+test('get: tsconfig.base.json; cwd: "/tralalero/tralala"; target: null; → file not found', t => {
     // Given
     const injection = getTsConfigFilesystemMock({
         cwd: '/tralalero/tralala',
         folders: [ '/tralalero/tralala' ]
     });
 
-    await t.throwsAsync(
+    t.throws(
         // When
         () => getTsConfig('tsconfig.base.json', injection),
 
         // Then
         { instanceOf: StatsError }
-    )
-});
-
-test('get: "https://www.4chan.org/cp.json"; cwd: "/bombardino/cocodrilo"; → valid JSON', async t => {
-    // Given
-    const injection = getTsConfigFetchMock({
-        cwd: '/bombardino/cocodrilo',
-        url: 'https://www.4chan.org/cp.json',
-        status: 200,
-        response: {
-            compilerOptions: {
-                target: 'ES2024',
-                module: 'Node16'
-            }
-        }
-    });
-
-    // When
-    const result = await getTsConfig('https://www.4chan.org/cp.json', injection);
-
-    // Then
-    t.is(result.path, '/bombardino/cocodrilo/cp.json');
-    t.is(result.config?.compilerOptions?.target, 'ES2024');
-    t.is(result.config?.compilerOptions?.module, 'Node16');
-});
-
-test('get: "https://www.4chan.org/fbi"; cwd: "/bombardino/cocodrilo"; → invalid http response', async t => {
-    // Given
-    const injection = getTsConfigFetchMock({
-        cwd: '/bombardino/cocodrilo',
-        url: 'https://www.4chan.org/fbi',
-        status: 404,
-        response: `Página no encontrada`
-    });
-
-    await t.throwsAsync(
-        // When
-        () => getTsConfig('https://www.4chan.org/fbi', injection),
-
-        // Then
-        { instanceOf: ResponseStatusError }
-    )
-});
-
-test('get: "https://www.4chan.org/cp.rar"; cwd: "/bombardino/cocodrilo"; → invalid JSON', async t => {
-    // Given
-    const injection = getTsConfigFetchMock({
-        cwd: '/bombardino/cocodrilo',
-        url: 'https://www.4chan.org/cp.rar',
-        status: 200,
-        response: `351356546545asdfa65sd656546 6a5s4df65asdf65a sa6df4$$$$zxf5464a6g`
-    });
-
-    await t.throwsAsync(
-        // When
-        () => getTsConfig('https://www.4chan.org/cp.rar', injection),
-
-        // Then
-        { instanceOf: JSONParseError }
     )
 });

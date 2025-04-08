@@ -1,8 +1,9 @@
-import type { NodeJsProcessInstance } from './node-js-process.instance.js';
-import type { AccessSyncFunction } from './access-sync.function.js';
+import type { GetSourceCodeFunction } from './get-source-code.function.js';
+import type { GetTsConfigFunction } from './get-ts-config.function.js';
+import type { ProcessInstance } from './process.instance.js';
 
-export interface SwcTranspilerInjection {
-    tsConfigPath: string;
-    accessSync: AccessSyncFunction;
-    process: NodeJsProcessInstance;
+export interface SWCTranspilerInjection {
+    getSourceCode: GetSourceCodeFunction;
+    getTsConfig: GetTsConfigFunction;
+    process: ProcessInstance;
 }

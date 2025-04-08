@@ -6,7 +6,7 @@ import { basename, resolve, dirname, normalize, join } from 'path';
 import { normalizeTsConfig } from './normalize-ts-config.js';
 import { toSWCConfig } from './to-swc-config.js';
 
-import { tsConfigFinder } from '@tool/get-ts-config/index.js';
+import { getTsConfig } from '@tool/get-ts-config/index.js';
 import { logger } from '@/logger.js';
 
 export class TsConfig {
@@ -53,7 +53,7 @@ export class TsConfig {
         }
 
         const fullPath = normalize(join(searchPath, filename));
-        const result = tsConfigFinder(fullPath);
+        const result = getTsConfig(fullPath);
         result.config?.exclude?.pop();
         return new TsConfig(result);
     }
