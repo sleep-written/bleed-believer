@@ -1,14 +1,19 @@
-import type { GetTsConfigInjection, ResponseInstance } from './interfaces/index.js';
+import type { GetTsConfigInjection, ResponseInstance, StatsInstance } from './interfaces/index.js';
 import type { TsConfigResult } from 'get-tsconfig';
 
 import { basename, dirname, isAbsolute, join, normalize, parse, resolve } from 'path';
+import { access, mkdir, rm, writeFile } from 'fs/promises';
 import { getTsconfig } from 'get-tsconfig';
+import { randomUUID } from 'crypto';
 import { statSync } from 'fs';
+import { tmpdir } from 'os';
+
 
 import {
     TsconfigFileNotFoundError,
     InvalidTsconfigFileError,
     InvalidStatsTypeError,
+    InvalidProtocolError,
     ResponseStatusError,
     JSONParseError,
     StatsError,
@@ -16,115 +21,148 @@ import {
 } from './errors/index.js';
 
 export async function getTsConfig(
-    path?: string | null,
+    input?: string | null,
     injection?: Partial<GetTsConfigInjection>
 ): Promise<TsConfigResult> {
     const getTsconfigFunction = injection?.getTsconfig ?? getTsconfig;
     const statSyncFunction = injection?.statSync ?? statSync;
     const processInstance = injection?.process ?? process;
     const fetchFunction = injection?.fetch ?? fetch;
-
-    if (typeof path === 'string') {
+    
+    let normalizedPath;
+    if (input != null) {
+        let url: URL | null;
         try {
-            const url = new URL(path);
-            let resp: ResponseInstance;
-            try {
-                resp = await fetchFunction(path);
+            url = new URL(input);
+        } catch {
+            url = null;
+        }
 
+        if (url) {
+            switch (url.protocol) {
+                case 'http:':
+                case 'https:':
+                    break;
+
+                default:
+                    throw new InvalidProtocolError(url.protocol);
+            }
+
+            let response: ResponseInstance;
+            try {
+                response = await fetchFunction(input);
             } catch (err) {
-                const error = new FetchError(path);
+                const error = new FetchError(input);
                 error.cause = err;
                 throw error;
-
             }
 
-            if (!resp.ok) {
-                throw new ResponseStatusError(resp.status, path);
-
+            if (!response.ok) {
+                throw new ResponseStatusError(response.status, input);
             }
 
             try {
-                const text = await resp.text();
-                const json = JSON.parse(text);
+                const text = await response.text();
+                while (true) {
+                    const tmpPath = join(
+                        tmpdir(),
+                        `@bleed-believer/path-alias`,
+                        `tsconfig.${randomUUID()}.json`
+                    );
 
-                return {
-                    config: json,
-                    path: join(
-                        processInstance.cwd(),
-                        basename(url.pathname)
-                    )
-                };
+                    let found: boolean;
+                    try {
+                        await access(tmpPath);
+                        found = true;
+                    } catch {
+                        found = false;
+                    }
 
-            } catch {
-                throw new JSONParseError(path);
+                    if (!found) {
+                        const dir = dirname(tmpPath);
+                        const name = basename(tmpPath);
+                        await mkdir(dir, { recursive: true });
+                        await writeFile(tmpPath, text, 'utf-8');
 
-            }
+                        const result = getTsconfigFunction(dir, name);
+                        await rm(tmpPath, { force: true });
+                        if (result) {
+                            result.path = join(
+                                processInstance.cwd(),
+                                basename(url.pathname)
+                            );
 
-        } catch (err: any) {
-            if (
-                !(err instanceof FetchError) &&
-                !(err instanceof JSONParseError) &&
-                !(err instanceof ResponseStatusError)
-            ) {
-                path = !isAbsolute(path)
-                ?   normalize(join(processInstance.cwd(), path))
-                :   normalize(path);
-
-            } else {
-                throw err;
-
-            }
-        }
-    } else {
-        path = processInstance.cwd();
-
-    }
-
-    const root = parse(path).root;
-    while (true) {
-        try {
-            const stats = statSyncFunction(path);
-            if (stats.isFile()) {
-                const pathname = dirname(path);
-                const filename = basename(path);
-                const tsConfig = getTsconfigFunction(pathname, filename);
-                if (!tsConfig) {
-                    throw new InvalidTsconfigFileError(path);
-                } else {
-                    return tsConfig;
+                            return result;
+                        }
+                        
+                        throw new InvalidTsconfigFileError(normalizedPath);
+                    }
                 }
+                
 
-            } else if (stats.isDirectory()) {
-                const tsConfig = getTsconfigFunction(path);
-                if (tsConfig) {
-                    return tsConfig;
-                }
-
-                if (path === root) {
-                    throw new TsconfigFileNotFoundError();
-                } else {
-                    path = resolve(path, '..');
-                }
-
-            } else {
-                throw new InvalidStatsTypeError(path);
-
-            }
-
-        } catch (e) {
-            if (
-                !(e instanceof TsconfigFileNotFoundError) &&
-                !(e instanceof InvalidTsconfigFileError) &&
-                !(e instanceof InvalidStatsTypeError) &&
-                !(e instanceof StatsError)
-            ) {
-                const error = new StatsError(path);
-                error.cause = e;
+            } catch (err) {
+                const error = new JSONParseError(input);
+                error.cause = err;
                 throw error;
-            } else {
-                throw e;
-
             }
         }
+
+        normalizedPath = !isAbsolute(input)
+        ?   join(processInstance.cwd(), normalize(input))
+        :   normalize(input);
+
+    } else {
+        normalizedPath = processInstance.cwd();
+
     }
+
+    let stats: StatsInstance | null;
+    try {
+        stats = statSyncFunction(normalizedPath);
+    } catch (err) {
+        const error = new StatsError(normalizedPath);
+        error.cause = err;
+        throw error;
+    }
+
+    if (stats?.isFile()) {
+        const result = getTsconfigFunction(
+            dirname(normalizedPath),
+            basename(normalizedPath)
+        );
+
+        if (result) {
+            return result;
+        }
+        
+        throw new InvalidTsconfigFileError(normalizedPath);
+
+    } else if (stats?.isDirectory()) {
+        const root = parse(normalizedPath).root;
+        do {
+            try {
+                stats = statSyncFunction(join(
+                    normalizedPath,
+                    'tsconfig.json'
+                ));
+            } catch {
+                stats = null;
+            }
+
+            if (stats?.isFile()) {
+                const result = getTsconfigFunction(normalizedPath);
+                if (result) {
+                    return result;
+                }
+
+                throw new InvalidTsconfigFileError(normalizedPath);
+            }
+
+            normalizedPath = resolve(normalizedPath, '..');
+        } while (normalizedPath != root);
+
+        throw new TsconfigFileNotFoundError();
+    }
+    
+    throw new InvalidStatsTypeError(normalizedPath);
 }
