@@ -6,10 +6,8 @@ import { getTsConfig } from './get-ts-config.js';
 import {
     TsconfigFileNotFoundError,
     InvalidTsconfigFileError,
-    StatsError,
-    JSONParseError,
-    ResponseStatusError,
     InvalidStatsTypeError,
+    StatsError,
 } from './errors/index.js';
 
 test('get: null (default); cwd: "/tralalero/tralala"; target: "/tralalero/tralala/tsconfig.json"; → file found', t => {

@@ -1,7 +1,7 @@
 import type { GetSourceCodeFunction, GetTsConfigFunction, ProcessInstance, SWCTranspilerInjection } from './interfaces/index.js';
 
+import { getSourceCode } from './get-source-code.js';
 import { getTsConfig } from '@tool/get-ts-config/index.js';
-import { SourceCode } from './source-code.js';
 
 export class SWCTranspiler {
     #getSourceCode: GetSourceCodeFunction;
@@ -10,7 +10,7 @@ export class SWCTranspiler {
     #path?: string | null;
 
     constructor(path?: string | null, injection?: Partial<SWCTranspilerInjection>) {
-        this.#getSourceCode = injection?.getSourceCode ?? SourceCode.getSourceCode;
+        this.#getSourceCode = injection?.getSourceCode ?? getSourceCode;
         this.#getTsConfig = injection?.getTsConfig ?? getTsConfig;
         this.#process = injection?.process ?? process;
         this.#path = path;
@@ -21,12 +21,12 @@ export class SWCTranspiler {
             process: this.#process
         });
 
-        const files = await this.#getSourceCode(tsConfigResult, {
+        const sources = await this.#getSourceCode(tsConfigResult, {
             process: this.#process
         });
 
-        for (const file of files) {
-            await file.transpile();
+        for (const source of sources) {
+            await source.transpile();
         }
     }
 }

@@ -16,7 +16,6 @@ export function getTsConfigFilesystemMock(options: {
     const symlinks = options.symlinks ?? [];
 
     return {
-        fetch: () => { throw new Error(`Fetch isn't available`) },
         process: {
             cwd: () => options.cwd
         },
