@@ -76,6 +76,6 @@ export function tsConfigToSwcOptions(tsConfigResult: TsConfigResult): Options {
         }
     }
 
-    cache.set(tsConfigResult, options);
+    cache.set(tsConfigResult, structuredClone(options));
     return options;
 }
