@@ -41,12 +41,12 @@
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
-  "peerDependencies": {
-    "typeorm": "^0.3.20"
-  },
   "devDependencies": {
     "@types/line-by-line": "^0.1.9",
     "sqlite3": "^5.1.7"
+  },
+  "peerDependencies": {
+    "typeorm": "^0.3.22"
   },
   "dependencies": {
     "line-by-line": "^0.1.6"
