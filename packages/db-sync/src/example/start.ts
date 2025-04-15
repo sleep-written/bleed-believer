@@ -8,9 +8,9 @@ import { ContractDetail } from './entities/contract-detail.entity.js';
 import { UserType } from './entities/user-type.entity.js';
 import { Contract } from './entities/contract.entity.js';
 import { Product } from './entities/product.entity.js';
+import { Server } from './entities/server.entity.js';
 import { Client } from './entities/client.entity.js';
 import { User } from './entities/user.entity.js';
-import { Server } from './entities/server.entity.js';
 
 // A where condition to select only a portion of the contracts
 const userTypeWhere: FindOptionsWhere<UserType> = {

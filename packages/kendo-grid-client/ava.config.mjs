@@ -1,13 +1,13 @@
 export default {
     files: [
-        './dist/**/*.test.js',
-        './dist/**/*.test.mjs',
+        './src/**/*.test.ts',
+        './src/**/*.test.mts',
     ],
-    // extensions: {
-    //     ts: 'module',
-    //     mts: 'module',
-    // },
-    // nodeArguments: [
-    //     '--import=@bleed-believer/path-alias',
-    // ]
+    extensions: {
+        ts: 'module',
+        mts: 'module',
+    },
+    nodeArguments: [
+        '--import=@bleed-believer/path-alias',
+    ]
 }

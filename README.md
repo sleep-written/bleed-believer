@@ -22,9 +22,9 @@ An scalable endpoint router for [express.js](https://www.npmjs.com/package/expre
 
 <br />
 
-## [@bleed-believer/path-alias](/packages/path-alias/README.md)
+## [@bleed-believer/path-alias](https://github.com/sleep-written/bleed-believer-path-alias)
 
-Create alias for your recurrent paths in end-user applications using your `tsconfig.json`.
+Create alias for your recurrent paths in end-user applications using your `tsconfig.json`. This package now has a own repository (updated link).
 
 <br />
 
