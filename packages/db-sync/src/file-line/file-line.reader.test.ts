@@ -131,7 +131,7 @@ test.serial('Ensure large file reading with low memory consumption', async t => 
     }
 
     // Calc average memory usage
-    const limit = 20;
+    const limit = 20; // 20 Mb
     const average =
         memoryUsage.reduce((p, c) => p + c) /
         memoryUsage.length;

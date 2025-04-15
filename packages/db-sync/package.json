@@ -14,7 +14,8 @@
     }
   },
   "scripts": {
-    "test": "rm -f ./database.*.db && bb-path-alias start src/example/setup.ts && bb-path-alias start src/example/start.ts && ava",
+    "init": "rm -f ./database.*.db && bb-path-alias start src/example/setup.ts && bb-path-alias start src/example/start.ts",
+    "test": "node --run init && ava",
     "build": "node --run clean && bb-path-alias build ./tsconfig.build.json && tsc -p tsconfig.build.json",
     "clean": "rm -rf ./dist",
     "check": "tsc --noEmit"

@@ -42,7 +42,7 @@ export class FileLineWriter extends FileLine {
 
                     if (!this.#stream!.write(v)) {
                         // Wait until the buffer can write again
-                        await new Promise(r => this.#stream!.once('drain', r));
+                        await new Promise<void>(r => this.#stream!.once('drain', () => r()));
                     }
                 };
 
