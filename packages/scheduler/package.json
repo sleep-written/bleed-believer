@@ -39,7 +39,7 @@
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
     "@bleed-believer/meta": "^0.11.3",
-    "audit-var": "^2.2.1",
-    "yaml": "^2.2.1"
+    "audit-var": "^2.3.1",
+    "yaml": "^2.7.1"
   }
 }
