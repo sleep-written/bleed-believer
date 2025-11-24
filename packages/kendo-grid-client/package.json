@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/kendo-grid-client",
-  "version": "1.0.6",
+  "version": "0.0.0-alpha.0",
   "description": "Easy manner to build tables with kendo-grid, using OData protocol.",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -40,7 +40,7 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "peerDependencies": {
-    "@progress/kendo-angular-grid": "^20.0.0",
-    "@progress/kendo-data-query": "^1.7.1"
+    "@progress/kendo-angular-grid": "^21.0.0",
+    "@progress/kendo-data-query": "^1.7.0"
   }
 }

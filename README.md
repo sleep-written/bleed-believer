@@ -4,6 +4,12 @@ This monorepo contains several packages to make applications easily, written in 
 
 <br />
 
+## [@bleed-believer/cli](/packages/cli/README.md)
+
+The __command line interface__ to build your ESM projects.
+
+<br />
+
 ## [@bleed-believer/meta](/packages/meta/README.md)
 
 Add metadata to your objects using symbols as metadata identifier.

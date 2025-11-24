@@ -1,6 +1,6 @@
 {
   "name": "bleed-believer",
-  "version": "0.2.0",
+  "version": "0.0.0.alpha",
   "private": true,
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "build": "turbo build",
-    "prepare": "npm run build"
+    "prepare": "node --run build"
   },
   "packageManager": "npm@10.8.1",
   "dependencies": {

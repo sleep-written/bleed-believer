@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/mnt",
-  "version": "0.1.4",
+  "version": "0.0.0-alpha.0",
   "description": "Manage partitions in linux.",
   "type": "module",
   "types": "./dist/index.d.ts",
