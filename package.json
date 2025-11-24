@@ -18,14 +18,14 @@
   ],
   "scripts": {
     "build": "turbo build",
-    "clean": "turbo clean",
-    "prepare": "npm run clean && npm run build"
+    "prepare": "npm run build"
   },
   "packageManager": "npm@10.8.1",
   "dependencies": {
     "@types/node": "^24.10.1",
     "ava": "^6.4.1",
     "lerna": "^9.0.1",
+    "tsc-alias": "^1.8.16",
     "turbo": "^2.6.1",
     "typescript": "^5.9.3"
   }

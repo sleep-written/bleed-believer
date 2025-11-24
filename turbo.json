@@ -15,7 +15,8 @@
         "test": {
             "cache": true,
             "inputs": [ "src/**" ],
-            "outputs": [ "dist/**" ]
+            "outputs": [ "dist/**" ],
+            "dependsOn": [ "@bleed-believer/cli#build" ]
         }
     }
 }

@@ -15,7 +15,9 @@
   },
   "scripts": {
     "test": "ava",
-    "build": "node --run clean && bb-path-alias build ./tsconfig.build.json && tsc -p tsconfig.build.json",
+    "build:tsc": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.json",
+    "build:swc": "node ../cli/dist/cli.js build --config ./tsconfig.build.json",
+    "build": "node --run clean && node --run build:swc && node --run build:tsc",
     "clean": "rm -rf ./dist",
     "check": "tsc --noEmit"
   },

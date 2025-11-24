@@ -55,9 +55,3 @@ Quickly create tables with filtering, pagination, and sorting in Angular applica
 ## [@bleed-believer/kendo-grid-server](/packages/kendo-grid-server/README.md)
 
 Server-side package that seamlessly integrates with [@progress/kendo-angular-grid](https://www.npmjs.com/package/@progress/kendo-angular-grid) to handle pagination, filtering, and sorting through TypeORM.
-
-<br />
-
-## [@bleed-believer/db-sync](/packages/db-sync/README.md)
-
-Migrate data from a source database to a target database using models defined with TypeORM.
