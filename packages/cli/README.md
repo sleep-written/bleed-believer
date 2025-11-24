@@ -37,6 +37,7 @@ If you don't have a `tsconfig.json` file in cwd, the `@bleed-believer/cli` will 
 
 -   `npx bleed build`  
     Transpile all files to JavaScript (like `tsc`, but faster).
+    -   `--watch` _(optional)_: Execute as watch mode.
     -   `--config` _(optional)_: Sets a custom tsconfig JSON file.
 
 ## Using custom loader

@@ -1,12 +1,12 @@
 {
   "type": "module",
   "scripts": {
-    "start": "ts-node-esm ./src/index.ts"
+    "build": "bleed build --config ./tsconfig.build.json"
   },
   "dependencies": {
-    "@bleed-believer/commander": "file:../../packages/commander"
+    "@bleed-believer/commander": "^0.0.0-alpha.0"
   },
   "devDependencies": {
-    "ts-node": "^10.9.1"
+    "@bleed-believer/cli": "^0.0.0-alpha.0"
   }
 }

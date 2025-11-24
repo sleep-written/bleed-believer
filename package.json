@@ -14,13 +14,14 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "scripts": {
     "build": "turbo build",
     "prepare": "node --run build"
   },
-  "packageManager": "npm@10.8.1",
+  "packageManager": "npm@11.6.3",
   "dependencies": {
     "@types/node": "^24.10.1",
     "ava": "^6.4.1",

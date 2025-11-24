@@ -1,9 +1,6 @@
 # Ignore dependencies
 node_modules
-packages/*/node_modules
 
 # Ignore transpiled files
-examples/*/.turbo
-packages/*/dist
-*.tsbuildinfo
 .turbo
+dist
