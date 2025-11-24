@@ -1,0 +1,24 @@
+{
+  "$schema": "https://swc.rs/schema.json",
+  "module": {
+    "type": "es6",
+    "resolveFully": true
+  },
+  "jsc": {
+    "target": "es2024",
+    "parser": {
+      "syntax": "typescript",
+      "decorators": true
+    },
+    "transform": {
+      "decoratorVersion": "2022-03"
+    },
+    "baseUrl": "./src",
+    "paths": {
+      "@cli/*": [ "./cli/*" ],
+      "@lib/*": [ "./lib/*" ],
+      "@/*": [ "./*" ]
+    }
+  },
+  "sourceMaps": true
+}
