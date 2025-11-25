@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "bleed build --config ./tsconfig.build.json"
+    "build": "node ../../packages/cli/dist/cli.js build --config ./tsconfig.build.json"
   },
   "dependencies": {
     "@bleed-believer/commander": "^0.0.0-alpha.0",
