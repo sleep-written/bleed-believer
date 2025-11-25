@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/espresso",
-  "version": "0.0.0-alpha.0",
+  "version": "0.0.2-alpha.0",
   "description": "Create endpoints for express.js using classes and decorators.",
   "type": "module",
   "types": "./dist/index.d.ts",
