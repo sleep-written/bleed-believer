@@ -1,9 +1,14 @@
 import { Commander } from '@bleed-believer/commander';
+
 import { AppRouting } from './app.routing.js';
+import { logger } from './logger.js';
+
+export const commander = new Commander(AppRouting, {
+    lowercase: true
+});
 
 try {
-    const cmd = new Commander(AppRouting);
-    await cmd.execute();
-} catch (err: any) {
-    console.error(err);
+    await commander.execute();
+} catch (err) {
+    logger.error(err);
 }

@@ -10,6 +10,7 @@ import { ArgvParser } from '../argv-parser/index.js';
 
 import { GET_ARGV_DATA } from '../get-argv-data/index.js';
 import { GET_ARGV } from '../get-argv/index.js';
+import { COMMAND } from '../command/command.js';
 
 export const COMMANDER = new MetaManager<CommanderMeta>();
 
@@ -46,7 +47,21 @@ export class Commander {
                 rawArgv: meta.rawArgv
             });
         }
+    }
 
+    docs(): { name: string; info: string; path: string[]; }[] {
+        const routes = flattenRoute(this.#main);
+        const docs: { name: string; info: string; path: string[]; }[] = [];
+        for (const route of routes) {
+            const meta = COMMAND.get(route.command);
+            docs.push({
+                name: meta.name,
+                path: route.path,
+                info: meta.info
+            });
+        }
+
+        return docs;
     }
 
     /**
