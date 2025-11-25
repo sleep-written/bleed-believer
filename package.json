@@ -18,6 +18,7 @@
     "examples/*"
   ],
   "scripts": {
+    "test": "turbo test",
     "build": "turbo build",
     "prepare": "node --run build"
   },

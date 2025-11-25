@@ -8,8 +8,6 @@
         "strict": true,
         "skipLibCheck": true,
         "verbatimModuleSyntax": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
         
         "sourceMap": true,
         "declaration": true,
