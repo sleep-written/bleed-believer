@@ -67,7 +67,7 @@
     "@types/yargs": "^17.0.34"
   },
   "dependencies": {
-    "@swc/core": "^1.15.1",
+    "@swc/core": "^1.15.3",
     "chalk": "^5.6.2",
     "json5": "^2.2.3",
     "tslog": "^4.10.2",

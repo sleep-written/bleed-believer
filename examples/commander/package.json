@@ -3,8 +3,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "bleed": "node ../../packages/cli/dist/cli.js",
-    "build": "node --run bleed -- build --config ./tsconfig.build.json"
+    "clean": "rm -rf ./dist",
+    "build": "node --run clean && node --run bleed -- build --config ./tsconfig.build.json",
+    "bleed": "node ../../packages/cli/dist/cli.js"
   },
   "dependencies": {
     "@bleed-believer/commander": "^0.0.0-alpha.0",
@@ -12,6 +13,7 @@
     "tslog": "^4.10.2"
   },
   "devDependencies": {
-    "@bleed-believer/cli": "^0.0.0-alpha.0"
+    "@bleed-believer/cli": "^0.0.0-alpha.0",
+    "typescript": "^5.9.3"
   }
 }

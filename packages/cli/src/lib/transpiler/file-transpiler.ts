@@ -4,17 +4,20 @@ import type { DirentObject } from '@lib/ts-config/index.js';
 
 import { basename, dirname, join, resolve, sep } from 'path';
 import { mkdir, readFile, writeFile } from 'fs/promises';
+import { ImportTransformer } from './import-transformer.js';
 import { transform } from '@swc/core';
 
 export class FileTranspiler {
-    #config: Config;
+    #importTransformer: ImportTransformer;
+    #swcConfig: Config;
     #inject: Required<FileTranspilerInject>;
 
     #rootDir: string;
     #outDir: string;
 
     constructor(tsConfig: TSConfigObject, inject?: FileTranspilerInject) {
-        this.#config = tsConfig.toSWC();
+        this.#importTransformer = new ImportTransformer(tsConfig.value, inject);
+        this.#swcConfig = tsConfig.toSWC();
         this.#inject = {
             process:    inject?.process                 ?? process,
 
@@ -59,7 +62,7 @@ export class FileTranspiler {
         ?   { name: basename(input), parentPath: dirname(input), isFile: () => true }
         :   input
 
-        const options: Options = structuredClone(this.#config);
+        const options: Options = structuredClone(this.#swcConfig);
         options.filename = filePath;
         delete options.exclude;
 
@@ -67,7 +70,13 @@ export class FileTranspiler {
         const mapPath = codePath + `.map`;
 
         const source = await this.#inject.readFile(options.filename, 'utf-8');
-        const output = await this.#inject.transform(source, options);
+        const output = await this.#inject.transform(
+            this.#importTransformer.transform(
+                source,
+                filePath
+            ),
+            options
+        );
 
         const outputDir = dirname(codePath);
         await this.#inject.mkdir(outputDir, { recursive: true });

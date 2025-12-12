@@ -1,0 +1,1 @@
+export type { RegExpObject } from './reg-exp.object.js';

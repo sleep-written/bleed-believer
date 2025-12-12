@@ -15,6 +15,9 @@ export interface CompilerOptions {
     emitDecoratorMetadata?: boolean;
     experimentalDecorators?: boolean;
 
+    allowImportingTsExtensions?: boolean;
+    rewriteRelativeImportExtensions?: boolean;
+
     outDir?: string;
     rootDir?: string;
     baseUrl?: string;

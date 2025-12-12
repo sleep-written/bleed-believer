@@ -1,7 +1,7 @@
 import { Commander } from '@bleed-believer/commander';
 
-import { AppRouting } from './app.routing.js';
-import { logger } from './logger.js';
+import { AppRouting } from './app.routing.ts';
+import { logger } from './logger.ts';
 
 export const commander = new Commander(AppRouting, {
     lowercase: true

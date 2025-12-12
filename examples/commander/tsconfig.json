@@ -6,6 +6,8 @@
 
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "allowImportingTsExtensions": true,
+        "rewriteRelativeImportExtensions": true,
 
         "strict": true,
         "outDir": "./dist",

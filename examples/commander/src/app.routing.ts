@@ -1,7 +1,7 @@
 import { CommandRouting } from '@bleed-believer/commander';
 
-import { HelloWorldCommand } from './hello-world/command.js';
-import { HelpCommand } from './help/command.js';
+import { HelloWorldCommand } from './hello-world/command.ts';
+import { HelpCommand } from './help/command.ts';
 
 @CommandRouting({
     commands: [
