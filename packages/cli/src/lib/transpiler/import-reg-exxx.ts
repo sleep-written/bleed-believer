@@ -33,20 +33,30 @@ export class ImportRegExxx extends RegExxx {
                     [ /(?:^|;)\s*/, /\s+/ ],
                     c => `(?<=${c})`
                 ),
-                /import/,
-                /\s+/,
-                RegExxx.composite(
-                    [
-                        RegExxx.parenthesis([
-                            namespaceExport,
-                            namedImports
-                        ]),
-                        /\s+/,
-                        /from/,
-                        /\s+/
-                    ],
-                    c => `(?:${c})?`
-                ),
+                
+                RegExxx.parenthesis([
+                    new RegExxx([
+                        /export\s+/,
+                        /(type\s+)?/,
+                        /\*\s+from\s+/
+                    ]),
+                    new RegExxx([
+                        /(im|ex)port\s+/,
+                        /(type\s+)?/,
+                        RegExxx.composite(
+                            [
+                                RegExxx.parenthesis([
+                                    namespaceExport,
+                                    namedImports
+                                ]),
+                                /\s+/,
+                                /from/,
+                                /\s+/
+                            ],
+                            c => `(?:${c})?`
+                        ),
+                    ])
+                ]),
 
                 new RegExxx(
                     [

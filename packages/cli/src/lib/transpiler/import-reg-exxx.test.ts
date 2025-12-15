@@ -10,6 +10,9 @@ test('Match "*.ts" imports', t => {
         `import { Tralalero } from "./brainrots.ts";`,
         `import { Tralalero, Tralala } from "./brainrots.ts";`,
         `import brainrots, { Tralalero, Tralala } from "./brainrots.ts";`,
+        `export * from "./brainrots.ts";`,
+        'export * as brainrots from "./brainrots.ts"',
+        `export { Tralalero, Tralala } from "./brainrots.ts";`,
     ];
 
     const regExxx = new ImportRegExxx();
@@ -23,6 +26,9 @@ test('Match "*.ts" imports', t => {
         'import * as brainrots from "./brainrots.ts"',
         'import { Tralalero } from "./brainrots.ts"',
         'import { Tralalero, Tralala } from "./brainrots.ts"',
-        'import brainrots, { Tralalero, Tralala } from "./brainrots.ts"'
+        'import brainrots, { Tralalero, Tralala } from "./brainrots.ts"',
+        'export * from "./brainrots.ts"',
+        'export * as brainrots from "./brainrots.ts"',
+        'export { Tralalero, Tralala } from "./brainrots.ts"',
     ]);
 });
