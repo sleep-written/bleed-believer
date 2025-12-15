@@ -47,6 +47,7 @@ test('Simple test', t => {
     const input = [
         `import { Tralalero, Tralala } from './brainrots/index.ts';`,
         `import ñeee from 'sparkle/laugh.ts';`,
+        `import reee from '#root/reee.ts';`,
     ].join('\n');
 
     // Execute test
@@ -57,5 +58,6 @@ test('Simple test', t => {
     t.deepEqual(output.split('\n'), [
         `import { Tralalero, Tralala } from './brainrots/index.js';`,
         `import ñeee from 'sparkle/laugh.ts';`,
+        `import reee from '#root/reee.js';`,
     ]);
 });

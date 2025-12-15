@@ -88,7 +88,7 @@ export class RegExxx {
             });
 
         } else if (input instanceof RegExxx) {
-            this.#children = input.children;
+            this.#children = structuredClone(input.children);
             this.#source = input.source;
             this.#flags = input.flags;
 

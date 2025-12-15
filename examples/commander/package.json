@@ -8,12 +8,16 @@
     "bleed": "node ../../packages/cli/dist/cli.js"
   },
   "dependencies": {
-    "@bleed-believer/commander": "^0.0.0-alpha.0",
+    "@bleed-believer/commander": "*",
     "chalk": "^5.6.2",
     "tslog": "^4.10.2"
   },
   "devDependencies": {
-    "@bleed-believer/cli": "^0.0.0-alpha.0",
+    "@bleed-believer/cli": "*",
     "typescript": "^5.9.3"
+  },
+  "imports": {
+    "#root/*.ts": "./src/*.ts",
+    "#root/*.js": "./dist/*.js"
   }
 }

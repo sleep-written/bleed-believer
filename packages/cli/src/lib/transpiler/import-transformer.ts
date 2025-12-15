@@ -62,19 +62,31 @@ export class ImportTransformer {
                     return m1;
                 }
 
-                const locations = this.#pathAlias.find(groups.location);
-                for (const location of locations ?? [ resolve(sourcePath, '..', groups.location) ]) {
-                    if (this.#exists(location) && location.startsWith(this.#srcPath)) {
-                        return m1.replace(
-                            /(?<=\.(m|c)?)t(?=sx?["'])/,
-                            m2 => m2 === m2.toUpperCase()
-                            ?   'J'
-                            :   'j'
-                        );
+                let found = false;
+                if (!groups.location.match(/^#.+\.(m|c)?tsx?$/)) {
+                    const locations = this.#pathAlias.find(groups.location);
+                    for (const location of locations ?? [ resolve(sourcePath, '..', groups.location) ]) {
+                        if (this.#exists(location) && location.startsWith(this.#srcPath)) {
+                            found = true;
+                            break;
+                        }
                     }
+                } else {
+                    found = true;
                 }
 
-                return m1;
+                if (found) {
+                    return m1.replace(
+                        /(?<=\.(m|c)?)t(?=sx?)/,
+                        m2 => m2 === m2.toUpperCase()
+                        ?   'J'
+                        :   'j'
+                    );
+
+                } else {
+                    return m1;
+
+                }
             }
         );
     }
