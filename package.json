@@ -24,7 +24,7 @@
   },
   "packageManager": "npm@11.6.3",
   "dependencies": {
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.2.0",
     "ava": "^6.4.1",
     "lerna": "^9.0.1",
     "tsc-alias": "^1.8.16",
