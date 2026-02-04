@@ -1,0 +1,46 @@
+{
+  "name": "@bleed-believer/monaco-editor",
+  "version": "0.0.0-alpha.0",
+  "description": "Monaco editor for angular.",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "test": "ava",
+    "build:tsc": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.json",
+    "build:swc": "node ../cli/dist/cli.js build --config ./tsconfig.build.json",
+    "build": "node --run clean && node --run build:swc && node --run build:tsc",
+    "clean": "rm -rf ./dist",
+    "check": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sleep-written/bleed-believer.git"
+  },
+  "keywords": [
+    "monaco",
+    "editor",
+    "angular"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "sleep-written",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sleep-written/bleed-believer/issues"
+  },
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "dependencies": {
+    "@angular/core": "^21.0.0",
+    "monaco-editor": "^0.55.0"
+  }
+}

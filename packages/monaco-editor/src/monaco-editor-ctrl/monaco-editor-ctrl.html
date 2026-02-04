@@ -1,0 +1,14 @@
+@let disabled = this.disabled();
+
+<bleed-monaco-editor
+[value]="this.value() ?? ''"
+[options]="this.rawOptions()"
+[language]="this.language()"
+(blur)="this.onBlur()"
+(valueChange)="this.onValueChange($event)">
+</bleed-monaco-editor>
+
+@if (disabled) {
+    <div class="disabled">
+    </div>
+}
