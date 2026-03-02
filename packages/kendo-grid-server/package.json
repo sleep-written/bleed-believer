@@ -41,11 +41,11 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "dependencies": {
-    "@progress/kendo-data-query": "^1.7.0",
-    "typeorm": "^0.3.0"
+    "@progress/kendo-data-query": "^1.7.0"
   },
-  "devDependencies": {
-    "sqlite3": "^5.1.7"
+  "peerDependencies": {
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.28"
   },
   "gitHead": "821ad0eac66627652ca87a09ff6b6c6d86b76e2e"
 }
