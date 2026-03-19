@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 
 export function createDataSource(database: string): DataSource {
     return new DataSource({
-        type: 'sqlite',
+        type: 'better-sqlite3',
         database,
         synchronize: true,
         entities: [
