@@ -1,1 +1,0 @@
-export type EventCallback<P extends any[] = []> = (...args: P) => unknown;

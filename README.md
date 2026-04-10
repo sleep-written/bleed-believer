@@ -4,9 +4,9 @@ This monorepo contains several packages to make applications easily, written in 
 
 <br />
 
-## [@bleed-believer/cli](/packages/cli/README.md)
+## [@bleed-believer/cli](https://github.com/sleep-written/bleed-believer-cli)
 
-The __command line interface__ to build your ESM projects.
+The __command line interface__ to build your ESM projects (move to a new repo).
 
 <br />
 

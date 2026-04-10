@@ -1,1 +1,0 @@
-export type TransformFunction<T> = (incoming: T, original?: T) => T;
