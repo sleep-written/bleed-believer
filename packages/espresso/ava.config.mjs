@@ -8,6 +8,6 @@ export default {
         mts: 'module',
     },
     nodeArguments: [
-        '--import=../cli/dist/index.js',
+        '--import=@bleed-believer/cli',
     ]
 }
