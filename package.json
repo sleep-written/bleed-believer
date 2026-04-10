@@ -20,7 +20,7 @@
   "scripts": {
     "test": "turbo test",
     "build": "turbo build",
-    "prepare": "node --run build"
+    "prepare": "turbo build"
   },
   "packageManager": "npm@11.6.3",
   "dependencies": {
