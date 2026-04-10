@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/meta",
-  "version": "0.0.0-alpha.0",
+  "version": "0.0.8-alpha.0",
   "description": "Manage multiple tags into your objects.",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -38,5 +38,6 @@
   "bugs": {
     "url": "https://github.com/sleep-written/bleed-believer/issues"
   },
-  "homepage": "https://github.com/sleep-written/bleed-believer#readme"
+  "homepage": "https://github.com/sleep-written/bleed-believer#readme",
+  "gitHead": "990aa80964b281182d277cc92fcd53fe9932dc26"
 }

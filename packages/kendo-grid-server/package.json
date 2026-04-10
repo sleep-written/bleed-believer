@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/kendo-grid-server",
-  "version": "0.0.7-alpha.0",
+  "version": "0.0.8-alpha.0",
   "description": "Parses the querystrings built with @bleed-believer/kendo-grid-client fro TypeORM",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -46,7 +46,7 @@
   "peerDependencies": {
     "typeorm": "^0.3.28"
   },
-  "gitHead": "821ad0eac66627652ca87a09ff6b6c6d86b76e2e",
+  "gitHead": "990aa80964b281182d277cc92fcd53fe9932dc26",
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
     "better-sqlite3": "^12.8.0"

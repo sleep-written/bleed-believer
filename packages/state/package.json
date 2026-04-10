@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/state",
-  "version": "0.0.0-alpha.0",
+  "version": "0.0.8-alpha.0",
   "description": "Assign path alias using tsconfig.json file",
   "type": "module",
   "types": "./dist/index.d.ts",
@@ -51,5 +51,6 @@
   "peerDependencies": {
     "@angular/compiler": "^21.0.0",
     "@angular/forms": "^21.0.0"
-  }
+  },
+  "gitHead": "990aa80964b281182d277cc92fcd53fe9932dc26"
 }
