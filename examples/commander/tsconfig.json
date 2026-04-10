@@ -13,11 +13,10 @@
         "strict": true,
         "outDir": "./dist",
         "rootDir": "./src",
-        "baseUrl": "./src",
         "sourceMap": true,
 
         "paths": {
-            "@/*": [ "./*" ]
+            "@/*": [ "./src/*" ]
         }
     }
 }

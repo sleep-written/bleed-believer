@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "node --run clean && node --run bleed -- build --config ./tsconfig.build.json",
-    "bleed": "node ../../packages/cli/dist/cli.js"
+    "build": "node --run clean && bleed build --config ./tsconfig.build.json"
   },
   "dependencies": {
     "@bleed-believer/commander": "*",
@@ -14,7 +13,7 @@
   },
   "devDependencies": {
     "@bleed-believer/cli": "*",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   },
   "imports": {
     "#root/*.ts": "./src/*.ts",

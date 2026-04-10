@@ -1,27 +1,15 @@
 {
     "$schema": "https://turborepo.com/schema.json",
     "tasks": {
-        "@bleed-believer/cli#build": {
-            "cache": true,
-            "inputs": [ "src/**" ],
-            "outputs": [ "dist/**" ]
-        },
-        "@bleed-believer/cli#test": {
-            "cache": true,
-            "inputs": [ "src/**" ],
-            "outputs": [ "dist/**" ]
-        },
         "build": {
             "cache": true,
             "inputs": [ "src/**" ],
-            "outputs": [ "dist/**" ],
-            "dependsOn": [ "@bleed-believer/cli#build", "^build" ]
+            "outputs": [ "dist/**" ]
         },
         "test": {
             "cache": true,
             "inputs": [ "src/**" ],
-            "outputs": [ "dist/**" ],
-            "dependsOn": [ "@bleed-believer/cli#build", "^test" ]
+            "outputs": [ "dist/**" ]
         }
     }
 }

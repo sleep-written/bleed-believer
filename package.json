@@ -24,11 +24,12 @@
   },
   "packageManager": "npm@11.6.3",
   "dependencies": {
-    "@types/node": "^25.3.3",
+    "@bleed-believer/cli": "^0.0.6-alpha.0",
+    "@types/node": "^25.6.0",
     "ava": "^7.0.0",
-    "lerna": "^9.0.5",
+    "lerna": "^9.0.7",
     "tsc-alias": "^1.8.16",
-    "turbo": "^2.8.12",
-    "typescript": "^5.9.3"
+    "turbo": "^2.9.6",
+    "typescript": "^6.0.2"
   }
 }
