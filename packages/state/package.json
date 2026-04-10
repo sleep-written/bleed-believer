@@ -1,6 +1,6 @@
 {
   "name": "@bleed-believer/state",
-  "version": "0.0.0-alpha.0",
+  "version": "0.0.8-alpha.0",
   "description": "Assign path alias using tsconfig.json file",
   "type": "module",
   "types": "./dist/index.d.ts",
