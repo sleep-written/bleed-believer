@@ -46,7 +46,7 @@
   "peerDependencies": {
     "typeorm": "^1.0.0"
   },
-  "gitHead": "990aa80964b281182d277cc92fcd53fe9932dc26",
+  "gitHead": "5e16756e900279583c3aa44fa80e687787daa232",
   "devDependencies": {
     "@types/better-sqlite3": "^7.0.0",
     "better-sqlite3": "^12.0.0"
