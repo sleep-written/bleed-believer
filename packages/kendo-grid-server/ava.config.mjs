@@ -3,10 +3,7 @@ export default {
         './src/**/*.test.ts',
         './src/**/*.test.mts',
     ],
-    extensions: {
-        ts: 'module',
-        mts: 'module',
-    },
+    extensions: [ 'ts', 'mts' ],
     nodeArguments: [
         '--import=@bleed-believer/cli',
     ]

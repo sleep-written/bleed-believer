@@ -44,11 +44,11 @@
     "@progress/kendo-data-query": "^1.7.0"
   },
   "peerDependencies": {
-    "typeorm": "^0.3.28"
+    "typeorm": "^1.0.0"
   },
   "gitHead": "990aa80964b281182d277cc92fcd53fe9932dc26",
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.13",
-    "better-sqlite3": "^12.8.0"
+    "@types/better-sqlite3": "^7.0.0",
+    "better-sqlite3": "^12.0.0"
   }
 }

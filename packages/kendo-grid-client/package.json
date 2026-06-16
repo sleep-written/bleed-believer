@@ -40,7 +40,7 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "peerDependencies": {
-    "@progress/kendo-angular-grid": "^20.0.0||^21.0.0||^22.0.0||^23.0.0",
+    "@progress/kendo-angular-grid": "^24.0.0",
     "@progress/kendo-data-query": "^1.7.0"
   },
   "gitHead": "990aa80964b281182d277cc92fcd53fe9932dc26"

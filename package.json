@@ -23,13 +23,18 @@
     "prepare": "turbo build"
   },
   "packageManager": "npm@11.6.3",
+  "allowScripts": {
+    "better-sqlite3@12.11.1": true,
+    "nx@22.7.5": true,
+    "@progress/kendo-licensing@1.11.2": true
+  },
   "dependencies": {
-    "@bleed-believer/cli": "^0.0.6-alpha.0",
-    "@types/node": "^25.6.0",
-    "ava": "^7.0.0",
+    "@bleed-believer/cli": "^1.0.2",
+    "@types/node": "^25.9.3",
+    "ava": "^8.0.1",
     "lerna": "^9.0.7",
-    "tsc-alias": "^1.8.16",
-    "turbo": "^2.9.6",
-    "typescript": "^6.0.2"
+    "tsc-alias": "^1.8.17",
+    "turbo": "^2.9.18",
+    "typescript": "^6.0.3"
   }
 }

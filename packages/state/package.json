@@ -49,8 +49,8 @@
   },
   "homepage": "https://github.com/sleep-written/bleed-believer#readme",
   "peerDependencies": {
-    "@angular/compiler": "^21.0.0",
-    "@angular/forms": "^21.0.0"
+    "@angular/compiler": "^21.0.0||^22.0.0",
+    "@angular/forms": "^21.0.0||^22.0.0"
   },
   "gitHead": "990aa80964b281182d277cc92fcd53fe9932dc26"
 }
